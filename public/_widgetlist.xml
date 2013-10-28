@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<rsp stat="ok">
+<list>
+<widget id="TestWidget">
+<title>Test Widget</title>
+<compression size="<%= size %>" type="zip"/>
+<description/>
+<download>http://<%= ip %>/<%= widgetfile %></download>
+</widget>
+</list>
+</rsp>

@@ -1,0 +1,37 @@
+{
+    "name": "news_max",
+    "description": "",
+    "author": {
+        "name": "A Different Engine.",
+        "url": "http://www.adifferentengine.com"
+    },
+    "version": "0.0.1",
+    "dependencies": {
+        "matchdep": "0.1.2",
+        "connect": "2.8.5",
+        "proxy-middleware": "0.4.0",
+        "underscore": "1.5.1",
+        "grunt-connect-proxy": "~0.1.5",
+        "optimist": "0.6.0",
+        "http-proxy": "0.10.3"
+    },
+    "devDependencies": {
+        "grunt": "~0.4.1",
+        "grunt-bower-requirejs": "0.6.0",
+        "grunt-contrib-connect": "~0.2.0",
+        "grunt-contrib-watch": "~0.4.3",
+        "grunt-connect-proxy": "~0.1.5",
+        "grunt-contrib-sass": "~0.4.1",
+        "grunt-contrib-requirejs": "~0.4.1",
+        "grunt-usemin": "~0.1.12",
+        "grunt-open": "~0.2.0",
+        "grunt-contrib-cssmin": "~0.6.1",
+        "grunt-contrib-imagemin": "~0.1.4",
+        "grunt-contrib-clean": "~0.5.0",
+        "grunt-contrib-compress": "~0.5.2",
+        "grunt-template": "0.2.0",
+        "grunt-contrib-copy": "0.4.1",
+        "grunt-forever": "0.4.1",
+        "connect-livereload": "~0.1.3"
+    }
+}

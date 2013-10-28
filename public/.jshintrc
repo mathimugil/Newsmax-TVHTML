@@ -1,0 +1,16 @@
+{
+    "undef":true,
+    "unused": true,
+    "browser":true,
+    "jquery":true,
+    "asi":true,
+    "laxcomma":true,
+    "globals": {
+        "require":true,
+        "define":true,
+        "$log": true,
+        "$error": true,
+        "$noop": true,
+        "console":true
+    }
+}
