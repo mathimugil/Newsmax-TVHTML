@@ -1,0 +1,3 @@
+{{#each categories}}
+<li>{{title}}</li>
+{{/each}}

@@ -21,6 +21,8 @@ time, mark, audio, video {
 
 $dark: #000;
 $light: #fff;
+$nblue: #4380c2;
+$tvwhite: #e1e1e1;
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
@@ -94,5 +96,67 @@ body {
   height: 720px;
   width: 1280px;
   z-index: 100;
-  color: $dark;
+  color: $dark; background: rgba(0,255,0,0.2);
+}
+
+
+#mainMenu {
+  height: 720px; background: rgba(0,0,0,0.8); width: 200px;
+  padding-top: 50px;
+}
+#mainMenu li, #subMenu li{
+  width: 150px;
+  border-bottom:1px rgba(255,255,255,0.3) solid;
+  text-align:right;
+  padding: 15px 20px 15px 30px; color: white;
+}
+
+#mainMenu li:last-child, #subMenu li:last-child {
+  border-bottom: none;
+}
+#mainMenu li.focused, #subMenu li.focused{
+  background:$nblue;
+  color:$tvwhite;
+}
+
+#mainMenu li.selected, #subMenu li.selected{
+  background:rgba(255,255,255,0.1);
+  color:$tvwhite;
+}
+
+#subMenu{
+  position:absolute;
+  top:0px; left:200px;
+  background: rgba(0,0,0,0.6);
+  height: 720px;padding-top: 50px;
+}
+
+#gridMenuContainer{
+  position:absolute;
+  top:0px; left:403px;
+  width:875px;
+}
+
+#gridMenuContainer li{
+  float:left;
+  border:2px solid transparent;
+}
+#gridMenuContainer li.focused{
+  border:2px solid red;
+}
+#gridHTML{
+position: absolute;
+top: 476px;
+left: 400px;
+width: 819px;
+height: 222px;
+background: rgba(0,0,0,0.8);
+color: #e1e1e1;
+opacity: .7;
+padding-top: 20px;
+}
+
+#gridHTML .title{
+  margin-top: 52px;
+  margin-left: 20px;
 }

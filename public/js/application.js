@@ -1,37 +1,40 @@
 require.config({
-
   map: {
     '*': {
-      'platform':'enginelite/apis/platform!',
-      'mediaplayer':'enginelite/apis/mediaplayer!',
-      'acr':'enginelite/apis/acr!',
-      'vastfetcher':'enginelite/advendors/enginelite.advendors.vast'
+      platform: 'enginelite/apis/platform!',
+      mediaplayer: 'enginelite/apis/mediaplayer!',
+      acr: 'enginelite/apis/acr!',
+      vastfetcher: 'enginelite/advendors/enginelite.advendors.vast'
     }
   },
-
   paths: {
-    text:                       'lib/text',
-    hbs:                        'lib/hbs',
-    domReady:                   'lib/domReady',
-    handlebars:              'lib/handlebars-1.0.0',
-    tvengine:                   'enginelite/tvengine',
-    navigation:                 'enginelite/enginelite.navigation',
-    keyhandler:                 'enginelite/enginelite.keyhandler',
-    stagemanager:               'enginelite/enginelite.stagemanager',
-    utils:                      'enginelite/enginelite.utils',
-    datastore:                  'enginelite/enginelite.datastore',
-    appconfig:                  'appconfig'
+    text: 'lib/text',
+    hbs: 'lib/hbs',
+    domReady: 'lib/domReady',
+    handlebars: 'lib/handlebars-1.0.0',
+    tvengine: 'enginelite/tvengine',
+    navigation: 'enginelite/enginelite.navigation',
+    keyhandler: 'enginelite/enginelite.keyhandler',
+    stagemanager: 'enginelite/enginelite.stagemanager',
+    utils: 'enginelite/enginelite.utils',
+    datastore: 'enginelite/enginelite.datastore',
+    appconfig: 'appconfig',
+    backbone: 'lib/vendor/backbone/backbone',
+    jquery: 'lib/vendor/jquery/jquery',
+    underscore: 'lib/vendor/underscore/underscore'
   },
-
   shim: {
-    'underscore': {
+    underscore: {
       exports: '_'
     },
-    'backbone': {
-      deps:['underscore','jquery'],
+    backbone: {
+      deps: [
+        'underscore',
+        'jquery'
+      ],
       exports: 'Backbone'
     },
-    'handlebars': {
+    handlebars: {
       exports: 'Handlebars'
     }
   }

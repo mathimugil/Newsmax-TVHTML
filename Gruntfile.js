@@ -137,10 +137,10 @@ module.exports = function(grunt) {
                     keepalive: true
                 }
             } 
-                /*  ,
+                ,
             proxies: [{
                 context: '/proxy.api',
-                host: '',
+                host: 'www.adifferentengine.com',
                 port: 80,
                 https: false,
                 changeOrigin: true,
@@ -148,7 +148,7 @@ module.exports = function(grunt) {
                     '^/proxy.api': ''
                 }
             }]
-             */
+            
                  ,
         },
         sass: {

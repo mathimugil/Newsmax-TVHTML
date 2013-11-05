@@ -1,0 +1,6 @@
+<ul class="gridMenuPage">
+{{#each items}}
+	{{pager @index ../numberPerPage '</ul><ul class="gridMenuPage">'}}
+	<li><img src="{{thumb}}"></li>
+{{/each}}
+</ul>
