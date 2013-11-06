@@ -106,13 +106,44 @@ body {
   left: 0;
   top: 0; }
 
-#subMenu {
+#subMenu, #searchMenu {
   position: absolute;
   top: 0px;
   left: -180px;
   background: black;
   height: 720px;
   padding-top: 50px; }
+
+#searchterm {
+  width: 240px;
+  background: black;
+  outline: 0;
+  color: white;
+  height: 30px;
+  margin-bottom: 24px;
+  font-size: 24px;
+  border: 0; }
+
+*:focus {
+  outline: none; }
+
+#searchMenu {
+  width: 240px;
+  color: white;
+  padding: 50px !important; }
+
+#searchTermWrap {
+  border-bottom: 1px solid white;
+  margin-bottom: 25px; }
+
+#searchMenu td {
+  height: 40px;
+  line-height: 40px;
+  width: 40px;
+  text-align: center; }
+
+#searchMenu td.focused {
+  background: #4380c2; }
 
 #mainMenu li, #subMenu li {
   width: 240px;
@@ -140,10 +171,10 @@ body {
 
 #gridMenuContainer li {
   float: left;
-  border: 2px solid transparent; }
+  border: 5px solid transparent; }
 
 #gridMenuContainer li.focused {
-  border: 2px solid red; }
+  border: 5px solid #4380c2; }
 
 #gridHTML {
   position: absolute;

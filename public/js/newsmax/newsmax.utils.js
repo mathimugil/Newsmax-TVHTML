@@ -11,7 +11,7 @@ define(['backbone'], function(Backbone) {
 
       var videos = new Videos();
       for (var i = 0; i < 24; i++) videos.push(new Video({
-        thumb: "http://lorempixel.com/200/" + (150) + "/",
+        thumb: "http://lorempixel.com/160/" + (90) + "/",
         title: title + i
       }));
       return videos;

@@ -44,21 +44,21 @@ define(['tvengine','platform','jquery','underscore','backbone'], function(TVEngi
 
 		_.extend(KeyHandler, Backbone.Events);
 
-		
+
 
 		var init = function() {
 			var $KEYS = Platform.keys();
-			
+
 			for (var key in $KEYS) keyMap[$KEYS[key]] = key;
-			
+
 			$(document).bind("keydown", function(event) {
 				if (event.keyCode == 457) document.location.reload(true)
 				var action = keyActions[keyMap[event.keyCode]];
-				
+
 				if (typeof action != 'undefined') {
 					if (action == 'onReturn') event.preventDefault(); //samsung tv's need for _checkOrBack
 					KeyHandler.trigger(action);
-					return true;
+					return false;
 				} else {
 					return true;
 				}
