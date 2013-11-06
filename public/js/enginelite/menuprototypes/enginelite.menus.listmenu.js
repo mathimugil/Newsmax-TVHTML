@@ -97,7 +97,6 @@ define(['navigation', 'underscore'], function(Navigation, _) {
       $log(" SET FOCUS ", this, $(this.el).children().length);
       this.$el.children().removeClass('focused');
       this.$el.children().eq(this._currentIndex).addClass('focused')
-
     },
 
     setSelected: function() {

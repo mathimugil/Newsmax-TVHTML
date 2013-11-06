@@ -53,6 +53,7 @@ define(['navigation', 'underscore'], function(Navigation, _) {
       }
 
       this.on('onselect', function() {
+        this.trigger('selectedindex', this._currentIndex);
         this.trigger('selecteditem', this.collection.get(this._currentIndex));
       }, this);
 
@@ -64,12 +65,18 @@ define(['navigation', 'underscore'], function(Navigation, _) {
         _t.render();
         _t._maxIndex = _t.collection.length - 1;
       });
+      this.on('onfocus newfocus', function(idx) {
+        idx = _.isNumber(idx) ? idx : this._currentIndex;
+        $(this.el).children().removeClass('sm-focused');
+        $(this.el).children().eq(idx).addClass('sm-focused');
+      }, this)
     },
 
     _incrementIndex: function() {
+        $log(" INCREMENT INDEX ", this._currentIndex)
       if(this._currentIndex < this._maxIndex) {
         this._currentIndex++;
-        this.triger('indexup', this._currentIndex);
+        this.trigger('newfocus', this._currentIndex);
         if(this._slotIndex < this.options.visible  - 1) {
           this._slotIndex++;
           this.trigger('slotup', this._slotIndex);
@@ -80,9 +87,10 @@ define(['navigation', 'underscore'], function(Navigation, _) {
     },
 
     _decrementIndex: function() {
+
       if(this._currentIndex > 0 ) {
         this._currentIndex--;
-        this.triger('indexdown', this._currentIndex);
+        this.trigger('newfocus', this._currentIndex);
         if(this._slotIndex > 0 ) {
           this._slotIndex--;
           this.trigger('slotdown', this._slotIndex);
@@ -92,13 +100,17 @@ define(['navigation', 'underscore'], function(Navigation, _) {
       }
     },
     render: function() {
-        $log(" RENDER CALLED ", this);
         if(_.isFunction(this.options.template) && this.collection && this.collection.length) {
             var items = this.collection.map(function(m) { return m.attributes } );
-            this.$el.html(this.options.template({
+            $(this.el).html(this.options.template({
                 items: items
             }));
         }
+        $log(" SLOT MENU RENDER AND BIND ")
+        $(this.el).children().on('mouseover', function() {
+            // $log(" MOUSEOVER ITEM ", $(this).index());
+        })
+        this._maxIndex = $(this.el).children().length
         return this;
     }
   });
