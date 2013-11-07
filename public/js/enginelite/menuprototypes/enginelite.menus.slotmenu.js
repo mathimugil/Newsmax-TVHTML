@@ -70,6 +70,8 @@ define(['navigation', 'underscore'], function(Navigation, _) {
         $(this.el).children().removeClass('sm-focused');
         $(this.el).children().eq(idx).addClass('sm-focused');
       }, this)
+
+
     },
 
     _incrementIndex: function() {

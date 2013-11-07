@@ -79,7 +79,7 @@ define(['keyhandler', 'jquery', 'underscore', 'backbone'], function(KeyHandler, 
 	Navigation.Menu = Backbone.View.extend({
 		focused: false,
 		initialize: function() {
-			Backbone.View.prototype.initialize.apply(this, arguments);
+            Backbone.View.prototype.initialize.apply(this, arguments);
 			this.off('onfocus onblur', null, this);
 			this.on('onfocus', function() {
 				this.focused = true;

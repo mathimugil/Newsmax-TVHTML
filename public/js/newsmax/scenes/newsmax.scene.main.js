@@ -6,13 +6,13 @@ define([
         'enginelite/menuprototypes/enginelite.menus.gridmenu',
         'enginelite/menuprototypes/enginelite.menus.slotmenu',
         'newsmax/newsmax.mainmenu', 'newsmax/newsmax.utils',
-        'newsmax/menus/newsmax.menu.simplekeys'
+        'newsmax/menus/newsmax.menu.simplekeys',
+        'mediaplayer', 'keyhandler'
     ],
-    function(StageManager, Navigation, BackBone, sampleTemplate, MainMenu, MainMenuTemplate, GridMenu, SlotMenu, MenuItems, Utils, KeyboardMenu) {
+
+    function(StageManager, Navigation, BackBone, sampleTemplate, MainMenu, MainMenuTemplate, GridMenu, SlotMenu, MenuItems, Utils, KeyboardMenu, MediaPlayer, KeyHandler) {
 
         'use strict';
-
-
         var scene = new StageManager.Scene({
             defaultScene: true, // Make this our default scene
             name: "main",
@@ -24,9 +24,16 @@ define([
         // var subcatState = scene.createState('subcat');
         // var searchState = scene.createState('search');
 
+        var mainMenuIndex;
+        var landingState = scene.createState('landing', true);
+        var liveState = scene.createState('live');
+
+        var liveMenu = new Navigation.Menu();
 
 
         scene.onenterscene = function() {
+
+            MediaPlayer.playUrl("https://s3.amazonaws.com/com.adifferentengine.themoney.development/videos/145/BigBuckBunny.145.h264.700.mp4");
 
             var mainMenu = new SlotMenu({
                 el: '#mainMenu',
@@ -41,22 +48,6 @@ define([
             keyMenu.render();
 
 
-
-            var firstSub = MenuItems.find(function(i) {
-                return i.get('action') === "subcategory"
-            });
-            var mainMenuIndex = MenuItems.indexOf(firstSub);
-            var subCollection = new Utils.categoryCollection(firstSub.models);
-
-            var subMenu = new SlotMenu({
-                el: '#subMenu',
-                collection: subCollection,
-                template: MainMenuTemplate,
-                direction: 'vertical',
-            });
-
-            subMenu.render();
-            var videoCollection = Utils.createCollection()
             var VideoGrid = GridMenu.extend({
                 options: {
                     rows: 3,
@@ -68,11 +59,23 @@ define([
                 }
             });
 
+            var videoCollection = Utils.createCollection()
             var Grid = new VideoGrid({
                 el: "#gridMenuContainer",
                 collection: videoCollection
             })
+
             Grid.render();
+
+            var subCollection = new Utils.categoryCollection();
+            var subMenu = new SlotMenu({
+                el: '#subMenu',
+                collection: subCollection,
+                template: MainMenuTemplate,
+                direction: 'vertical',
+            });
+            subMenu.render();
+
 
 
             mainMenu.on('selectedindex', function(index) {
@@ -85,6 +88,9 @@ define([
                         break;
                     case 'search':
                         keyMenu.focus();
+                        break;
+                    case 'livefeed':
+                        scene.s.live();
                         break;
 
                 }
@@ -188,7 +194,41 @@ define([
             mainMenu.focus();
 
         }
+        var timeout;
+
+        var touchHideTimeout = function() {
+            $log(" TOUCH HIDE TIMEOUT ", timeout);
+            clearTimeout(timeout);
+            timeout = setTimeout(function() {
+                scene.s.live();
+            }, 5000)
+        }
 
 
+        landingState.onenterstate = function() {
+            $log(" ENTERING LANDING STATE ");
+            KeyHandler.on('onSelect onRight onLeft onUp onDown', function() {
+                $log(" KEY HANDLER")
+                touchHideTimeout();
+            }, this)
+            touchHideTimeout();
+        }
+        landingState.onleavestate = function() {
+            clearTimeout(timeout);
+        }
+        liveState.onenterstate = function() {
+            $("#landing").fadeOut();
+            liveMenu.focus();
+            liveMenu.on('onselect onright onleft onup ondown', function() {
+                $log(" LIVE MENU ON SOMETHING ")
+                scene.s.landing();
+                Navigation.back();
+            }, this)
+        }
+
+        liveState.onleavestate = function() {
+            liveMenu.off(null,null,this);
+            $("#landing").fadeIn();
+        }
         return scene;
     });

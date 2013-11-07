@@ -5,7 +5,15 @@ define(['navigation', 'hbs!newsmax/templates/KeyBoard','underscore'], function(N
             col: 0
         },
 
-
+        events: {
+            'mouseover td':'setMouseFocus','click td':'_onselect'
+        },
+        setMouseFocus: function(e) {
+            var t =  $(e.currentTarget);
+            this._coords.col = t.index();
+            this._coords.row = t.parent('tr').index();
+            this.setFocus();
+        },
 
         initialize: function() {
             Navigation.Menu.prototype.initialize.call(this);

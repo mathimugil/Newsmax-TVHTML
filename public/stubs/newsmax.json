@@ -1,0 +1,150 @@
+{
+	"sections": [
+		{
+			"title": "NewsmaxTV Live",
+			"subtitle": "Live from Newsmax Studios",
+			"image": "widescrn_B_NewsmaxTVLive.jpg",
+			"url": "http://ooyalahd2-f.akamaihd.net/i/newsmax02_delivery@119568/master.m3u8",
+			"categories": []
+		},
+		{
+			"title": "Finance",
+			"subtitle": "The latest financial and investment news",
+			"image": "widescrn_B_Finance.jpg",
+			"url": "...",
+			"categories": [
+				{
+					"title": "Finance and Investing",
+					"videos": true,
+					"url": "http://cdn-api.ooyala.com/v2/syndications/ddacf62a2c824b8fa7c0b6ea806e6cdc/feed?pcode=JkcWs6v53lsRdGfwlCSwg_a5CUMv"
+				},
+				{
+					"title": "Domestic",
+					"videos": true,
+					"url": "http://cdn-api.ooyala.com/v2/syndications/ddacf62a2c824b8fa7c0b6ea806e6cdc/feed?pcode=JkcWs6v53lsRdGfwlCSwg_a5CUMv"
+				},
+				{
+					"title": "International",
+					"videos": true,
+					"url": "http://cdn-api.ooyala.com/v2/syndications/ddacf62a2c824b8fa7c0b6ea806e6cdc/feed?pcode=JkcWs6v53lsRdGfwlCSwg_a5CUMv"
+				},
+				{
+					"title": "Stocks",
+					"videos": true,
+					"url": "http://cdn-api.ooyala.com/v2/syndications/ddacf62a2c824b8fa7c0b6ea806e6cdc/feed?pcode=JkcWs6v53lsRdGfwlCSwg_a5CUMv"
+				},
+				{
+					"title": "Commodities",
+					"videos": true,
+					"url": "http://cdn-api.ooyala.com/v2/syndications/ddacf62a2c824b8fa7c0b6ea806e6cdc/feed?pcode=JkcWs6v53lsRdGfwlCSwg_a5CUMv"
+				}
+			]
+		},
+		{
+			"title": "Newsmax Interviews",
+			"subtitle": "In depth interviews from top newsmakers",
+			"image": "widescrn_B_NewsmakerInterviews.jpg",
+			"url": "...",
+			"categories": [
+				{
+					"title": "NewsMakers",
+					"videos": true,
+					"url": "http://cdn-api.ooyala.com/v2/syndications/ddacf62a2c824b8fa7c0b6ea806e6cdc/feed?pcode=JkcWs6v53lsRdGfwlCSwg_a5CUMv"
+				},
+				{
+					"title": "Domestic",
+					"videos": true,
+					"url": "http://cdn-api.ooyala.com/v2/syndications/ddacf62a2c824b8fa7c0b6ea806e6cdc/feed?pcode=JkcWs6v53lsRdGfwlCSwg_a5CUMv"
+				},
+				{
+					"title": "International",
+					"videos": true,
+					"url": "http://cdn-api.ooyala.com/v2/syndications/ddacf62a2c824b8fa7c0b6ea806e6cdc/feed?pcode=JkcWs6v53lsRdGfwlCSwg_a5CUMv"
+				},
+				{
+					"title": "Political",
+					"videos": true,
+					"url": "http://cdn-api.ooyala.com/v2/syndications/ddacf62a2c824b8fa7c0b6ea806e6cdc/feed?pcode=JkcWs6v53lsRdGfwlCSwg_a5CUMv"
+				},
+				{
+					"title": "Economic",
+					"videos": true,
+					"url": "http://cdn-api.ooyala.com/v2/syndications/ddacf62a2c824b8fa7c0b6ea806e6cdc/feed?pcode=JkcWs6v53lsRdGfwlCSwg_a5CUMv"
+				}
+			]
+		},
+		{
+			"title": "Special Programming",
+			"subtitle": "On Demand Shows and Videos",
+			"image": "widescrn_B_SpecialProgramming.jpg",
+			"url": "...",
+			"categories": [
+				{
+					"title": "Shows",
+					"videos": true,
+					"url": "http://cdn-api.ooyala.com/v2/syndications/ddacf62a2c824b8fa7c0b6ea806e6cdc/feed?pcode=JkcWs6v53lsRdGfwlCSwg_a5CUMv"
+				},
+				{
+					"title": "Documentaries",
+					"videos": true,
+					"url": "http://cdn-api.ooyala.com/v2/syndications/ddacf62a2c824b8fa7c0b6ea806e6cdc/feed?pcode=JkcWs6v53lsRdGfwlCSwg_a5CUMv"
+				},
+				{
+					"title": "Other Programming",
+					"videos": true,
+					"url": "http://cdn-api.ooyala.com/v2/syndications/ddacf62a2c824b8fa7c0b6ea806e6cdc/feed?pcode=JkcWs6v53lsRdGfwlCSwg_a5CUMv"
+				}
+			]
+		},
+		{
+			"title": "Health",
+			"subtitle": "The latest in health and wellness from our experts",
+			"image": "widescrn_B_Health.jpg",
+			"url": "...",
+			"categories": [
+				{
+					"title": "Featured",
+					"videos": true,
+					"url": "http://cdn-api.ooyala.com/v2/syndications/ddacf62a2c824b8fa7c0b6ea806e6cdc/feed?pcode=JkcWs6v53lsRdGfwlCSwg_a5CUMv"
+				},
+				{
+					"title": "Cancer",
+					"videos": true,
+					"url": "http://cdn-api.ooyala.com/v2/syndications/ddacf62a2c824b8fa7c0b6ea806e6cdc/feed?pcode=JkcWs6v53lsRdGfwlCSwg_a5CUMv"
+				},
+				{
+					"title": "Heart",
+					"videos": true,
+					"url": "http://cdn-api.ooyala.com/v2/syndications/ddacf62a2c824b8fa7c0b6ea806e6cdc/feed?pcode=JkcWs6v53lsRdGfwlCSwg_a5CUMv"
+				},
+				{
+					"title": "Brain",
+					"videos": true,
+					"url": "http://cdn-api.ooyala.com/v2/syndications/ddacf62a2c824b8fa7c0b6ea806e6cdc/feed?pcode=JkcWs6v53lsRdGfwlCSwg_a5CUMv"
+				},
+				{
+					"title": "Diet",
+					"videos": true,
+					"url": "http://cdn-api.ooyala.com/v2/syndications/ddacf62a2c824b8fa7c0b6ea806e6cdc/feed?pcode=JkcWs6v53lsRdGfwlCSwg_a5CUMv"
+				},
+				{
+					"title": "Natural Health",
+					"videos": true,
+					"url": "http://cdn-api.ooyala.com/v2/syndications/ddacf62a2c824b8fa7c0b6ea806e6cdc/feed?pcode=JkcWs6v53lsRdGfwlCSwg_a5CUMv"
+				},
+				{
+					"title": "Anti-Aging",
+					"videos": true,
+					"url": "http://cdn-api.ooyala.com/v2/syndications/ddacf62a2c824b8fa7c0b6ea806e6cdc/feed?pcode=JkcWs6v53lsRdGfwlCSwg_a5CUMv"
+				}
+			]
+		}
+	],
+	"top_of_the_hour_news": {
+		"title": "Top of the Hour News",
+		"subtitle": "Breaking news at the Top of the Hour",
+		"image": "grid-img_spotlight_topofthehournews.jpg",
+		"url": "http://ooyalahd2-f.akamaihd.net/i/newsmax02_delivery@119568/master.m3u8"
+	}
+	
+}
