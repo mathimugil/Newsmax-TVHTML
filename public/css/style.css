@@ -130,7 +130,8 @@ body {
 #searchMenu {
   width: 240px;
   color: white;
-  padding: 50px !important; }
+  padding: 50px !important;
+  opacity: 0; }
 
 #searchTermWrap {
   border-bottom: 1px solid white;
