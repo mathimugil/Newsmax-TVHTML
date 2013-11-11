@@ -140,7 +140,7 @@ module.exports = function(grunt) {
                 ,
             proxies: [{
                 context: '/proxy.api',
-                host: 'www.adifferentengine.com',
+                host: 'cdn-api.ooyala.com',
                 port: 80,
                 https: false,
                 changeOrigin: true,

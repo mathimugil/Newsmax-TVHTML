@@ -1,4 +1,3 @@
-
 define(['navigation','underscore', 'hbs!enginelite/menuprototypes/templates/enginelite.gridmenu', 'enginelite/menuprototypes/helpers/handlebars.helpers.pager'], function(Navigation, _, GridMenuPageTemplate) {
 /*
 
@@ -62,20 +61,25 @@ define(['navigation','underscore', 'hbs!enginelite/menuprototypes/templates/engi
 
     _currentIndex : 0,
     _defaults: {
-      rows: 4, cols: 2
+      rows: 4, cols: 2, _onPlay:false
     },
 
 
     initialize: function() {
-      Navigation.Menu.prototype.initialize.call(this);
+      Navigation.Menu.prototype.initialize.call(this, arguments);
       this.options = _.defaults(this.options, this._defaults);
       this.options.perpage = this.options.cols * this.options.rows;
       this.on('onfocus', this._onFocus, this);
-      this.on('onblur', this._onBlur, this)
+      this.on('onblur',this._onBlur, this);
       this.on('onright', this._columnUp, this);
       this.on('onleft', this._columnDown, this);
       this.on('onup', this._rowUp, this)
       this.on('ondown', this._rowDown, this)
+      this.on('onselect', this._onSelect, this);
+      this.on('onplay', function(){
+        if(!this.options._onPlay) return;
+        this._onSelect()
+      });
     },
 
 
@@ -98,25 +102,24 @@ define(['navigation','underscore', 'hbs!enginelite/menuprototypes/templates/engi
     },
 
     _onBlur: function(){
-      $(this.el).children().children().removeClass("focused")
+      $(this.options.el).find('li').removeClass('focused');
     },
 
     _oldIndex: null,
+    _oldFocus:null,
 
     setFocus: function() {
-      // $log(" SET FOCUS ", this.options, this.coords())
-      $(this.el).children().children().removeClass("focused")
-      $(this.el).children().children().eq(this._currentIndex).addClass("focused");
-      
-      //TODO: remove later
-      this.trigger('newfocus',{index:this._currentIndex, item: this.collection.at(this._currentIndex)});
-
-      if(this._oldIndex !== this._currentIndex && this._focused) {
-        this.trigger('newfocus', {
-          index: this._currentIndex, item: this.collection.at(this._currentIndex)
-        });
+      this.trigger('blurfocus', this.collection.at(this._oldFocus));
+      $(this.options.el).children().children().removeClass("focused")
+      $(this.options.el).children().children().eq(this._currentIndex).addClass("focused");
+      if(this._oldIndex !== this._currentIndex && this.focused) {
+        this.trigger('newfocus', this.collection.at(this._currentIndex));
         this._oldFocus = this._currentIndex;
       }
+    },
+
+    _onSelect:function(){
+      this.trigger('selecteditem',this.collection.at(this._currentIndex));
     },
 
     _pageUp:function() {
@@ -126,26 +129,23 @@ define(['navigation','underscore', 'hbs!enginelite/menuprototypes/templates/engi
       }
       var gap = this.options.perpage - this.options.cols + 1;
       var desiredIndex = this._currentIndex + gap;
-
-      $log(" PAGE UP ", desiredIndex)
       while (desiredIndex >= this.collection.length && desiredIndex > this._currentIndex) {
         desiredIndex -= this.options.cols
       }
-      $log(" PAGE UP DONE ", desiredIndex);
       this._currentIndex = desiredIndex;
-      this.trigger("pageup");
+      this.trigger("pageup", this.coords().pageIndex, this.coords().lastpage);
       this.setFocus();
     },
-
     _pageDown: function() {
       var coords = this.coords();
       if(coords.pageIndex === 0) {
         this.trigger("leftedge");
+        $log('leftedge')
         return;
       }
       var gap = this.options.perpage - this.options.cols + 1;
       this._currentIndex -= gap;
-      this.trigger('pagedown');
+      this.trigger('pagedown',this.coords().pageIndex, this.coords().lastpage);
       this.setFocus();
     },
 
@@ -168,17 +168,18 @@ define(['navigation','underscore', 'hbs!enginelite/menuprototypes/templates/engi
     },
 
     _rowUp: function() {
-        if((this._currentIndex - this.options.cols) >= 0) {
-          this._currentIndex -= this.options.cols;
-          this.setFocus();
-        } else {
-          this.trigger("upfromtop")
-        }
+      var _coords = this.coords();
+      if((this._currentIndex > (_coords.pageIndex*this.options.perpage)&&this._currentIndex>=(_coords.pageIndex*this.options.perpage)+this.options.cols)) {
+        this._currentIndex -= this.options.cols;
+        this.setFocus();
+      } else {
+        this.trigger("upfromtop")
+      }
     },
 
     _rowDown: function() {
       var coords = this.coords();
-      if((this._currentIndex + this.options.cols ) <= coords.lastPageIndex  && this._currentIndex + this.options.cols < (this.collection.length - 1)) {
+      if((this._currentIndex + this.options.cols ) <= coords.lastPageIndex  && this._currentIndex + this.options.cols < (this.collection.length)) {
           this._currentIndex += this.options.cols;
           this.setFocus();
        } else {
@@ -187,10 +188,13 @@ define(['navigation','underscore', 'hbs!enginelite/menuprototypes/templates/engi
     },
 
     render: function () {
-      this.$el.html(GridMenuPageTemplate({
+      var tmpl = (this.options.template) ? this.options.template : GridMenuPageTemplate;
+      $(this.options.el).html(tmpl({
         items: this.collection.models.map(function(m) { return m.attributes }),
         numberPerPage: this.options.rows * this.options.cols
-      }))
+      }));
+      this.trigger('pageset', this.coords().pageIndex);
+      return this;
     }
   });
 

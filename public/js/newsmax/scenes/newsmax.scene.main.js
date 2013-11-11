@@ -6,11 +6,14 @@ define([
         'enginelite/menuprototypes/enginelite.menus.gridmenu',
         'enginelite/menuprototypes/enginelite.menus.slotmenu',
         'newsmax/newsmax.mainmenu', 'newsmax/newsmax.utils',
-        'newsmax/menus/newsmax.menu.simplekeys'
+        'newsmax/menus/newsmax.menu.simplekeys',
+        'newsmax/newsmax.api'
     ],
-    function(StageManager, Navigation, BackBone, sampleTemplate, MainMenu, MainMenuTemplate, GridMenu, SlotMenu, MenuItems, Utils, KeyboardMenu) {
+    function(StageManager, Navigation, BackBone, sampleTemplate, MainMenu, MainMenuTemplate, GridMenu, SlotMenu, MenuItems, Utils, KeyboardMenu, API) {
 
         'use strict';
+
+        $log(API);
 
 
         var scene = new StageManager.Scene({
@@ -27,6 +30,7 @@ define([
 
 
         scene.onenterscene = function() {
+
 
             var mainMenu = new SlotMenu({
                 el: '#mainMenu',
@@ -179,10 +183,16 @@ define([
 
             Grid.on('newfocus', function(item) {
                 updateHTMLforGrid(item);
-            }, scene)
+            }, scene);
+
+            Grid.on('selecteditem',function(item){
+              //$log('item = ', item);
+              //we should be getting an item here and changing to another scene. but lets just hold off on that for a few moments
+              StageManager.changeScene('videoPlayback',{item:item});
+            })
 
             var updateHTMLforGrid = function(item) {
-                $('.title').html('Title: ' + item.item.get("title"))
+                $('.title').html('Title: ' + item.get("title"))
             }
 
             mainMenu.focus();

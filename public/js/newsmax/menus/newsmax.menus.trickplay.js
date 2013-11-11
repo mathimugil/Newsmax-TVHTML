@@ -1,0 +1,83 @@
+define(['navigation', 'enginelite/menuprototypes/enginelite.menus.listmenu', 'hbs!newsmax/templates/trickplay', 'jquery', 'underscore', 'backbone', 'handlebars', 'keyhandler'], function(Navigation, ListMenu, trickPlayTemplate, $, _, Backbone, Handlebars, KeyHandler) {
+
+	var menu = ListMenu.extend({});
+
+    var VideoMenu = new menu({});
+
+    VideoMenu.on('selectedindex',function(index){
+        
+        switch(index.toString()){
+            case "0":
+                //stop
+                KeyHandler.trigger('onStop');
+                break;
+            case "1":
+                //play
+                KeyHandler.trigger('onPlay');
+                break;
+            case "2":
+                //pause
+                KeyHandler.trigger('onPause');
+                break;
+            case "3":
+                KeyHandler.trigger('onRW');
+                //rewind
+                break;
+            case "4":
+                KeyHandler.trigger('onFF');
+                //fastforward
+                break;
+
+            default:
+                //do nothing
+        }
+    });
+
+    VideoMenu.setFocusTo = function(type) {
+
+        switch(type.toString()){
+            
+            case "onStop":
+                this._currentIndex = 0;
+                break;
+            case "onPlay":
+                this._currentIndex = 1;
+                break;
+            case "onPause":
+                this._currentIndex = 2;
+                break;
+            case "onRW":
+                this._currentIndex = 3;
+                break;
+            case "onFF":
+                this._currentIndex = 4;
+                break;
+            default:
+                //do nothing
+        }
+
+        //it is hidden so this will not work.
+        if(this.focused) this.setFocus();
+        else this.focus();
+    }
+
+    VideoMenu.on('onblur',function(){
+        $('#trickPlayContainer div').removeClass('focused');
+    });
+
+    //TODO: ASK MIKE HOW TO DO THIS BETTER with extend
+    VideoMenu.enabled = true;
+    VideoMenu.disable = function(){
+        this.enabled = false;
+    }
+
+    VideoMenu.enable = function(){
+        this.enabled = true
+    }
+
+    VideoMenu.disabled = function(){
+        return (this.enabled) ? false : true;
+    }
+
+	return VideoMenu;
+});

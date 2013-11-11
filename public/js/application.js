@@ -10,6 +10,9 @@ require.config({
   paths: {
     text: 'lib/text',
     hbs: 'lib/hbs',
+    'jquery.imagesloaded': 'lib/jqplugins/jquery.imagesloaded',
+    'jquery.ellipsis': 'lib/jquery.ellipsis.min',
+    'jquery.loadingdotdotdot': 'lib/jquery.loadingdotdotdot',
     domReady: 'lib/domReady',
     handlebars: 'lib/handlebars-1.0.0',
     tvengine: 'enginelite/tvengine',
@@ -21,7 +24,8 @@ require.config({
     appconfig: 'appconfig',
     backbone: 'lib/vendor/backbone/backbone',
     jquery: 'lib/vendor/jquery/jquery',
-    underscore: 'lib/vendor/underscore/underscore'
+    underscore: 'lib/vendor/underscore/underscore',
+    api: 'newsmax/newsmax.api'
   },
   shim: {
     underscore: {
@@ -36,7 +40,16 @@ require.config({
     },
     handlebars: {
       exports: 'Handlebars'
-    }
+    },
+    'jquery.imagesloaded': [
+      'jquery'
+    ],
+    'jquery.ellipsis': [
+      'jquery'
+    ],
+    'jquery.loadingdotdotdot': [
+      'jquery'
+    ]
   }
 });
 
@@ -44,10 +57,25 @@ require(
   [
     'domReady',
     'tvengine',
-    'newsmax/scenes/newsmax.scene.main'
+    'newsmax/newsmax.api',
+    'newsmax/scenes/newsmax.scene.main',
+    'newsmax/scenes/newsmax.scene.videoplayback',
+    'newsmax/scenes/newsmax.scrubber',
+    'jquery.ellipsis',
+    'jquery.loadingdotdotdot',
   ],
   function ( domReady, TVEngine) {
     domReady(function() {
+
+    window.$navigation    = require('navigation');
+    window.$keyhandler    = require("keyhandler");
+    window.$stagemanager  = require("stagemanager");
+    window.$platform      = require('platform');
+
+    $('#return_button').click(function(){
+      $keyhandler.trigger('onReturn');
+    });
+
       TVEngine.start();
     });
   }, function(e) {

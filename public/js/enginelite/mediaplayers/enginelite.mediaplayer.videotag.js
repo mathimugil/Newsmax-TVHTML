@@ -108,6 +108,7 @@ define(['enginelite/enginelite.mediaplayer', 'platform', 'jquery','underscore'],
       this.stop(true);
       $(this._videoElement).attr('autoplay', 'play');
       $(this._videoElement).attr('src', url);
+      if($globalMute) $(this._videoElement).prop('muted',true);
       //$(this._videoElement).attr('muted',true);     //not sure why we were doing this?
       $(this._videoElement).show();
       if (_.isNumber(index)) {

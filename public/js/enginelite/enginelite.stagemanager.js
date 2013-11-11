@@ -202,7 +202,7 @@ define(['tvengine', 'navigation', 'keyhandler','jquery','underscore','backbone']
      // $log(" HISTORY ADDING SCENE: " + current.scene + " STATE: " + current.state + " params: ", current.params);
       if(!current || _.isEmpty(current)) return;
       this._stack.unshift({ scene: current.scene, state: current.state, params: current.params || {} });
-      KeyHandler.incrementStupidCounter();
+      //KeyHandler.incrementStupidCounter();
     },
 
 
@@ -236,14 +236,14 @@ define(['tvengine', 'navigation', 'keyhandler','jquery','underscore','backbone']
       if(_.isFunction(currentScene.handlesback) ) {
         // Scene is handling back button, see if it still wants to change the scene.
         if( !currentScene.handlesback() ) {
-          KeyHandler.incrementStupidCounter();
+          //KeyHandler.incrementStupidCounter();
           return true;
         }
       }
       if(!StageManager._changingScene) {
         this.back();
       } else {
-        KeyHandler.incrementStupidCounter();
+        //KeyHandler.incrementStupidCounter();
       }
     },
 
