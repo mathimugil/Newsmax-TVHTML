@@ -44,8 +44,9 @@ define(['jquery', 'underscore', 'backbone', 'tvengine', 'domReady'], function($,
       if (_.isFunction($.ajaxPrefilter)) {
          $.ajaxPrefilter(function(options, originalOptions) {
           var data = originalOptions.data || {};
+          var proxypath = options.proxypath || 'proxy.api';
           if (!options.skipProxy && data.dataType !== "jsonp" && options.url.indexOf("http") === 0) {
-            options.url = options.url.replace(/^[^#]*?:\/\/.*?(\/.*)$/, "/proxy.api$1");
+            options.url = options.url.replace(/^[^#]*?:\/\/.*?(\/.*)$/, "/"+proxypath+"$1");
           }
         });
       }

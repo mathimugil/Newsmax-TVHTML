@@ -53,8 +53,10 @@ define(['navigation', 'underscore'], function(Navigation, _) {
       }
 
       this.on('onselect', function() {
+
+        $log(" SLOT MENU ON SELECT ")
         this.trigger('selectedindex', this._currentIndex);
-        this.trigger('selecteditem', this.collection.get(this._currentIndex));
+        this.trigger('selecteditem', this.collection.at(this._currentIndex));
       }, this);
 
       var _t = this;

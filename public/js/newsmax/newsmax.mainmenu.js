@@ -1,91 +1,35 @@
-define(['backbone', 'underscore', 'newsmax/newsmax.utils'], function(Backbone, _, Utils) {
-    var count = 0;
-    var financeSubs = [{
-        title: 'Spotlight',
-    }, {
-        title: 'Finance and Investing',
-    }, {
-        title: 'Domestic',
-    }, {
-        title: 'International',
-    }, {
-        title: 'Stocks',
-    }, {
-        title: 'Commodities',
-    }];
+define(['newsmax/newsmax.api', 'newsmax/newsmax.utils'], function(API, Utils) {
+    
+    //return 
+    return API.fetchMainConfig().then(function(data){
+        $log('data', data);
+        var out =  _(data.categories).map(function(categorie){
+           action = categorie.url.match(/\.m3u8$/) ? 'livefeed' : 'subcategory';
 
-    var specialsubs = [{
-        title: 'Spotlight',
-    }, {
-        title: 'Shows',
-    }, {
-        title: 'Documentaries',
-    }, {
-        title: 'Other Programming',
-    }];
-
-    var healthSubs = [{
-        title: 'Spotlight',
-    }, {
-        title: 'Featured',
-    }, {
-        title: 'Cancer',
-    }, {
-        title: 'Heart',
-    }, {
-        title: 'Brain',
-    }, {
-        title: 'Diet',
-    }, {
-        title: 'Natural Health',
-    }, {
-        title: 'Anti-Aging',
-    }];
-
-    var interviews = [
-    {
-        title: 'Spotlight'
-    }, {
-        title: 'Economic',
-    }, {
-        title: 'Recent Episodes'
-    }, {
-        title: 'Clips',
-    }, {
-        title: 'Highlights',
-    }, {
-        title: 'Archive',
-    }];
-
-    var categories = new Utils.categoryCollection([
-
-        {
-            title: 'NewsMax Live',
-            action: 'livefeed'
-        }, {
+            if (action == "subcategory") {
+                action = (!categorie.feeds || categorie.feeds.length === 0) ? "videos":"subcategory";
+            }  
+           return  _.extend(categorie, {
+                action:action, 
+                subcategory: (categorie.feeds && categorie.feeds.length) ? new Utils.categoryCollection(categorie.feeds) : null,
+                feeds: null,
+            })
+        });
+        
+       var live = _(out).find(function(cat) {
+        return (cat.action == "livefeed")
+       })
+       out = _(out).filter(function(cat) {
+            return (cat.action !== "livefeed")
+       });
+       out.unshift({
             title: 'Search',
             action: 'search'
-        }, {
-            title: 'Newsmaker Interviews',
-            subcategory: new Utils.categoryCollection(interviews),
-            action: 'subcategory'
+        })
+       out.unshift(live);
 
-        }, {
-            title: 'Finance',
-            subcategory: new Utils.categoryCollection(financeSubs),
-            action: 'subcategory'
-        }, {
-            title: 'Special Programming',
-            subcategory: new Utils.categoryCollection(specialsubs),
-            action: 'subcategory'
-
-        }, {
-            title: 'Health',
-            subcategory: new Utils.categoryCollection(healthSubs),
-            action: 'subcategory'
-        }
-    ]);
-
-    return categories;
+       $log("OUT", out);
+       return new Utils.categoryCollection(out);
+    });
 
 })

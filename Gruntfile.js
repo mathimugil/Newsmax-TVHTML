@@ -138,18 +138,38 @@ module.exports = function(grunt) {
                 }
             } 
                 ,
-            proxies: [{
-                context: '/proxy.api',
-                host: 'cdn-api.ooyala.com',
-                port: 80,
-                https: false,
-                changeOrigin: true,
-                rewrite: {
-                    '^/proxy.api': ''
+            proxies: [
+                {
+                    context: '/proxy.cdn',
+                    host: 'cdn.nmax.tv',
+                    port: 80,
+                    https: false,
+                    changeOrigin: true,
+                    rewrite: {
+                        '^/proxy.cdn': ''
+                    }
+                },
+                {
+                    context: '/proxy.api',
+                    host: 'www.nmax.tv',
+                    port: 80,
+                    https: false,
+                    changeOrigin: true,
+                    rewrite: {
+                        '^/proxy.api': ''
+                    }
+                },
+                {
+                    context: '/proxy.ooo',
+                    host: 'cdn-api.ooyala.com',
+                    port: 80,
+                    https: false,
+                    changeOrigin: true,
+                    rewrite: {
+                        '^/proxy.ooo': ''
+                    }
                 }
-            }]
-            
-                 ,
+            ]
         },
         sass: {
             main: {

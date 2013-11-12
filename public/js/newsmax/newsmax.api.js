@@ -3,8 +3,7 @@ define(['navigation'], function(Navigation) {
 		fetchItem: function(url, parser, options) {
 
 			options = _.isFunction(parser) ? options : parser;
-			options = options || {};
-			options = _.defaults(options,{
+			options = _.defaults(options || {},{
 				url : url,
 				// skipProxy: true,
 				// xhrFields: {
@@ -29,7 +28,24 @@ define(['navigation'], function(Navigation) {
 			})
 		},
 		fetchMRSS: function (url){
-			return this.fetchItem(url,this.mrssParser);
+			//url = "http://www.nmax.tv/NewsmaxVideoServices/api/MRSSHandler?mrssUrl=http://cdn-api.ooyala.com/v2/syndications/b1b7ec4a35bc4b3398742d477fdb5bfa/feed?pcode=JkcWs6v53lsRdGfwlCSwg_a5CUMv"
+			proxypath = (url.indexOf("www.nmax.tv") > 2)  ? 'proxy.api' : 'proxy.ooo';
+			return this.fetchItem(url,this.mrssParser, {
+				proxypath: proxypath
+			});
+		},
+		fetchMainConfig: function (){
+			return this.fetchItem('http://cdn.nmax.tv/NewsmaxVideoServices/api/Configuration?DC=iPhone&SN=3535252235252',this.parseMainConfig,{
+				proxypath:'proxy.cdn'
+			})
+		},
+		parseMainConfig: function (data){
+			try{
+				data = JSON.parse(data.configDocument.trim());				
+			} catch(e){
+				$log(e)
+			}
+			return data;
 		}
 	}
 })
