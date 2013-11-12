@@ -184,6 +184,22 @@ padding-top: 20px;
 }
 
 #gridHTML .title{
-  margin-top: 52px;
+  margin-top: 12px;
   margin-left: 20px;
+  display:block;
+}
+#gridHTML .description{
+    margin-top: 52px;
+    margin-left: 20px;
+    display:block;   
+}
+
+.gridItem img{
+    width:160px;
+    height:90px;
+}
+
+.gridItem img {
+  width: 160px;
+  height: 90px;
 }

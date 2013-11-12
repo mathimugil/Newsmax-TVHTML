@@ -7,9 +7,10 @@ define([
         'enginelite/menuprototypes/enginelite.menus.slotmenu',
         'newsmax/newsmax.mainmenu', 'newsmax/newsmax.utils',
         'newsmax/menus/newsmax.menu.simplekeys',
-        'newsmax/newsmax.api'
+        'newsmax/newsmax.api',
+        'hbs!newsmax/templates/GridMenu'
     ],
-    function(StageManager, Navigation, BackBone, sampleTemplate, MainMenu, MainMenuTemplate, GridMenu, SlotMenu, MenuItemsDeferred, Utils, KeyboardMenu, API) {
+    function(StageManager, Navigation, BackBone, sampleTemplate, MainMenu, MainMenuTemplate, GridMenu, SlotMenu, MenuItemsDeferred, Utils, KeyboardMenu, API, GridMenuTemplate) {
 
         'use strict';
 
@@ -66,8 +67,8 @@ define([
                 var videoCollection = Utils.createCollection()
                 var VideoGrid = GridMenu.extend({
                     options: {
-                        rows: 3,
-                        cols: 4
+                        rows: 20,
+                        cols: 5
                     },
                     initialize: function() {
                         GridMenu.prototype.initialize.call(this);
@@ -77,9 +78,10 @@ define([
 
                 Grid = new VideoGrid({
                     el: "#gridMenuContainer",
-                    collection: videoCollection
+                    collection: videoCollection,
+                    template: GridMenuTemplate
                 })
-                Grid.render();
+                //Grid.render();
 
 
                 mainMenu.on('selectedindex', function(index) {
@@ -193,6 +195,7 @@ define([
                 Grid.on('selecteditem', function(item) {
                     //$log('item = ', item);
                     //we should be getting an item here and changing to another scene. but lets just hold off on that for a few moments
+                    debugger;
                     StageManager.changeScene('videoPlayback', {
                         item: item
                     });
@@ -200,6 +203,7 @@ define([
 
                 var updateHTMLforGrid = function(item) {
                     $('.title').html('Title: ' + item.get("title"))
+                    $('.description').html('Description: ' + item.get('description'));
                 }
 
                 mainMenu.focus();

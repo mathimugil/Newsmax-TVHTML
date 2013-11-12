@@ -595,7 +595,9 @@ define([
             case 'onstop':
                 StageManager.StageHistory.back();
                 break;
-            case 'onerror':
+            case 'videoerror':
+                $log('There was an error in videoplayback scene - make sure you are using safari for hls streams');
+                StageManager.StageHistory.back();
                 //TODO: set error flag to check while exiting the scene
         }
     }
