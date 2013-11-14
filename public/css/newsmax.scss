@@ -1,3 +1,5 @@
+@import '../vendor/font-awesome/scss/font-awesome';
+
 @font-face
 {
 font-family: HelveticaNeue;
@@ -10,9 +12,20 @@ font-family: HelveticaNeueBold;
 src: url(../fonts/HelveticaNeueBold.ttf);
 }
 
-body{
-	
+@mixin button{
+  font-family: FontAwesome;
+  font-style: normal;
+  font-weight: normal;
+  color: black;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#efefef), color-stop(100%,#c9c9c9));
 }
+@mixin buttonhover{
+  color: white;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ff7a2a), color-stop(100%,#ff7a2a));
+}
+
+body{}
+
 #wrapper{
 	display:block;
 }
@@ -29,21 +42,15 @@ body{
 }
 
 #logo{
-position: absolute;
-top: 58px;
-left: 1110px;
-z-index: 99;
-width:124px;
-height:34px;
-background:url(../images/yg-logo-colored2.png);
+  position: absolute;
+  top: 58px;
+  left: 1110px;
+  z-index: 99;
+  width:124px;
+  height:34px;
+  background:url(../images/yg-logo-colored2.png);
 }
-.backButton{
-	position:absolute;top:50px; left:49px;
-	width:47px; height:53px;
-	background:url(../images/back-sprite.png);
-	background-repeat: no-repeat;
-	background-position:0px 0px;
-}
+
 
 .yg-logo{
 	position:absolute;
@@ -84,9 +91,20 @@ background:url(../images/yg-logo-colored2.png);
 	position:absolute;
 	width:1280px; height:720px;
 }
-
-.backButton.focused{
-	background-position:-47px 0px;	
+.backButton{
+	position:absolute;
+  top:50px; left:49px;
+	width:47px; height:53px;
+  @include button;
+  
+  &:before{
+    position: absolute;
+    top: 17px; left: 20px;
+    content: "\f053";
+  }
+  &.focused{
+    @include buttonhover;
+  }
 }
 
 #playBackTray{
@@ -96,13 +114,19 @@ background:url(../images/yg-logo-colored2.png);
 }
 #hideTrayButton{
 	position:absolute; bottom:130px; right:48px;
-	background: url(../images/hide-controls-sprite.png);
 	width:69px; height:59px;
-	background-position: 0px 0px;
+  @include button;
+  
+  &:before{
+    position: absolute;
+    top: 17px; left: 20px;
+    content: "\f078";
+  }
+  &.focused{
+    @include buttonhover;
+  }
 }
-#hideTrayButton.focused{
-	background-position: -69px 0px;
-}
+
 #progressBarWrapper{
 	position:absolute;
 	left:51px; top:23px;
@@ -153,31 +177,41 @@ background:url(../images/yg-logo-colored2.png);
 	float:left;
 	width:62px; height:53px;
 	background-repeat: no-repeat;
+  display: inline-block;
+  position: relative;
+  float: left;
+  @include button;
+  
+  &:before{
+    position: absolute;
+    top: 17px; left: 20px;
+  }
+  &.stop:before{
+    content: "\f04d";
+  }
+
+  &.play:before{
+  	content: "\f04b";
+  }
+
+  &.pause:before{
+  	content: "\f04c";
+  }
+
+  &.rewind:before{
+  	content: "\f04a";
+  }
+
+  &.fastforward:before{
+  	content: "\f04e";
+  }
+
+  &.focused{
+    @include buttonhover;
+  }
 }
 
-.trickPlayButton.stop{
-	background:url(../images/stop-sprite.png)
-}
 
-.trickPlayButton.play{
-	background:url(../images/play-sprite.png)
-}
-
-.trickPlayButton.pause{
-	background:url(../images/pause-sprite.png)
-}
-
-.trickPlayButton.rewind{
-	background:url(../images/rewind-sprite.png)
-}
-
-.trickPlayButton.fastforward{
-	background:url(../images/fastforward-sprite.png)
-}
-
-.trickPlayButton.focused{
-	background-position: -62px 0px;
-}
 
 .videoGridMenu {
 	position: absolute;
@@ -214,12 +248,6 @@ background:url(../images/yg-logo-colored2.png);
 .videoListMenu > ul > li.focused{
 
 }
-
-
-
-
-
-
 
 .filterGridMenu{
 	position: absolute;

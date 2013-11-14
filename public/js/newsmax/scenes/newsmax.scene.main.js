@@ -195,7 +195,7 @@ define([
                 Grid.on('selecteditem', function(item) {
                     //$log('item = ', item);
                     //we should be getting an item here and changing to another scene. but lets just hold off on that for a few moments
-                    debugger;
+                    //debugger;
                     StageManager.changeScene('videoPlayback', {
                         item: item
                     });
