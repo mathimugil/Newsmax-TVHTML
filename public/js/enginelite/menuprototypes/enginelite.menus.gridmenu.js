@@ -109,6 +109,7 @@ define(['navigation','underscore', 'hbs!enginelite/menuprototypes/templates/engi
     _oldFocus:null,
 
     setFocus: function() {
+      console.log("this.currentindex:", this._currentIndex);
       this.trigger('blurfocus', this.collection.at(this._oldFocus));
       $(this.options.el).children().children().removeClass("focused")
       $(this.options.el).children().children().eq(this._currentIndex).addClass("focused");

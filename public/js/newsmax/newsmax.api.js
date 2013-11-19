@@ -28,7 +28,6 @@ define(['navigation'], function(Navigation) {
 			})
 		},
 		fetchMRSS: function (url){
-			//url = "http://www.nmax.tv/NewsmaxVideoServices/api/MRSSHandler?mrssUrl=http://cdn-api.ooyala.com/v2/syndications/b1b7ec4a35bc4b3398742d477fdb5bfa/feed?pcode=JkcWs6v53lsRdGfwlCSwg_a5CUMv"
 			proxypath = (url.indexOf("www.nmax.tv") > 2)  ? 'proxy.api' : 'proxy.ooo';
 			return this.fetchItem(url,this.mrssParser, {
 				proxypath: proxypath
@@ -41,7 +40,7 @@ define(['navigation'], function(Navigation) {
 		},
 		parseMainConfig: function (data){
 			try{
-				data = JSON.parse(data.configDocument.trim());				
+				data = JSON.parse(data.configDocument.trim());
 			} catch(e){
 				$log(e)
 			}

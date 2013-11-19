@@ -1,72 +1,190 @@
 @import '../vendor/font-awesome/scss/font-awesome';
+@import 'colors';
 
 @font-face
 {
-font-family: HelveticaNeue;
-src: url(../fonts/HelveticaNeue.ttf);
+font-family: HelveticaNeueLight;
+src: url(../fonts/HelveticaNeueLight.ttf);
 }
 
-@font-face
-{
-font-family: HelveticaNeueBold;
-src: url(../fonts/HelveticaNeueBold.ttf);
-}
-
-@mixin button{
+@mixin button {
   font-family: FontAwesome;
   font-style: normal;
   font-weight: normal;
-  color: black;
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#efefef), color-stop(100%,#c9c9c9));
+  color: $tvwhite;
+  background-color: $dark;
 }
-@mixin buttonhover{
-  color: white;
+@mixin buttonhover {
+  color: $tvwhite;
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ff7a2a), color-stop(100%,#ff7a2a));
 }
-
-body{}
-
-#wrapper{
-	display:block;
+@mixin menubg {
+  background: rgba(45,91,169, 0.95);
+  box-shadow: 10px 0px 8px rgba(00,00,00,0.25);
 }
-#wrapper.mainwrapper{
-	background: url(../images/background.png) no-repeat;
+@mixin outerglow {
+  box-shadow: 0px 0px 10px rgba(00,00,00,0.25);
 }
-#wrapper.video{
-	background:transparent;
+@mixin silvergradient {
+  background: -webkit-linear-gradient(top, rgba(239,239,239,0.9) 0%, rgba(204,204,203, 0.9) 81%, rgba(154,155,159, 0.9) 100%);
 }
 
-#logo{
+body{
+  font-family: HelveticaNeueLight, Helvetica, Arial, sans-serif;
+}
+img#logo {
   position: absolute;
-  top: 58px;
-  left: 1110px;
-  z-index: 99;
-  width:124px;
-  height:34px;
-  background:url(../images/yg-logo-colored2.png);
+  z-index: 99999;
+  top: 32px;
+  right: 32px;
+  width: 238px; height: 40px;
+  display: none;
+}
+
+#mainMenu {
+  @include menubg;
+  height: 720px; 
+  padding-top: 50px; 
+  position:absolute; left: 0; top: 0;
+}
+
+#subMenu {
+  @include menubg;
+  position:absolute;
+  top:0px; left: -180px;
+  height: 720px;
+  padding-top: 50px;
+}
+
+*:focus {
+   outline: none;
+}
+#searchMenu {
+  position: absolute;
+  width: 280px; height: 340px; color: white; 
+  padding: 50px !important; opacity: 0;
+  text-transform: uppercase;
+  
+  table { width: 100%; }
+  td {
+    height: 40px; line-height: 40px; width: 40px; text-align: center;
+    
+    &.focused {
+      background:$nblue;
+    }
+  }
+  #searchTermWrap {
+      border-bottom: 2px solid rgba(255,255,255,0.3); margin-bottom: 25px; 
+  }
+  #searchterm {
+      width: 100%; background: black; outline: 0; color: white;
+      height: 30px;
+      margin-bottom: 24px; font-size: 24px; border: 0;
+      text-align: right;
+  }
+}
+
+#mainMenu li, #subMenu li {
+  width: 240px;
+  text-align:right;
+  padding: 15px 20px 0px 30px; 
+  color: $tvwhite;
+  margin-bottom: 5px;
+  border-bottom: 8px solid transparent;
+  font-weight: normal;
+  &.sm-focused {
+    border-bottom: 8px solid $menuHighlight;
+    color:$tvwhite;
+    font: Helvetica;
+    font-weight: bold;
+  }
+  &.selected {
+    border-bottom: 8px solid $menuHighlight;
+    color:$tvwhite;
+  }
+}
+
+#gridMenuContainer {
+  @include silvergradient;
+  display: none;
+  position: absolute;
+  top: 100px; left: 360px;
+  width: 850px; height: 545px;
+  padding: 20px;
+  overflow: hidden;
+  
+  ul { display: table; }
+  li.gridItem {
+    float: left;
+    border: 2px solid transparent;
+    
+    img {
+      width: 270px;
+      height: 152px;
+      border: 4px solid transparent;
+      opacity:0.7;
+    }
+    &.focused img {
+      @include outerglow;
+      border: 4px solid $red;
+      opacity:1;
+    }
+  }
+}
+
+#gridHTML {
+  @include silvergradient;
+  @include outerglow;
+  display: none;
+  position: absolute;
+  top: 489px; left: 360px;
+  width: 850px; height: 181px;
+  color: $dark;
+  padding: 20px;
+  font-size: 20px;
+  
+  #gridArrow{
+    position: absolute;
+    top: -31px;
+    &.left{
+      left: 124px;
+    }
+    &.middle{
+      left: 412px;
+    }
+    &.right{
+      left: 699px;
+    }
+  }
+  span{ display: block; margin-bottom: 10px;}
 }
 
 
-.yg-logo{
-	position:absolute;
-	top:100px; right:100px;
-	width:124px; height:34px;
-	background: url(../images/yg-logo.png) top left no-repeat;
+
+
+//#wrapper{
+//  display:block;
+//}
+//#wrapper.mainwrapper{
+//  background: url(../images/background.png) no-repeat;
+//}
+//#wrapper.video{
+//  background:transparent;
+//}
+
+#vignette {
+  background:url(../images/combo-vignette.png) top left no-repeat;
+  position:absolute;
+  width:1280px; height:720px;
 }
 
-#vignette{
-	background:url(../images/combo-vignette.png) top left no-repeat;
-	position:absolute;
-	width:1280px; height:720px;
-}
-
-.backButton{
+.backButton {
 	position:absolute;
   top:50px; left:49px;
 	width:47px; height:53px;
   @include button;
   
-  &:before{
+  &:before {
     position: absolute;
     top: 17px; left: 20px;
     content: "\f053";
@@ -115,7 +233,7 @@ body{}
 	position:absolute;
 	top:0px; left:0px;
 	width:400px; height:10px;
-	background:#69747a;
+	background:$nblue;
 }
 #timecode{
 	font: 19px HelveticaNeue;
@@ -169,45 +287,51 @@ body{}
   }
 }
 
-/*new*/
 #videoInfo{
-	position:absolute;
-	top:558px; left:49px;
-	color:white;
-	font-family: HelveticaNeue;
-	font-size: 19px;
-	width:1000px;
+  position:absolute;
+  top:558px; left:49px;
+  color:white;
+  font-family: HelveticaNeue;
+  font-size: 19px;
+  width:1000px;
   
   h2{
-  	font-size: 23px;
-  	font-weight:bold;
-  	position:absolute;
-  	display:block;
-  	top:0px; left:0px;
+    font-size: 23px;
+    font-weight:bold;
+    position:absolute;
+    display:block;
+    top:0px; left:0px;
   }
   
   .description{
-  	position:absolute; top:72px; left:0px; 
-  	width: 845px;
-  	line-height:23px;
+    position:absolute; top:72px; left:0px; 
+    width: 845px;
+    line-height:23px;
   }
   
 }
 
 .now-playing-text{
-	position:absolute;
-	left:109px; top:64px;
-	color:#535c61;
-	font: 20px HelveticaNeue;
-	font-weight:bold;
+  position:absolute;
+  left:109px; top:64px;
+  color:#535c61;
+  font: 20px HelveticaNeue;
+  font-weight:bold;
 }
 
 #loadingVideoIndicator{
   position:absolute;
   top:0px; left:0px;
   width:1280px; height:720px;
-  background:rgb(202,222,233);
+  background: -webkit-radial-gradient(center, ellipse cover, #dde0e7 1%,#b6cadb 100%);
   z-index:100;
+  #splash{
+    position: absolute; top: 250px; left: 185px;
+  }
+  #loading-text{
+    font-size: 36px;
+    position: absolute; top: 450px; left: 535px;
+  }
 }
 
 #loadingDots{
@@ -218,22 +342,22 @@ body{}
 }
 
 #videoInfoButton{
-	position:absolute;
-	left:319px;
-	width:128px; height:53px;
-	background:url(../images/video-infobutton-sprite.png) no-repeat;
-	background-position: 0px 0px;
+  position:absolute;
+  left:319px;
+  width:128px; height:53px;
+  background:url(../images/video-infobutton-sprite.png) no-repeat;
+  background-position: 0px 0px;
   &.focused{
     background-position: -128px 0px;
   }
 }
 
 .closeButton{
-	position: absolute; 
-	top:50px; left:49px;
-	width:47px; height:53px;
-	background:url(../images/close-playback-sprite.png) no-repeat top left;
-	background-position: 0px 0px;
+  position: absolute; 
+  top:50px; left:49px;
+  width:47px; height:53px;
+  background:url(../images/close-playback-sprite.png) no-repeat top left;
+  background-position: 0px 0px;
   
   &.focused{
     background-position:-47px 0px;
@@ -241,40 +365,40 @@ body{}
 }
 
 #errorModal{
-	position:absolute;
-	z-index:100;
-	width:1280px; height:720px;
-	background:url(../images/error-modal.jpg) no-repeat top left;
-	visibility:hidden;
+  position:absolute;
+  z-index:100;
+  width:1280px; height:720px;
+  background:url(../images/error-modal.jpg) no-repeat top left;
+  visibility:hidden;
 }
 #networkErrorModal{
-	position:absolute;
-	z-index:100;
-	width:1280px; height:720px;
-	background:url(../images/network-disconnected.jpg) no-repeat top left;
-	visibility:hidden;
+  position:absolute;
+  z-index:100;
+  width:1280px; height:720px;
+  background:url(../images/network-disconnected.jpg) no-repeat top left;
+  visibility:hidden;
 }
 
 #scrubDirection{
-    width:67px;
-    height:47px;
-    background:blue;
-    position:absolute;
-    bottom:2px;
-    left:-33px;
-    display:none;
-    &.ff{
-      background: url(../images/ff-bubble.png) no-repeat top left;   
-    }
-    &.rw{
-      background: url(../images/rw-bubble.png) no-repeat top left;   
-    }
+  width:67px;
+  height:47px;
+  background:blue;
+  position:absolute;
+  bottom:2px;
+  left:-33px;
+  display:none;
+  &.ff{
+    background: url(../images/ff-bubble.png) no-repeat top left;   
+  }
+  &.rw{
+    background: url(../images/rw-bubble.png) no-repeat top left;   
+  }
 }
 
 .closeButtonText{
-	position:absolute;
-	top:63px; left:108px;
-	font: 20px HelveticaNeue;
-	font-weight:bold;
-	color: #535c61;
+  position:absolute;
+  top:63px; left:108px;
+  font: 20px HelveticaNeue;
+  font-weight:bold;
+  color: #535c61;
 }

@@ -185,7 +185,8 @@ module.exports = function(grunt) {
         },
         open: {
             server: {
-                path: 'http://<%= connect.options.hostname %>:<%= connect.options.port %>'
+                path: 'http://<%= connect.options.hostname %>:<%= connect.options.port %>',
+                app: 'safari'
             }
         },
         forever: {

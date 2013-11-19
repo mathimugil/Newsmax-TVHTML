@@ -31,13 +31,7 @@ define(['backbone', 'mediaplayer'], function(Backbone, MediaPlayer) {
         }
       });
 
-      //THIS is not being used any longer.
       var videos = new Videos();
-      for (var i = 0; i < 24; i++) videos.push(new Video({
-        thumb: "http://lorempixel.com/160/" + (90) + "/",
-        title: title + i,
-        url: 'http://yogaglovideo.s3.amazonaws.com/berg-hd-1200b-2010040902-4-fspass2.mp4'
-      }));
       return videos;
     },
     categoryModel: catModel,

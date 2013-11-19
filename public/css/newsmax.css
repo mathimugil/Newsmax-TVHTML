@@ -1328,38 +1328,139 @@
   content: "\f196"; }
 
 @font-face {
-  font-family: HelveticaNeue;
-  src: url(../fonts/HelveticaNeue.ttf); }
+  font-family: HelveticaNeueLight;
+  src: url(../fonts/HelveticaNeueLight.ttf); }
 
-@font-face {
-  font-family: HelveticaNeueBold;
-  src: url(../fonts/HelveticaNeueBold.ttf); }
+body {
+  font-family: HelveticaNeueLight, Helvetica, Arial, sans-serif; }
 
-#wrapper {
-  display: block; }
-
-#wrapper.mainwrapper {
-  background: url(../images/background.png) no-repeat; }
-
-#wrapper.video {
-  background: transparent; }
-
-#logo {
+img#logo {
   position: absolute;
-  top: 58px;
-  left: 1110px;
-  z-index: 99;
-  width: 124px;
-  height: 34px;
-  background: url(../images/yg-logo-colored2.png); }
+  z-index: 99999;
+  top: 32px;
+  right: 32px;
+  width: 238px;
+  height: 40px;
+  display: none; }
 
-.yg-logo {
+#mainMenu {
+  background: rgba(45, 91, 169, 0.95);
+  box-shadow: 10px 0px 8px rgba(0, 0, 0, 0.25);
+  height: 720px;
+  padding-top: 50px;
+  position: absolute;
+  left: 0;
+  top: 0; }
+
+#subMenu {
+  background: rgba(45, 91, 169, 0.95);
+  box-shadow: 10px 0px 8px rgba(0, 0, 0, 0.25);
+  position: absolute;
+  top: 0px;
+  left: -180px;
+  height: 720px;
+  padding-top: 50px; }
+
+*:focus {
+  outline: none; }
+
+#searchMenu {
+  position: absolute;
+  width: 280px;
+  height: 340px;
+  color: white;
+  padding: 50px !important;
+  opacity: 0;
+  text-transform: uppercase; }
+  #searchMenu table {
+    width: 100%; }
+  #searchMenu td {
+    height: 40px;
+    line-height: 40px;
+    width: 40px;
+    text-align: center; }
+    #searchMenu td.focused {
+      background: #085caa; }
+  #searchMenu #searchTermWrap {
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    margin-bottom: 25px; }
+  #searchMenu #searchterm {
+    width: 100%;
+    background: black;
+    outline: 0;
+    color: white;
+    height: 30px;
+    margin-bottom: 24px;
+    font-size: 24px;
+    border: 0;
+    text-align: right; }
+
+#mainMenu li, #subMenu li {
+  width: 240px;
+  text-align: right;
+  padding: 15px 20px 0px 30px;
+  color: #e1e1e1;
+  margin-bottom: 5px;
+  border-bottom: 8px solid transparent;
+  font-weight: normal; }
+  #mainMenu li.sm-focused, #subMenu li.sm-focused {
+    border-bottom: 8px solid #5186c6;
+    color: #e1e1e1;
+    font: Helvetica;
+    font-weight: bold; }
+  #mainMenu li.selected, #subMenu li.selected {
+    border-bottom: 8px solid #5186c6;
+    color: #e1e1e1; }
+
+#gridMenuContainer {
+  background: -webkit-linear-gradient(top, rgba(239, 239, 239, 0.9) 0%, rgba(204, 204, 203, 0.9) 81%, rgba(154, 155, 159, 0.9) 100%);
+  display: none;
   position: absolute;
   top: 100px;
-  right: 100px;
-  width: 124px;
-  height: 34px;
-  background: url(../images/yg-logo.png) top left no-repeat; }
+  left: 360px;
+  width: 850px;
+  height: 545px;
+  padding: 20px;
+  overflow: hidden; }
+  #gridMenuContainer ul {
+    display: table; }
+  #gridMenuContainer li.gridItem {
+    float: left;
+    border: 2px solid transparent; }
+    #gridMenuContainer li.gridItem img {
+      width: 270px;
+      height: 152px;
+      border: 4px solid transparent;
+      opacity: 0.7; }
+    #gridMenuContainer li.gridItem.focused img {
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+      border: 4px solid #c22826;
+      opacity: 1; }
+
+#gridHTML {
+  background: -webkit-linear-gradient(top, rgba(239, 239, 239, 0.9) 0%, rgba(204, 204, 203, 0.9) 81%, rgba(154, 155, 159, 0.9) 100%);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+  display: none;
+  position: absolute;
+  top: 489px;
+  left: 360px;
+  width: 850px;
+  height: 181px;
+  color: black;
+  padding: 20px;
+  font-size: 20px; }
+  #gridHTML #gridArrow {
+    position: absolute;
+    top: -31px; }
+    #gridHTML #gridArrow.left {
+      left: 124px; }
+    #gridHTML #gridArrow.middle {
+      left: 412px; }
+    #gridHTML #gridArrow.right {
+      left: 699px; }
+  #gridHTML span {
+    display: block;
+    margin-bottom: 10px; }
 
 #vignette {
   background: url(../images/combo-vignette.png) top left no-repeat;
@@ -1376,15 +1477,15 @@
   font-family: FontAwesome;
   font-style: normal;
   font-weight: normal;
-  color: black;
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #efefef), color-stop(100%, #c9c9c9)); }
+  color: #e1e1e1;
+  background-color: black; }
   .backButton:before {
     position: absolute;
     top: 17px;
     left: 20px;
     content: "\f053"; }
   .backButton.focused {
-    color: white;
+    color: #e1e1e1;
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ff7a2a), color-stop(100%, #ff7a2a)); }
 
 #playBackTray {
@@ -1404,15 +1505,15 @@
   font-family: FontAwesome;
   font-style: normal;
   font-weight: normal;
-  color: black;
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #efefef), color-stop(100%, #c9c9c9)); }
+  color: #e1e1e1;
+  background-color: black; }
   #hideTrayButton:before {
     position: absolute;
     top: 17px;
     left: 20px;
     content: "\f078"; }
   #hideTrayButton.focused {
-    color: white;
+    color: #e1e1e1;
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ff7a2a), color-stop(100%, #ff7a2a)); }
 
 #progressBarWrapper {
@@ -1434,7 +1535,7 @@
   left: 0px;
   width: 400px;
   height: 10px;
-  background: #69747a; }
+  background: #085caa; }
 
 #timecode {
   font: 19px HelveticaNeue;
@@ -1459,8 +1560,8 @@
   font-family: FontAwesome;
   font-style: normal;
   font-weight: normal;
-  color: black;
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #efefef), color-stop(100%, #c9c9c9)); }
+  color: #e1e1e1;
+  background-color: black; }
   .trickPlayButton:before {
     position: absolute;
     top: 17px;
@@ -1476,10 +1577,9 @@
   .trickPlayButton.fastforward:before {
     content: "\f04e"; }
   .trickPlayButton.focused {
-    color: white;
+    color: #e1e1e1;
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ff7a2a), color-stop(100%, #ff7a2a)); }
 
-/*new*/
 #videoInfo {
   position: absolute;
   top: 558px;
@@ -1516,8 +1616,17 @@
   left: 0px;
   width: 1280px;
   height: 720px;
-  background: #cadee9;
+  background: -webkit-radial-gradient(center, ellipse cover, #dde0e7 1%, #b6cadb 100%);
   z-index: 100; }
+  #loadingVideoIndicator #splash {
+    position: absolute;
+    top: 250px;
+    left: 185px; }
+  #loadingVideoIndicator #loading-text {
+    font-size: 36px;
+    position: absolute;
+    top: 450px;
+    left: 535px; }
 
 #loadingDots {
   font-size: 38pt;

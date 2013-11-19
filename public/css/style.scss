@@ -1,3 +1,5 @@
+@import 'colors';
+
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -19,17 +21,11 @@ time, mark, audio, video {
     vertical-align: baseline;
 }
 
-$dark: #000;
-$light: #fff;
-$nblue: #4380c2;
-$tvwhite: #e1e1e1;
-
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
     display: block;
 }
-
 
 body {
     line-height: 1;
@@ -78,7 +74,6 @@ a {
     z-index: 0;
 }
 
-
 body {
   height: 720px;
   width: 1280px;
@@ -101,105 +96,7 @@ body {
   height: 720px;
   width: 1280px;
   z-index: 100;
-  color: $dark; background: rgba(0,255,0,0.2);
-}
-
-
-#mainMenu {
-  height: 720px; background: rgba(0,0,0,1.0);
-  padding-top: 50px; position:absolute; left: 0; top: 0;
-}
-
-#subMenu, #searchMenu {
-  position:absolute;
-  top:0px; left: -180px;
-  background: rgba(0,0,0,1.0);
-  height: 720px;padding-top: 50px;
-}
-#searchterm {
-    width: 240px; background: black; outline: 0; color: white;
-    height: 30px;
-    margin-bottom: 24px; font-size: 24px; border: 0;
-}
-*:focus {
-   outline: none;
-}
-#searchMenu  {
-    width: 240px; color: white;
-    padding: 50px !important; opacity: 0;
-    
-    td{
-      height: 40px; line-height: 40px; width: 40px; text-align: center;
-      
-      &.focused{
-        background:$nblue;
-      }
-    }
-}
-#searchTermWrap {
-    border-bottom: 1px solid white; margin-bottom: 25px;
-}
-
-#mainMenu li, #subMenu li{
-  width: 240px;
-  border-bottom:1px rgba(255,255,255,0.3) solid;
-  text-align:right;
-  padding: 15px 20px 15px 30px; color: white;
-  &:last-child{
-    border-bottom: none;
-  }
-  &.sm-focused{
-    background:$nblue;
-    color:$tvwhite;
-  }
-  &.selected{
-    background:rgba(255,255,255,0.1);
-    color:$tvwhite;
-  }
-}
-
-#gridMenuContainer{
-  position:absolute;
-  top:0px; left:403px;
-  width:875px;
-  
-  li{
-    float:left;
-    border:5px solid transparent;
-    
-    &.focused{
-      border:5px solid $nblue;
-    }
-  }
-}
-
-#gridHTML{
-  position: absolute;
-  top: 476px;
-  left: 400px;
-  width: 819px;
-  height: 222px;
-  background: rgba(0,0,0,0.8);
-  color: #e1e1e1;
-  opacity: .7;
-  padding-top: 20px;
-  
-  .title{
-    margin-top: 12px;
-    margin-left: 20px;
-    display:block;
-  }
-  
-  .description{
-    margin-top: 52px;
-    margin-left: 20px;
-    display:block;   
-  }
-}
-
-.gridItem img{
-    width:160px;
-    height:90px;
+  color: $dark; background: #ccc;
 }
 
 @import 'newsmax';

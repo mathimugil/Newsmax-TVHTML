@@ -3,19 +3,14 @@ define([
     'navigation', 
     'platform', 
     'jquery', 
-    //'hbs!templates/Sample', 
     'underscore', 
     'backbone', 
-    //'yogaglo/api/yogaglo.api', 
     'mediaplayer', 
     'keyhandler', 
     'utils', 
     'newsmax/scenes/newsmax.scrubber', 
     'newsmax/menus/newsmax.menus.trickplay', 
-    //'appconfig',
-    //'models', 
     'newsmax/menus/newsmax.menus.backmenu', 
-    //'yogaglo/api/yogaglo.send',
     'jquery.loadingdotdotdot'
     ],
     function(
@@ -74,23 +69,11 @@ define([
     }*/
 
     videoPlayback.handlesback = function(){
-        //if we are playing whatis yogaglo and the last scene was loadWhatIsYogaglo we need to exit the application
-        /*if(videoPlayback.isPlayingWhatIsYogaGlo){
-            if($stagemanager.StageHistory._stack[0].scene == 'loadWhatIsYogaGlo')
-                StageManager.StageHistory._stack = [];  
-        }*/
         if(disableBack == true) return false;
         else return true;
     }
 
     videoPlayback.onenterscene = function() {
-
-        /*scene.whatis = false;
-        if(window.loggedIn == true){
-            trackInterval = setInterval(function(){
-                trackMyPractice(video);
-            },1000)
-        }*/
 
         TrickMenu.disable();
         $('#loadingVideoIndicator').show();
@@ -101,23 +84,12 @@ define([
         if (!this.persist.params) $error('!video scene needs paramater!');
 
         video = this.persist.params.item //|| Send.currentVideo();
-
-        //videoPlayback.isPlayingWhatIsYogaGlo = (this.persist.params.option == 'whatisyogaglo');
         
-        /*if(!video) { 
-            scene.whatis=true;
-            videoPlayback.isPlayingWhatIsYogaGlo = true;
-            video = window.whatIsYogaGlo.videos.models[0];
-            video.set('title',video.get('name'));
-            $('.backButton').hide();
-            $('.now-playing-text').hide();
-        }*/
         //Analytics.watchedClass(video.attributes.idvideo)
         setupTrickPlayMenu();
         
         $('.now-playing-text').html("sample text");
         initVideoPlayback();
-
         /*if ($storage.getItem('access_token') !== null) {
             appconfig.access_token = $storage.getItem('access_token')
         }*/
@@ -137,17 +109,6 @@ define([
             $("#loadingVideoIndicator").fadeOut();
             touchTimeout();
         },this);
-
-        /*if(!videoPlayback.isPlayingWhatIsYogaGlo) 
-            API.checkVideoAccess().done(function(result){    
-                if(result==false)
-                    MediaPlayer.on('timeupdate',function(time){
-                        if(time > 1000*60*5){
-                            MediaPlayer.pause();
-                            videoPlayback.changeState('expired');
-                        }
-                    },videoPlayback);
-            });*/
 
         TrickMenu.focus();
         
@@ -180,9 +141,6 @@ define([
     }
 
     videoPlayback.onleavescene = function() {
-        /*if(window.loggedIn == true){
-              clearInterval(trackInterval);
-        }*/
       
         //$('#wrapper').css({'background-image':'url(images/background.png)'})
         teardownKeyhandlers();
@@ -193,83 +151,7 @@ define([
         hideMenu.off(null, null, this);
         TrickMenu.off(null, null, this);  
         MediaPlayer.off(null,null,this);
-
-        //if(videoPlayback.isPlayingWhatIsYogaGlo) videoPlayback.isPlayingWhatIsYogaGlo = false;
     }
-
-    /*aboutState.onenterstate = function() {
-        clearTimeout(timeout);
-        setTimeout(function(){
-            touchTimeout();
-        }, 2*60*1000);
-
-        closeMenu.on('onfocus',function(){
-            $('.closeButton').addClass('focused');
-        },this);
-        closeMenu.on('onblur',function(){
-            $('.closeButton').removeClass('focused');
-        },this);
-        closeMenu.on('onselect',function(){
-            videoPlayback.changeState('controlsup');
-            TrickMenu.focus();
-        },this);
-        $log('video in updatevideoinfo',video)
-        updateVideoInfo(video)
-        $('.aboutModal > #videoInfo').show();
-
-        KeyHandler.on('onReturn',function(){ 
-            closeMenu.trigger('onselect'); 
-        },this);
-
-        disableBack = true;
-    }*/
-
-    /*aboutState.onleavestate = function(){
-        closeMenu.off(null,null,this);
-        lastState = "about";
-        disableBack = false;
-        KeyHandler.off(null,null,this);
-    }*/
-
-    /*expiredState.onenterstate = function() {
-        continueB = new Navigation.Menu();
-        joinB = new Navigation.Menu();
-
-        continueB.on('onfocus',function(){
-            $("#continueBrowsingButton").addClass('focused');
-        },this);
-        continueB.on('onblur',function(){
-            $("#continueBrowsingButton").removeClass("focused");
-        },this);
-        continueB.on('onselect',function(){
-            StageManager.StageHistory.back();
-        },this);
-        continueB.on('onright',function(){
-            joinB.focus();
-        },this);
-
-        joinB.on('onfocus',function(){
-            $('#joinYogaGlowButton').addClass('focused');
-        },this);
-        joinB.on('onblur',function(){
-            $("#joinYogaGlowButton").removeClass('focused');
-        },this);
-        joinB.on('onselect',function(){
-            Send.Send('join', 'join')
-        },this);
-        joinB.on('onleft',function(){
-            continueB.focus();
-        },this);
-
-        continueB.focus();
-        
-    }*/
-
-    /*expiredState.onleavestate = function() {
-        continueB.off(null,null,this);
-        joinB.off(null,null,this);
-        lastState = 'expired';
-    }*/
 
     controlsUp.onenterstate = function() {
         
@@ -389,48 +271,6 @@ define([
         */
     }
     
-    /*function updateFavoriteDisplay(initializing){
-        if(_.isUndefined(video.get('favorite')))
-            $error('video does not contain favorite data information');
-
-        if(video.get('favorite')){
-            $("#videoFavoriteButton").addClass("selected");
-            
-            if(!initializing) $('#videoFavoriteAddedToolTip').show();
-            setTimeout(function(){
-                $('#videoFavoriteAddedToolTip').hide();
-            },2000);           
-        }
-        else{
-            $("#videoFavoriteButton").removeClass("selected");         
-        }
-
-    }
-    
-    var lockFavorite = false;
-
-    function toggleFavorite(){
-    
-        if(lockFavorite) return;
-        
-        var id = video.get('idvideo');
-        
-        if(video.get('favorite'))
-            API.removeUserFavorite(id).done(function(data){
-                video.set('favorite',!data);
-                updateFavoriteDisplay();
-                lockFavorite = false;
-            });
-        else
-            API.addUserFavorite(id).done(function(data){
-                video.set('favorite',data);
-                updateFavoriteDisplay();
-                lockFavorite = false;
-            });
-            
-        lockFavorite = true;
-    }*/ 
-    
     var touchTimeout = function(){
         clearTimeout(timeout);
         timeout = setTimeout(function(){
@@ -481,11 +321,10 @@ define([
     }
 
     function initVideoPlayback() {
-
+      // debugger;
         var playlist =  video.getPlaylist();
         MediaPlayer.setPlaylist(playlist);
         MediaPlayer.play();
-   
     }
 
     function initKeyhandlers() {

@@ -8,14 +8,29 @@ define([
         'newsmax/newsmax.mainmenu', 'newsmax/newsmax.utils',
         'newsmax/menus/newsmax.menu.simplekeys',
         'newsmax/newsmax.api',
-        'hbs!newsmax/templates/GridMenu'
+        'hbs!newsmax/templates/GridMenu',
+        'mediaplayer'
     ],
-    function(StageManager, Navigation, BackBone, sampleTemplate, MainMenu, MainMenuTemplate, GridMenu, SlotMenu, MenuItemsDeferred, Utils, KeyboardMenu, API, GridMenuTemplate) {
+    function(
+      StageManager, 
+      Navigation, 
+      BackBone, 
+      sampleTemplate, 
+      MainMenu, 
+      MainMenuTemplate, 
+      GridMenu, 
+      SlotMenu, 
+      MenuItemsDeferred, 
+      Utils, 
+      KeyboardMenu, 
+      API, 
+      GridMenuTemplate, 
+      MediaPlayer
+    ) {
 
         'use strict';
 
         $log(API);
-
 
         var scene = new StageManager.Scene({
             defaultScene: true, // Make this our default scene
@@ -28,14 +43,36 @@ define([
         // var subcatState = scene.createState('subcat');
         // var searchState = scene.createState('search');
 
-        var Grid;
+        var Grid, gridRowHeight;
 
         scene.onenterscene = function() {
 
-
-
             return MenuItemsDeferred.done(function(MenuItems) {
-
+              $log("menuitems", MenuItems)
+                
+                
+              /* LIVE STREAM CONTROLS */
+                var initLiveStream = function(){
+                  var liveObj = MenuItems.find(function(i) {
+                    return i.get('action') === "livefeed";
+                  });
+                  var playlist = new MediaPlayer.Playlist();
+                  playlist.addVideo(liveObj.get('url'));
+                  MediaPlayer.setPlaylist(playlist);
+                  
+                  MediaPlayer.once('timeupdate',function(){
+                      $("#loadingVideoIndicator").fadeOut();
+                      $("img#logo").fadeIn();
+                      //touchTimeout();
+                  },this);
+                                    // 
+                  $("#loadingVideoIndicator").fadeOut();
+                  $("img#logo").fadeIn();
+                  MediaPlayer.play();
+                } 
+                initLiveStream();
+                
+              /* MENUS */
                 var mainMenu = new SlotMenu({
                     el: '#mainMenu',
                     collection: MenuItems,
@@ -47,8 +84,6 @@ define([
                     el: "#keyboard"
                 })
                 keyMenu.render();
-
-
 
                 var firstSub = MenuItems.find(function(i) {
                     return i.get('action') === "subcategory"
@@ -62,18 +97,41 @@ define([
                     template: MainMenuTemplate,
                     direction: 'vertical',
                 });
-
                 subMenu.render();
+                
                 var videoCollection = Utils.createCollection()
                 var VideoGrid = GridMenu.extend({
                     options: {
-                        rows: 20,
-                        cols: 5
+                        rows: 2,
+                        cols: 3
                     },
                     initialize: function() {
                         GridMenu.prototype.initialize.call(this);
                         this.listenTo(this.collection, 'reset', this.render);
-                    }
+                        this.on('pageup', this.pageUp, this); 
+                        this.on('pagedown', this.pageDown, this); 
+                        //this.on('onright', this.onRight, this);
+                    },
+                    display: function(){
+                      $("#gridHTML").fadeIn();
+                      $(this.el).fadeIn();
+                    },
+                    hide: function(){
+                      $("#gridHTML").fadeOut();
+                      $(this.el).fadeOut();
+                    },
+                    // onRight: function(){
+//                       // this handler simply monitors the detail menu arrow
+//                       $log("current index", Grid.currentIndex)
+//                     }
+                    // pageDown: function(){
+//                       $log("page down: ");
+//                       moveGrid("down");
+//                     },
+//                     pageUp: function(){
+//                       $log("page up");
+//                       moveGrid("up");
+//                     }
                 });
 
                 Grid = new VideoGrid({
@@ -82,7 +140,7 @@ define([
                     template: GridMenuTemplate
                 })
                 //Grid.render();
-
+                
 
                 mainMenu.on('selectedindex', function(index) {
                     mainMenuIndex = index;
@@ -91,6 +149,7 @@ define([
                         case 'subcategory':
                             subCollection.reset(item.get('subcategory').models);
                             subMenu.focus();
+                            Grid.display();
                             break;
                         case 'search':
                             keyMenu.focus();
@@ -114,10 +173,10 @@ define([
 
                 keyMenu.on('onfocus', function() {
                     $("#searchMenu").animate({
-                        left: 50,
+                        left: 300,
                         opacity: 1
                     });
-                    hideMainMenu();
+                    //hideMainMenu();
                     $log(" ON FOCUS TO KEY MENU ")
                     $("#searchterm").focus();
                 }, scene)
@@ -148,8 +207,6 @@ define([
                 subMenu.on('selecteditem', function(item) {
                     $log('selectedItem = ', subMenu);
                     updateGrid(item.get('url'));
-
-                    //videoCollection.reset(MenuItems.at(mainMenuIndex).get('subcategory').at(index).get('subsubcategory').models)
                 }, scene);
 
                 mainMenu.render();
@@ -161,10 +218,15 @@ define([
 
                 subMenu.on('onleft', function() {
                     mainMenu.focus();
+                    $log("left from submenu");
                 }, scene)
 
                 subMenu.on('onright', function() {
+                  $log("right from submenu");
+                  if( $.trim( $('#gridMenuContainer').html() ).length ) {
+                    //debugger;
                     Grid.focus();
+                  }
                 }, scene)
 
                 keyMenu.on('leftfrommenu', function() {
@@ -193,19 +255,53 @@ define([
                 }, scene);
 
                 Grid.on('selecteditem', function(item) {
-                    //$log('item = ', item);
-                    //we should be getting an item here and changing to another scene. but lets just hold off on that for a few moments
+                    $log('item = ', item);
                     //debugger;
                     StageManager.changeScene('videoPlayback', {
                         item: item
                     });
-                })
-
+                });
+                
+                var positionArrow = function() {
+                  $("#gridArrow").removeClass();
+                  
+                  switch (Grid._currentIndex % Grid.options.cols) {
+                    case 0:
+                      $("#gridArrow").addClass("left");
+                      break;
+                    case 1:
+                      $("#gridArrow").addClass("middle");
+                      break;
+                    case 2:
+                      $("#gridArrow").addClass("right");
+                      break;
+                  }
+                }
+                // we need to control the info box arrow position as we move left and right
+                Grid.on('onright', positionArrow);
+                Grid.on('onleft', positionArrow);
+                
+                
+                var moveGrid = function (direction) {
+                  $(Grid.el).children().removeClass("currentRow");
+                  $(Grid.el).children().children().eq(Grid._currentIndex).parent().addClass("currentRow");
+                  
+                  var move;
+                  direction == "up" ? move = "-=" + gridRowHeight : move = "+=" + gridRowHeight;
+                  $(Grid.el).animate({
+                    top: move
+                  }, 0, function(){
+                    //animation completed
+                  });
+                };
+                
                 var updateHTMLforGrid = function(item) {
                     $('.title').html('Title: ' + item.get("title"))
                     $('.description').html('Description: ' + item.get('description'));
-                }
+                };
 
+                
+                
                 mainMenu.focus();
 
             })
@@ -216,6 +312,7 @@ define([
         var updateGrid = function(url){
             API.fetchMRSS(url).done(function(data){
                 Grid.collection.reset(data);
+                gridRowHeight = $("ul.gridMenuPage:first").outerHeight();
             })
         }
 
