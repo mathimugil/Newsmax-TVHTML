@@ -24,7 +24,7 @@ define(['newsmax/newsmax.api', 'newsmax/newsmax.utils'], function(API, Utils) {
             return (cat.action !== "livefeed")
        });
        
-       out.unshift({
+       out.push({
             title: 'Search',
             action: 'search'
         });

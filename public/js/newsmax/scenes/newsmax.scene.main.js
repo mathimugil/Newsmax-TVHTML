@@ -112,11 +112,14 @@ define([
                         this.on('pagedown', this.pageDown, this); 
                         //this.on('onright', this.onRight, this);
                     },
-                    display: function(){
+                    resetIndex: function() {
+                      this._currentIndex = 0;
+                    },
+                    display: function() {
                       $("#gridHTML").fadeIn();
                       $(this.el).fadeIn();
                     },
-                    hide: function(){
+                    hide: function() {
                       $("#gridHTML").fadeOut();
                       $(this.el).fadeOut();
                     },
@@ -149,7 +152,6 @@ define([
                         case 'subcategory':
                             subCollection.reset(item.get('subcategory').models);
                             subMenu.focus();
-                            Grid.display();
                             break;
                         case 'search':
                             keyMenu.focus();
@@ -180,6 +182,7 @@ define([
                     $log(" ON FOCUS TO KEY MENU ")
                     $("#searchterm").focus();
                 }, scene)
+                
                 keyMenu.on('onblur', function() {
                     $("#searchMenu").animate({
                         left: -$("#searchMenu").outerWidth(),
@@ -194,19 +197,14 @@ define([
                         opacity: 1
                     });
                     hideMainMenu();
+                    $log("triggering");
+                    $("#subMenu li.sm-focused").trigger("select");
                 }, scene)
-
-                subMenu.on('onblur', function() {
-                    $("#subMenu").animate({
-                        left: -$("#subMenu").outerWidth(),
-                        opacity: 0.3
-                    });
-                    showMainMenu();
-                }, scene);
 
                 subMenu.on('selecteditem', function(item) {
                     $log('selectedItem = ', subMenu);
                     updateGrid(item.get('url'));
+                    Grid.display();
                 }, scene);
 
                 mainMenu.render();
@@ -217,14 +215,17 @@ define([
                 }, scene)
 
                 subMenu.on('onleft', function() {
+                    showMainMenu();
                     mainMenu.focus();
-                    $log("left from submenu");
+                    $("#subMenu").animate({
+                        left: -$("#subMenu").outerWidth(),
+                        opacity: 0.3
+                    });
                 }, scene)
 
                 subMenu.on('onright', function() {
                   $log("right from submenu");
                   if( $.trim( $('#gridMenuContainer').html() ).length ) {
-                    //debugger;
                     Grid.focus();
                   }
                 }, scene)
@@ -251,7 +252,8 @@ define([
                 }, scene)
 
                 Grid.on('newfocus', function(item) {
-                    updateHTMLforGrid(item);
+                  console.log("new focus");
+                  updateHTMLforGrid(item);
                 }, scene);
 
                 Grid.on('selecteditem', function(item) {
@@ -300,8 +302,6 @@ define([
                     $('.description').html('Description: ' + item.get('description'));
                 };
 
-                
-                
                 mainMenu.focus();
 
             })
@@ -311,8 +311,10 @@ define([
 
         var updateGrid = function(url){
             API.fetchMRSS(url).done(function(data){
+                Grid.resetIndex();
                 Grid.collection.reset(data);
                 gridRowHeight = $("ul.gridMenuPage:first").outerHeight();
+                Grid.focus();
             })
         }
 
