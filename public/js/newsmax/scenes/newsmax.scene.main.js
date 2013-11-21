@@ -211,11 +211,12 @@ define([
                         left: 50,
                         opacity: 1
                     });
-                    $("#subMenu li").removeClass("selected");
                     hideMainMenu();
                 }, scene);
                 
                 subMenu.on('selecteditem', function(item) {
+                  $("#subMenu li").removeClass("selected");
+                  $("#subMenu li.sm-focused").addClass("selected").removeClass("sm-focused");
                   updateGrid(item.get('url'));  
                 }, scene);
 
@@ -237,9 +238,9 @@ define([
 
                 subMenu.on('onright', function() {
                   $log("right from submenu");
+                  $("#subMenu li").removeClass("sm-focused");
                   if( $.trim( $('#gridMenuContainer').html() ).length ) {
                     Grid.focus();
-                    $("#subMenu li.sm-focused").addClass("selected").removeClass("sm-focused");
                   }
                 }, scene)
 
@@ -329,7 +330,6 @@ define([
         
         var updateGrid = function(url){
           showLoader();
-          $log("UPDATE GRID CALLED", url)
             API.fetchMRSS(url).done(function(data){
                 hideLoader();
                 Grid.display();

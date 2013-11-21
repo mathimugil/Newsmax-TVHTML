@@ -1404,7 +1404,7 @@ img#logo {
   border-bottom: 8px solid transparent;
   font-weight: normal;
   font-size: 26px; }
-  #mainMenu li.sm-focused, #mainMenu li.selected, #subMenu li.sm-focused, #subMenu li.selected {
+  #mainMenu li.sm-focused, #mainMenu li.selected, #mainMenu li.selected.sm-focused, #subMenu li.sm-focused, #subMenu li.selected, #subMenu li.selected.sm-focused {
     border-bottom: 8px solid #5186c6;
     color: #e1e1e1;
     font: Helvetica;
@@ -1449,7 +1449,7 @@ img#logo {
   height: 118px;
   color: black;
   padding: 10px;
-  font-size: 20px;
+  font-size: 18px;
   background-color: #dfdfdf; }
   #gridHTML #gridArrow {
     position: absolute;
@@ -1698,7 +1698,7 @@ img#logo {
   font-weight: bold;
   color: #535c61; }
 
-/* CSS LOADING ANIMATION */
+/* CSS LOADING ANIMATIONS */
 #fadingBarsG {
   position: relative;
   width: 149px;

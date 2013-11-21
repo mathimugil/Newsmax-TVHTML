@@ -94,7 +94,7 @@ img#logo {
   font-weight: normal;
   font-size: 26px;
   
-  &.sm-focused, &.selected {
+  &.sm-focused, &.selected, &.selected.sm-focused {
     border-bottom: 8px solid $highlight;
     color:$tvwhite;
     font: Helvetica;
@@ -146,7 +146,7 @@ img#logo {
   width: 785px; height: 118px;
   color: $dark;
   padding: 10px;
-  font-size: 20px;
+  font-size: 18px;
   background-color: $silver;
   
   #gridArrow{
@@ -404,7 +404,10 @@ img#logo {
   font-weight:bold;
   color: #535c61;
 }
-/* CSS LOADING ANIMATION */
+
+
+
+/* CSS LOADING ANIMATIONS */
 #fadingBarsG{
   position:relative;
   width:149px;
