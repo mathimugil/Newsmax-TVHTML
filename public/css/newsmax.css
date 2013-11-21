@@ -1399,18 +1399,18 @@ img#logo {
   width: 240px;
   text-align: right;
   padding: 15px 20px 0px 30px;
-  color: #e1e1e1;
+  color: #66a1d6;
   margin-bottom: 5px;
   border-bottom: 8px solid transparent;
-  font-weight: normal; }
-  #mainMenu li.sm-focused, #subMenu li.sm-focused {
+  font-weight: normal;
+  font-size: 26px; }
+  #mainMenu li.sm-focused, #mainMenu li.selected, #subMenu li.sm-focused, #subMenu li.selected {
     border-bottom: 8px solid #5186c6;
     color: #e1e1e1;
     font: Helvetica;
     font-weight: bold; }
   #mainMenu li.selected, #subMenu li.selected {
-    border-bottom: 8px solid #5186c6;
-    color: #e1e1e1; }
+    border-bottom: 8px solid transparent; }
 
 #gridMenuContainer {
   background: -webkit-linear-gradient(top, rgba(239, 239, 239, 0.9) 0%, rgba(204, 204, 203, 0.9) 81%, rgba(154, 155, 159, 0.9) 100%);
@@ -1424,43 +1424,49 @@ img#logo {
   overflow: hidden; }
   #gridMenuContainer ul {
     display: table; }
+    #gridMenuContainer ul.currentRow {
+      margin-bottom: 150px; }
   #gridMenuContainer li.gridItem {
     float: left;
     border: 2px solid transparent; }
     #gridMenuContainer li.gridItem img {
-      width: 270px;
-      height: 152px;
-      border: 4px solid transparent;
+      width: 197px;
+      height: 110px;
+      border: 3px solid #58595b;
       opacity: 0.7; }
     #gridMenuContainer li.gridItem.focused img {
       box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
-      border: 4px solid #c22826;
+      border: 3px solid #5186c6;
       opacity: 1; }
 
 #gridHTML {
-  background: -webkit-linear-gradient(top, rgba(239, 239, 239, 0.9) 0%, rgba(204, 204, 203, 0.9) 81%, rgba(154, 155, 159, 0.9) 100%);
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
   display: none;
   position: absolute;
-  top: 489px;
-  left: 360px;
-  width: 850px;
-  height: 181px;
+  top: 373px;
+  left: 390px;
+  width: 785px;
+  height: 118px;
   color: black;
-  padding: 20px;
-  font-size: 20px; }
+  padding: 10px;
+  font-size: 20px;
+  background-color: #dfdfdf; }
   #gridHTML #gridArrow {
     position: absolute;
-    top: -31px; }
+    top: -26px; }
     #gridHTML #gridArrow.left {
       left: 124px; }
-    #gridHTML #gridArrow.middle {
-      left: 412px; }
+    #gridHTML #gridArrow.middle-left {
+      left: 312px; }
+    #gridHTML #gridArrow.middle-right {
+      left: 433px; }
     #gridHTML #gridArrow.right {
-      left: 699px; }
+      left: 635px; }
   #gridHTML span {
     display: block;
     margin-bottom: 10px; }
+    #gridHTML span.title {
+      font-weight: bold; }
 
 #vignette {
   background: url(../images/combo-vignette.png) top left no-repeat;
@@ -1691,3 +1697,215 @@ img#logo {
   font: 20px HelveticaNeue;
   font-weight: bold;
   color: #535c61; }
+
+/* CSS LOADING ANIMATION */
+#fadingBarsG {
+  position: relative;
+  width: 149px;
+  height: 18px;
+  z-index: 999;
+  top: 500px;
+  left: 560px; }
+
+.fadingBarsG {
+  position: absolute;
+  top: 0;
+  background-color: #af2827;
+  width: 18px;
+  height: 18px;
+  -webkit-animation-name: bounce_fadingBarsG;
+  -webkit-animation-duration: 1.3s;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-direction: linear;
+  -webkit-transform: scale(0.3);
+  -o-animation-name: bounce_fadingBarsG;
+  -o-animation-duration: 1.3s;
+  -o-animation-iteration-count: infinite;
+  -o-animation-direction: linear;
+  -o-transform: scale(0.3);
+  animation-name: bounce_fadingBarsG;
+  animation-duration: 1.3s;
+  animation-iteration-count: infinite;
+  animation-direction: linear;
+  transform: scale(0.3); }
+
+#fadingBarsG_1 {
+  left: 0;
+  -webkit-animation-delay: 0.52s;
+  -o-animation-delay: 0.52s;
+  animation-delay: 0.52s; }
+
+#fadingBarsG_2 {
+  left: 19px;
+  -webkit-animation-delay: 0.65s;
+  -o-animation-delay: 0.65s;
+  animation-delay: 0.65s; }
+
+#fadingBarsG_3 {
+  left: 37px;
+  -webkit-animation-delay: 0.78s;
+  -o-animation-delay: 0.78s;
+  animation-delay: 0.78s; }
+
+#fadingBarsG_4 {
+  left: 56px;
+  -webkit-animation-delay: 0.91s;
+  -o-animation-delay: 0.91s;
+  animation-delay: 0.91s; }
+
+#fadingBarsG_5 {
+  left: 75px;
+  -webkit-animation-delay: 1.04s;
+  -o-animation-delay: 1.04s;
+  animation-delay: 1.04s; }
+
+#fadingBarsG_6 {
+  left: 93px;
+  -webkit-animation-delay: 1.17s;
+  -o-animation-delay: 1.17s;
+  animation-delay: 1.17s; }
+
+#fadingBarsG_7 {
+  left: 112px;
+  -webkit-animation-delay: 1.3s;
+  -o-animation-delay: 1.3s;
+  animation-delay: 1.3s; }
+
+#fadingBarsG_8 {
+  left: 130px;
+  -webkit-animation-delay: 1.43s;
+  -o-animation-delay: 1.43s;
+  animation-delay: 1.43s; }
+
+@-webkit-keyframes bounce_fadingBarsG {
+  0% {
+    -webkit-transform: scale(1);
+    background-color: #af2827; }
+
+  100% {
+    -webkit-transform: scale(0.3);
+    background-color: #af2827; } }
+
+@-o-keyframes bounce_fadingBarsG {
+  0% {
+    -o-transform: scale(1);
+    background-color: #af2827; }
+
+  100% {
+    -o-transform: scale(0.3);
+    background-color: #af2827; } }
+
+@keyframes bounce_fadingBarsG {
+  0% {
+    transform: scale(1);
+    background-color: #af2827; }
+
+  100% {
+    transform: scale(0.3);
+    background-color: #af2827; } }
+
+#circularG {
+  position: relative;
+  width: 175px;
+  height: 175px;
+  top: 260px;
+  left: 600px;
+  display: none; }
+
+.circularG {
+  position: absolute;
+  background-color: #66A2D6;
+  width: 40px;
+  height: 40px;
+  -webkit-border-radius: 27px;
+  -webkit-animation-name: bounce_circularG;
+  -webkit-animation-duration: 1.04s;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-direction: linear;
+  -o-border-radius: 27px;
+  -o-animation-name: bounce_circularG;
+  -o-animation-duration: 1.04s;
+  -o-animation-iteration-count: infinite;
+  -o-animation-direction: linear;
+  border-radius: 27px;
+  animation-name: bounce_circularG;
+  animation-duration: 1.04s;
+  animation-iteration-count: infinite;
+  animation-direction: linear; }
+
+#circularG_1 {
+  left: 0;
+  top: 69px;
+  -webkit-animation-delay: 0.39s;
+  -o-animation-delay: 0.39s;
+  animation-delay: 0.39s; }
+
+#circularG_2 {
+  left: 19px;
+  top: 19px;
+  -webkit-animation-delay: 0.52s;
+  -o-animation-delay: 0.52s;
+  animation-delay: 0.52s; }
+
+#circularG_3 {
+  top: 0;
+  left: 69px;
+  -webkit-animation-delay: 0.65s;
+  -o-animation-delay: 0.65s;
+  animation-delay: 0.65s; }
+
+#circularG_4 {
+  right: 19px;
+  top: 19px;
+  -webkit-animation-delay: 0.78s;
+  -o-animation-delay: 0.78s;
+  animation-delay: 0.78s; }
+
+#circularG_5 {
+  right: 0;
+  top: 69px;
+  -webkit-animation-delay: 0.91s;
+  -o-animation-delay: 0.91s;
+  animation-delay: 0.91s; }
+
+#circularG_6 {
+  right: 19px;
+  bottom: 19px;
+  -webkit-animation-delay: 1.04s;
+  -o-animation-delay: 1.04s;
+  animation-delay: 1.04s; }
+
+#circularG_7 {
+  left: 69px;
+  bottom: 0;
+  -webkit-animation-delay: 1.17s;
+  -o-animation-delay: 1.17s;
+  animation-delay: 1.17s; }
+
+#circularG_8 {
+  left: 19px;
+  bottom: 19px;
+  -webkit-animation-delay: 1.3s;
+  -o-animation-delay: 1.3s;
+  animation-delay: 1.3s; }
+
+@-webkit-keyframes bounce_circularG {
+  0% {
+    -webkit-transform: scale(1); }
+
+  100% {
+    -webkit-transform: scale(0.3); } }
+
+@-o-keyframes bounce_circularG {
+  0% {
+    -o-transform: scale(1); }
+
+  100% {
+    -o-transform: scale(0.3); } }
+
+@keyframes bounce_circularG {
+  0% {
+    transform: scale(1); }
+
+  100% {
+    transform: scale(0.3); } }

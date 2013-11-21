@@ -50,7 +50,6 @@ define([
             return MenuItemsDeferred.done(function(MenuItems) {
               $log("menuitems", MenuItems)
                 
-                
               /* LIVE STREAM CONTROLS */
                 var initLiveStream = function(){
                   var liveObj = MenuItems.find(function(i) {
@@ -62,12 +61,10 @@ define([
                   
                   MediaPlayer.once('timeupdate',function(){
                       $("#loadingVideoIndicator").fadeOut();
+                      $("#fadingBarsG").fadeOut();
                       $("img#logo").fadeIn();
                       //touchTimeout();
                   },this);
-                                    // 
-                  $("#loadingVideoIndicator").fadeOut();
-                  $("img#logo").fadeIn();
                   MediaPlayer.play();
                 } 
                 initLiveStream();
@@ -95,25 +92,24 @@ define([
                     el: '#subMenu',
                     collection: subCollection,
                     template: MainMenuTemplate,
-                    direction: 'vertical',
+                    direction: 'vertical'
                 });
                 subMenu.render();
                 
                 var videoCollection = Utils.createCollection()
                 var VideoGrid = GridMenu.extend({
                     options: {
-                        rows: 2,
-                        cols: 3
+                        rows: 1,
+                        cols: 4
                     },
                     initialize: function() {
                         GridMenu.prototype.initialize.call(this);
                         this.listenTo(this.collection, 'reset', this.render);
                         this.on('pageup', this.pageUp, this); 
                         this.on('pagedown', this.pageDown, this); 
-                        //this.on('onright', this.onRight, this);
                     },
                     resetIndex: function() {
-                      this._currentIndex = 0;
+                      this._currentIndex = this.options.cols; //we want the first item in the 2nd row
                     },
                     display: function() {
                       $("#gridHTML").fadeIn();
@@ -123,18 +119,35 @@ define([
                       $("#gridHTML").fadeOut();
                       $(this.el).fadeOut();
                     },
-                    // onRight: function(){
-//                       // this handler simply monitors the detail menu arrow
-//                       $log("current index", Grid.currentIndex)
-//                     }
-                    // pageDown: function(){
-//                       $log("page down: ");
-//                       moveGrid("down");
-//                     },
-//                     pageUp: function(){
-//                       $log("page up");
-//                       moveGrid("up");
-//                     }
+                    onRight: function(){
+                      // this handler simply monitors the detail menu arrow
+                      $log("current index", Grid._currentIndex)
+                    },
+                    pageDown: function(){
+                      $log("page down: ");
+                      moveGrid("down");
+                    },
+                    pageUp: function(){
+                      $log("page up");
+                      moveGrid("up");
+                    },
+                    // OVERRIDE DEFAULT FUNCTIONS
+                    _columnUp: function() { // move right
+                      if((this._currentIndex % this.options.cols) == (this.options.cols -1)) {
+                        //this._pageUp();
+                      } else if (this._currentIndex < this.collection.length - 1) {
+                        this._currentIndex++;
+                        this.setFocus();
+                      }
+                    },
+                    _columnDown: function() { // move left
+                      if((this._currentIndex % this.options.cols) !== 0 ) {
+                        this._currentIndex--;
+                        this.setFocus();
+                      } else {
+                        subMenu.focus();
+                      }
+                    },
                 });
 
                 Grid = new VideoGrid({
@@ -142,21 +155,22 @@ define([
                     collection: videoCollection,
                     template: GridMenuTemplate
                 })
-                //Grid.render();
-                
 
                 mainMenu.on('selectedindex', function(index) {
                     mainMenuIndex = index;
                     var item = MenuItems.at(index);
+                    $log("action is: ", item.get('action') );
+                    $log("item is: ", item );
                     switch (item.get('action')) {
                         case 'subcategory':
                             subCollection.reset(item.get('subcategory').models);
+                            updateGrid(item.get('subcategory').at(0).get('url'));
                             subMenu.focus();
+                            $("#subMenu li.sm-focused").addClass("selected").removeClass("sm-focused");
                             break;
                         case 'search':
                             keyMenu.focus();
                             break;
-
                     }
                 })
 
@@ -192,19 +206,17 @@ define([
                 }, scene)
 
                 subMenu.on('onfocus', function() {
+                  $log("subMenu on focus, ", this)
                     $("#subMenu").animate({
                         left: 50,
                         opacity: 1
                     });
+                    $("#subMenu li").removeClass("selected");
                     hideMainMenu();
-                    $log("triggering");
-                    $("#subMenu li.sm-focused").trigger("select");
-                }, scene)
-
+                }, scene);
+                
                 subMenu.on('selecteditem', function(item) {
-                    $log('selectedItem = ', subMenu);
-                    updateGrid(item.get('url'));
-                    Grid.display();
+                  updateGrid(item.get('url'));  
                 }, scene);
 
                 mainMenu.render();
@@ -227,6 +239,7 @@ define([
                   $log("right from submenu");
                   if( $.trim( $('#gridMenuContainer').html() ).length ) {
                     Grid.focus();
+                    $("#subMenu li.sm-focused").addClass("selected").removeClass("sm-focused");
                   }
                 }, scene)
 
@@ -272,9 +285,12 @@ define([
                       $("#gridArrow").addClass("left");
                       break;
                     case 1:
-                      $("#gridArrow").addClass("middle");
+                      $("#gridArrow").addClass("middle-left");
                       break;
                     case 2:
+                      $("#gridArrow").addClass("middle-right");
+                      break;
+                    case 3:
                       $("#gridArrow").addClass("right");
                       break;
                   }
@@ -283,11 +299,8 @@ define([
                 Grid.on('onright', positionArrow);
                 Grid.on('onleft', positionArrow);
                 
-                
                 var moveGrid = function (direction) {
-                  $(Grid.el).children().removeClass("currentRow");
-                  $(Grid.el).children().children().eq(Grid._currentIndex).parent().addClass("currentRow");
-                  
+                  updateSelectorsForGrid();
                   var move;
                   direction == "up" ? move = "-=" + gridRowHeight : move = "+=" + gridRowHeight;
                   $(Grid.el).animate({
@@ -296,6 +309,7 @@ define([
                     //animation completed
                   });
                 };
+                
                 
                 var updateHTMLforGrid = function(item) {
                     $('.title').html('Title: ' + item.get("title"))
@@ -308,14 +322,31 @@ define([
 
             
         }
-
+        var updateSelectorsForGrid = function() {
+          $(Grid.el).children().removeClass("currentRow");
+          $(Grid.el).children().children().eq(Grid._currentIndex).parent().addClass("currentRow");
+        }
+        
         var updateGrid = function(url){
+          showLoader();
+          $log("UPDATE GRID CALLED", url)
             API.fetchMRSS(url).done(function(data){
+                hideLoader();
+                Grid.display();
                 Grid.resetIndex();
                 Grid.collection.reset(data);
                 gridRowHeight = $("ul.gridMenuPage:first").outerHeight();
+                updateSelectorsForGrid();
                 Grid.focus();
             })
+        }
+        
+        var showLoader = function(){
+          $("#circularG").fadeIn();
+        }
+        
+        var hideLoader = function(){
+          $("#circularG").fadeOut();
         }
 
         return scene;
