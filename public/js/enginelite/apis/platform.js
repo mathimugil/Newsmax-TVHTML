@@ -17,7 +17,7 @@ define(function() {
         else if ( navigator.userAgent.search(/Viera/) > -1 ) {
           require(['enginelite/platforms/enginelite.platform.panasonic'], load);
         }
-        else if ( navigator.appCodeName.search(/Maple/) > -1 ) {
+        else if ( navigator.userAgent.search(/Maple/) > -1 ) {
           require(['enginelite/platforms/enginelite.platform.samsungmodern'], load);
         }
          else if ( navigator.userAgent.search(/AQUOS/) > -1 ) {
