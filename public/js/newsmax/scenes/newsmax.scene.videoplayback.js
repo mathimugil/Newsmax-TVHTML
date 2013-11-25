@@ -76,32 +76,19 @@ define([
     videoPlayback.onenterscene = function() {
 
         TrickMenu.disable();
-        $('#loadingVideoIndicator').show();
-        $("#loadingDots").Loadingdotdotdot({"speed": 400,"maxDots": 3,"word":""});
-        $('#wrapper').css({'background-image':'none'});
-        $("#logo").hide();
+        showLoader();
         
         if (!this.persist.params) $error('!video scene needs paramater!');
 
         video = this.persist.params.item //|| Send.currentVideo();
         
-        //Analytics.watchedClass(video.attributes.idvideo)
-        setupTrickPlayMenu();
-        
         $('.now-playing-text').html("sample text");
         initVideoPlayback();
-        /*if ($storage.getItem('access_token') !== null) {
-            appconfig.access_token = $storage.getItem('access_token')
-        }*/
 
         //initKeyhandlers();
         bindMediaEventHandler();
 
         TrickMenu.setElement("#trickPlayContainer");
-
-        /*var trackMyPractice = function(_video){
-            API.trackPractice(_video.attributes.idvideo)
-        }*/
  
         MediaPlayer.once('timeupdate',function(){
             TrickMenu.enable();
@@ -141,16 +128,12 @@ define([
     }
 
     videoPlayback.onleavescene = function() {
-      
-        //$('#wrapper').css({'background-image':'url(images/background.png)'})
-        teardownKeyhandlers();
-        scrubManager.deactivate();
-        MediaPlayer.stop();
-        //$("#logo").show();
-        $('#loadingVideoIndicator').hide();   
-        hideMenu.off(null, null, this);
-        TrickMenu.off(null, null, this);  
-        MediaPlayer.off(null,null,this);
+      teardownKeyhandlers();
+      scrubManager.deactivate();
+      MediaPlayer.stop();
+      hideMenu.off(null, null, this);
+      TrickMenu.off(null, null, this);  
+      MediaPlayer.off(null,null,this);
     }
 
     controlsUp.onenterstate = function() {
@@ -222,23 +205,6 @@ define([
         disableBack = false;
     }
 
-    function convertLevel(l){
-        
-        //Delete this
-        return;
-
-        /*var thisLevel = null;
-
-        if (l == "12") {
-            thisLevel = "1/2"
-        } else if (l == "23") {
-            thisLevel = "2/3"
-        } else {
-            thisLevel = l
-        }
-
-        return thisLevel;*/
-    }
 
     function updateVideoInfo(video){
         //TODO: implement if we need something like that on this screen
@@ -249,26 +215,6 @@ define([
         $('.aboutModal #videoInfo .data .teacher').html(video.get('teacher'));
         $('.aboutModal #videoInfo .data .level').html(convertLevel('Level '+video.get('level')));
         $('.aboutModal #videoInfo .data .duration').html(video.get('durationMin')+'min');*/
-    }
-
-    function setupTrickPlayMenu(){
-
-        //If this videoplayback scene can vary then we should remove this part
-        return;
-
-        /*$("#trickPlayContainer").find('.option').remove();
-        
-        if(videoPlayback.isPlayingWhatIsYogaGlo){
-            $('#trickPlayContainer').append($('<div id="skipThisButton" class="option">&nbsp;</div>'));
-        }else if(videoPlayback.persist.params.option == 'about'){ //TODO: need the introductory video to allow the skipThisButton
-            //$('#trickPlayContainer').append($('<div id="skipThisButton" class="option">&nbsp;</div>'));
-        }else {
-            $('#trickPlayContainer').append($('<div id="videoInfoButton" class="option">&nbsp;</div>'));
-            if(appconfig.userId) $('#trickPlayContainer').append($('<div id="videoFavoriteButton" class="option">&nbsp;</div>'));
-        }
-
-        TrickMenu._currentIndex = 0;    //because we could have left the scene and be on a different item (videoFavoriteButton) and then removed it
-        */
     }
     
     var touchTimeout = function(){
@@ -425,8 +371,10 @@ define([
             case 'playlist:newplaylistitem':
                 break;
             case 'bufferingend':
+                hideLoader();
                 break;
             case 'bufferingstart':
+                showLoader();
                 break;
             case 'playlist:ended':
                 StageManager.StageHistory.back();  
@@ -444,6 +392,14 @@ define([
     function teardownKeyhandlers() {
         MediaPlayer.off(null, null, videoPlayback);
         KeyHandler.off(null, null, videoPlayback);
+    }
+    
+    var showLoader = function(){
+      $("#circularG").fadeIn();
+    }
+    
+    var hideLoader = function(){
+      $("#circularG").fadeOut();
     }
 
     return videoPlayback;

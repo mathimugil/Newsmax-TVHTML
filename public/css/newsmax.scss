@@ -9,14 +9,15 @@ src: url(../fonts/HelveticaNeueLight.ttf);
 
 @mixin button {
   font-family: FontAwesome;
+  font-size: 26px;
   font-style: normal;
   font-weight: normal;
   color: $tvwhite;
-  background-color: $dark;
+  background-color: $gray;
 }
 @mixin buttonhover {
   color: $tvwhite;
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ff7a2a), color-stop(100%,#ff7a2a));
+  background-color: $nblue;
 }
 @mixin menubg {
   background: rgba(45,91,169, 0.95);
@@ -187,12 +188,13 @@ img#logo {
 .backButton {
 	position:absolute;
   top:50px; left:49px;
-	width:47px; height:53px;
+	width:55px; height:55px;
   @include button;
+  font-size: 36px;
   
   &:before {
     position: absolute;
-    top: 17px; left: 20px;
+    top: 10px; left: 13px;
     content: "\f053";
   }
   
@@ -201,20 +203,15 @@ img#logo {
   }
 }
 
-#playBackTray{
-	position:absolute; bottom:0px; left:0px;
-	width:1280px; height:140px;
-	background:url(../images/playback-tray.png) no-repeat top left;
-}
-
 #hideTrayButton{
-	position:absolute; bottom:130px; right:48px;
-	width:69px; height:59px;
+  position: absolute; bottom: 140px; right: 48px;
+  width: 55px; height: 55px;
   @include button;
+  font-size: 36px;
   
   &:before{
     position: absolute;
-    top: 17px; left: 20px;
+    top: 10px; left: 10px;
     content: "\f078";
   }
   &.focused{
@@ -222,76 +219,86 @@ img#logo {
   }
 }
 
-#progressBarWrapper{
-	position:absolute;
-	left:51px; top:23px;
-}
+#playBackTray{
+  @include silvergradient;
+  @include outerglow;
+  position:absolute; bottom:0px; left:0px;
+  width:1280px; height:140px;
 
-#progressBarBack{
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	width: 1129px;
-	height: 10px;
-	background-color: #cacccc;
-}
-#progressBar{
-	position:absolute;
-	top:0px; left:0px;
-	width:400px; height:10px;
-	background:$nblue;
-}
-#timecode{
-	font: 19px HelveticaNeue;
-	color:#69747a;
-	position:absolute;
-	bottom:101px;
-	left:1196px;
-}
+  #progressBarWrapper{
+    position:absolute;
+    left: 51px; top: 90px;
+    #progressBarBack{
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      width: 1129px;
+      height: 10px;
+      background-color: #e1e2e3;
+      @include outerglow;
+    }
+    #progressBar{
+      position:absolute;
+      top:0px; left:0px;
+      width:400px; height:10px;
+      background:#2F5CA9;
+    }
+  }
 
-#trickPlayContainer{
-	position:absolute;
-	bottom:32px; left:393px;
+  #timecode{
+    font: 19px;
+    color: $dark;
+    font-weight: bold;
+    position:absolute;
+    bottom:30px;
+    left:1196px;
+  }
 
-}
-
-.trickPlayButton{
-	float:left;
-	width:62px; height:53px;
-	background-repeat: no-repeat;
-  display: inline-block;
-  position: relative;
-  float: left;
-  @include button;
-  
-  &:before{
+  #trickPlayContainer{
+    @include outerglow;
     position: absolute;
-    top: 17px; left: 20px;
-  }
-  &.stop:before{
-    content: "\f04d";
-  }
+    top: 20px; left: 452px;
 
-  &.play:before{
-  	content: "\f04b";
-  }
-
-  &.pause:before{
-  	content: "\f04c";
-  }
-
-  &.rewind:before{
-  	content: "\f04a";
-  }
-
-  &.fastforward:before{
-  	content: "\f04e";
-  }
-
-  &.focused{
-    @include buttonhover;
+    .trickPlayButton{
+      float: left;
+      width: 62px; height: 53px;
+      background-repeat: no-repeat;
+      display: inline-block;
+      position: relative;
+      float: left;
+      border-right: 1px solid #555;
+      @include button;
+  
+      &:before{
+        position: absolute;
+        top: 15px; left: 20px;
+      }
+      &.stop:before{
+        content: "\f04d";
+      }
+      &.play:before{
+      	content: "\f04b";
+      }
+      &.pause:before{
+      	content: "\f04c";
+      }
+      &.rewind:before{
+      	content: "\f04a";
+      }
+      &.fastforward {
+        border-right: none;
+      }
+      &.fastforward:before{
+      	content: "\f04e";
+      }
+      &.focused{
+        @include buttonhover;
+      }
+    }
   }
 }
+
+
 
 #videoInfo{
   position:absolute;

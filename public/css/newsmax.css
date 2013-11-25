@@ -1481,113 +1481,119 @@ img#logo {
   position: absolute;
   top: 50px;
   left: 49px;
-  width: 47px;
-  height: 53px;
+  width: 55px;
+  height: 55px;
   font-family: FontAwesome;
+  font-size: 26px;
   font-style: normal;
   font-weight: normal;
   color: #e1e1e1;
-  background-color: black; }
+  background-color: #666666;
+  font-size: 36px; }
   .backButton:before {
     position: absolute;
-    top: 17px;
-    left: 20px;
+    top: 10px;
+    left: 13px;
     content: "\f053"; }
   .backButton.focused {
     color: #e1e1e1;
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ff7a2a), color-stop(100%, #ff7a2a)); }
+    background-color: #085caa; }
+
+#hideTrayButton {
+  position: absolute;
+  bottom: 140px;
+  right: 48px;
+  width: 55px;
+  height: 55px;
+  font-family: FontAwesome;
+  font-size: 26px;
+  font-style: normal;
+  font-weight: normal;
+  color: #e1e1e1;
+  background-color: #666666;
+  font-size: 36px; }
+  #hideTrayButton:before {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    content: "\f078"; }
+  #hideTrayButton.focused {
+    color: #e1e1e1;
+    background-color: #085caa; }
 
 #playBackTray {
+  background: -webkit-linear-gradient(top, rgba(239, 239, 239, 0.9) 0%, rgba(204, 204, 203, 0.9) 81%, rgba(154, 155, 159, 0.9) 100%);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
   position: absolute;
   bottom: 0px;
   left: 0px;
   width: 1280px;
-  height: 140px;
-  background: url(../images/playback-tray.png) no-repeat top left; }
-
-#hideTrayButton {
-  position: absolute;
-  bottom: 130px;
-  right: 48px;
-  width: 69px;
-  height: 59px;
-  font-family: FontAwesome;
-  font-style: normal;
-  font-weight: normal;
-  color: #e1e1e1;
-  background-color: black; }
-  #hideTrayButton:before {
+  height: 140px; }
+  #playBackTray #progressBarWrapper {
     position: absolute;
-    top: 17px;
-    left: 20px;
-    content: "\f078"; }
-  #hideTrayButton.focused {
-    color: #e1e1e1;
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ff7a2a), color-stop(100%, #ff7a2a)); }
-
-#progressBarWrapper {
-  position: absolute;
-  left: 51px;
-  top: 23px; }
-
-#progressBarBack {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  width: 1129px;
-  height: 10px;
-  background-color: #cacccc; }
-
-#progressBar {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  width: 400px;
-  height: 10px;
-  background: #085caa; }
-
-#timecode {
-  font: 19px HelveticaNeue;
-  color: #69747a;
-  position: absolute;
-  bottom: 101px;
-  left: 1196px; }
-
-#trickPlayContainer {
-  position: absolute;
-  bottom: 32px;
-  left: 393px; }
-
-.trickPlayButton {
-  float: left;
-  width: 62px;
-  height: 53px;
-  background-repeat: no-repeat;
-  display: inline-block;
-  position: relative;
-  float: left;
-  font-family: FontAwesome;
-  font-style: normal;
-  font-weight: normal;
-  color: #e1e1e1;
-  background-color: black; }
-  .trickPlayButton:before {
+    left: 51px;
+    top: 90px; }
+    #playBackTray #progressBarWrapper #progressBarBack {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      width: 1129px;
+      height: 10px;
+      background-color: #e1e2e3;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25); }
+    #playBackTray #progressBarWrapper #progressBar {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      width: 400px;
+      height: 10px;
+      background: #2F5CA9; }
+  #playBackTray #timecode {
+    font: 19px;
+    color: black;
+    font-weight: bold;
     position: absolute;
-    top: 17px;
-    left: 20px; }
-  .trickPlayButton.stop:before {
-    content: "\f04d"; }
-  .trickPlayButton.play:before {
-    content: "\f04b"; }
-  .trickPlayButton.pause:before {
-    content: "\f04c"; }
-  .trickPlayButton.rewind:before {
-    content: "\f04a"; }
-  .trickPlayButton.fastforward:before {
-    content: "\f04e"; }
-  .trickPlayButton.focused {
-    color: #e1e1e1;
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ff7a2a), color-stop(100%, #ff7a2a)); }
+    bottom: 30px;
+    left: 1196px; }
+  #playBackTray #trickPlayContainer {
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+    position: absolute;
+    top: 20px;
+    left: 452px; }
+    #playBackTray #trickPlayContainer .trickPlayButton {
+      float: left;
+      width: 62px;
+      height: 53px;
+      background-repeat: no-repeat;
+      display: inline-block;
+      position: relative;
+      float: left;
+      border-right: 1px solid #555;
+      font-family: FontAwesome;
+      font-size: 26px;
+      font-style: normal;
+      font-weight: normal;
+      color: #e1e1e1;
+      background-color: #666666; }
+      #playBackTray #trickPlayContainer .trickPlayButton:before {
+        position: absolute;
+        top: 15px;
+        left: 20px; }
+      #playBackTray #trickPlayContainer .trickPlayButton.stop:before {
+        content: "\f04d"; }
+      #playBackTray #trickPlayContainer .trickPlayButton.play:before {
+        content: "\f04b"; }
+      #playBackTray #trickPlayContainer .trickPlayButton.pause:before {
+        content: "\f04c"; }
+      #playBackTray #trickPlayContainer .trickPlayButton.rewind:before {
+        content: "\f04a"; }
+      #playBackTray #trickPlayContainer .trickPlayButton.fastforward {
+        border-right: none; }
+      #playBackTray #trickPlayContainer .trickPlayButton.fastforward:before {
+        content: "\f04e"; }
+      #playBackTray #trickPlayContainer .trickPlayButton.focused {
+        color: #e1e1e1;
+        background-color: #085caa; }
 
 #videoInfo {
   position: absolute;
