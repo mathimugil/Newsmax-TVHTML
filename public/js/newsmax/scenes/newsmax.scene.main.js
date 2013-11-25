@@ -61,11 +61,12 @@ define([
                   
                   MediaPlayer.once('timeupdate',function(){
                       $("#loadingVideoIndicator").fadeOut();
-                      $("#fadingBarsG").fadeOut();
                       $("img#logo").fadeIn();
                       //touchTimeout();
                   },this);
-                  MediaPlayer.play();
+                  $("#loadingVideoIndicator").fadeOut();
+                  $("img#logo").fadeIn();
+                  //MediaPlayer.play();
                 } 
                 initLiveStream();
                 
@@ -109,19 +110,26 @@ define([
                         this.on('pagedown', this.pageDown, this); 
                     },
                     resetIndex: function() {
-                      this._currentIndex = this.options.cols; //we want the first item in the 2nd row
+                      /* we have to do a little fanciness. If there are less than two full rows of 
+                       * items, we have to set the index differently
+                       */
+                      $log("number elements in collection: ", this.collection.models.length);
+                      if (this.collection.models.length >= (this.options.cols * this.options.rows * 2) ){
+                        this._currentIndex = this.options.cols; //we want the first item in the 2nd row
+                      }else{
+                        //we have to apply an offset
+                        $(this.el).addClass("offset");
+                        this._currentIndex = 0;
+                      }
+                      
                     },
-                    display: function() {
+                    show: function() {
                       $("#gridHTML").fadeIn();
-                      $(this.el).fadeIn();
+                      $("#gridMenuHolder").fadeIn();
                     },
                     hide: function() {
                       $("#gridHTML").fadeOut();
-                      $(this.el).fadeOut();
-                    },
-                    onRight: function(){
-                      // this handler simply monitors the detail menu arrow
-                      $log("current index", Grid._currentIndex)
+                      $("#gridMenuHolder").fadeOut();
                     },
                     pageDown: function(){
                       $log("page down: ");
@@ -134,7 +142,7 @@ define([
                     // OVERRIDE DEFAULT FUNCTIONS
                     _columnUp: function() { // move right
                       if((this._currentIndex % this.options.cols) == (this.options.cols -1)) {
-                        //this._pageUp();
+                        // don't do anything on the far right
                       } else if (this._currentIndex < this.collection.length - 1) {
                         this._currentIndex++;
                         this.setFocus();
@@ -148,6 +156,40 @@ define([
                         subMenu.focus();
                       }
                     },
+                    _rowUp: function() {
+                      if ( (this._currentIndex > 0) && (this._currentIndex > (this.options.cols - 1)) ){
+                        this._currentIndex -= this.options.cols;
+                        this.setFocus();
+                        this.trigger("pagedown");
+                      } else {
+                        //not sure if we'll need this or not
+                        this.trigger("upfromtop")
+                      }
+                    },
+
+                    _rowDown: function() {
+                      
+                      var coords = this.coords();
+                      if( this._currentIndex < (this.collection.length - 1) ) {
+                        //we need to consider the last line carefully
+                        if (coords.pageIndex = coords.maxPageIndex - 1){
+                          if ((this._currentIndex + this.options.cols) > (this.collection.length - 1) ){
+                            this._currentIndex = this.collection.length - 1;
+                          }else{
+                            this._currentIndex += this.options.cols;
+                          }
+                        }else{
+                          this._currentIndex += this.options.cols;
+                        }
+                        
+                        this.setFocus();
+                        this.trigger("pageup");
+                       } else {
+                        //not sure if we'll need this
+                        this.trigger("downfrombottom");
+                       }
+                    },
+                    
                 });
 
                 Grid = new VideoGrid({
@@ -237,7 +279,6 @@ define([
                 }, scene)
 
                 subMenu.on('onright', function() {
-                  $log("right from submenu");
                   $("#subMenu li").removeClass("sm-focused");
                   if( $.trim( $('#gridMenuContainer').html() ).length ) {
                     Grid.focus();
@@ -266,13 +307,10 @@ define([
                 }, scene)
 
                 Grid.on('newfocus', function(item) {
-                  console.log("new focus");
                   updateHTMLforGrid(item);
                 }, scene);
 
                 Grid.on('selecteditem', function(item) {
-                    $log('item = ', item);
-                    //debugger;
                     StageManager.changeScene('videoPlayback', {
                         item: item
                     });
@@ -302,15 +340,13 @@ define([
                 
                 var moveGrid = function (direction) {
                   updateSelectorsForGrid();
-                  var move;
-                  direction == "up" ? move = "-=" + gridRowHeight : move = "+=" + gridRowHeight;
-                  $(Grid.el).animate({
-                    top: move
-                  }, 0, function(){
+                  var options = {};
+                  direction == "up" ? options = {"top": "-=" + gridRowHeight + "px"} : options = { "top": "+=" + gridRowHeight + "px"};
+                  $("#gridMenuContainer").animate(options, 0, function(){
                     //animation completed
                   });
+                  
                 };
-                
                 
                 var updateHTMLforGrid = function(item) {
                     $('.title').html('Title: ' + item.get("title"))
@@ -332,9 +368,9 @@ define([
           showLoader();
             API.fetchMRSS(url).done(function(data){
                 hideLoader();
-                Grid.display();
-                Grid.resetIndex();
+                Grid.show();
                 Grid.collection.reset(data);
+                Grid.resetIndex();
                 gridRowHeight = $("ul.gridMenuPage:first").outerHeight();
                 updateSelectorsForGrid();
                 Grid.focus();

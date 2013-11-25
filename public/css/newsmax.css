@@ -1412,7 +1412,7 @@ img#logo {
   #mainMenu li.selected, #subMenu li.selected {
     border-bottom: 8px solid transparent; }
 
-#gridMenuContainer {
+#gridMenuHolder {
   background: -webkit-linear-gradient(top, rgba(239, 239, 239, 0.9) 0%, rgba(204, 204, 203, 0.9) 81%, rgba(154, 155, 159, 0.9) 100%);
   display: none;
   position: absolute;
@@ -1421,23 +1421,26 @@ img#logo {
   width: 850px;
   height: 545px;
   padding: 20px;
-  overflow: hidden; }
-  #gridMenuContainer ul {
-    display: table; }
-    #gridMenuContainer ul.currentRow {
-      margin-bottom: 150px; }
-  #gridMenuContainer li.gridItem {
-    float: left;
-    border: 2px solid transparent; }
-    #gridMenuContainer li.gridItem img {
-      width: 197px;
-      height: 110px;
-      border: 3px solid #58595b;
-      opacity: 0.7; }
-    #gridMenuContainer li.gridItem.focused img {
-      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
-      border: 3px solid #5186c6;
-      opacity: 1; }
+  overflow: hidden;
+  border: 1px solid #cccccb; }
+  #gridMenuHolder #gridMenuContainer {
+    position: absolute; }
+    #gridMenuHolder #gridMenuContainer ul {
+      display: table; }
+      #gridMenuHolder #gridMenuContainer ul.currentRow {
+        margin-bottom: 150px; }
+    #gridMenuHolder #gridMenuContainer li.gridItem {
+      float: left;
+      border: 2px solid transparent; }
+      #gridMenuHolder #gridMenuContainer li.gridItem img {
+        width: 197px;
+        height: 110px;
+        border: 3px solid #58595b;
+        opacity: 0.7; }
+      #gridMenuHolder #gridMenuContainer li.gridItem.focused img {
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+        border: 3px solid #5186c6;
+        opacity: 1; }
 
 #gridHTML {
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);

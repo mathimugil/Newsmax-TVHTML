@@ -104,8 +104,7 @@ img#logo {
     border-bottom: 8px solid transparent;
   }
 }
-
-#gridMenuContainer {
+#gridMenuHolder{
   @include silvergradient;
   display: none;
   position: absolute;
@@ -113,27 +112,32 @@ img#logo {
   width: 850px; height: 545px;
   padding: 20px;
   overflow: hidden;
+  border: 1px solid #cccccb;
   
-  ul { 
-    display: table; 
-    &.currentRow{
-      margin-bottom: 150px;
+  #gridMenuContainer {
+    position: absolute;
+  
+    ul { 
+      display: table; 
+      &.currentRow{
+        margin-bottom: 150px;
+      }
     }
-  }
-  li.gridItem {
-    float: left;
-    border: 2px solid transparent;
+    li.gridItem {
+      float: left;
+      border: 2px solid transparent;
     
-    img {
-      width: 197px;
-      height: 110px;
-      border: 3px solid #58595b;
-      opacity:0.7;
-    }
-    &.focused img {
-      @include outerglow;
-      border: 3px solid $highlight;
-      opacity:1;
+      img {
+        width: 197px;
+        height: 110px;
+        border: 3px solid #58595b;
+        opacity:0.7;
+      }
+      &.focused img {
+        @include outerglow;
+        border: 3px solid $highlight;
+        opacity:1;
+      }
     }
   }
 }
