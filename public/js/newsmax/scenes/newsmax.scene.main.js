@@ -110,6 +110,8 @@ define([
                         this.on('pagedown', this.pageDown, this); 
                     },
                     resetIndex: function() {
+                      resetGridPosition();
+                      $log(">>>>>>> resetIndex");
                       /* we have to do a little fanciness. If there are less than two full rows of 
                        * items, we have to set the index differently
                        */
@@ -118,7 +120,8 @@ define([
                         this._currentIndex = this.options.cols; //we want the first item in the 2nd row
                       }else{
                         //we have to apply an offset
-                        $(this.el).addClass("offset");
+                        //$(this.el).addClass("offset");
+                        moveGrid("down");
                         this._currentIndex = 0;
                       }
                       
@@ -132,11 +135,9 @@ define([
                       $("#gridMenuHolder").fadeOut();
                     },
                     pageDown: function(){
-                      $log("page down: ");
                       moveGrid("down");
                     },
                     pageUp: function(){
-                      $log("page up");
                       moveGrid("up");
                     },
                     // OVERRIDE DEFAULT FUNCTIONS
@@ -201,8 +202,6 @@ define([
                 mainMenu.on('selectedindex', function(index) {
                     mainMenuIndex = index;
                     var item = MenuItems.at(index);
-                    $log("action is: ", item.get('action') );
-                    $log("item is: ", item );
                     switch (item.get('action')) {
                         case 'subcategory':
                             subCollection.reset(item.get('subcategory').models);
@@ -235,7 +234,6 @@ define([
                         opacity: 1
                     });
                     //hideMainMenu();
-                    $log(" ON FOCUS TO KEY MENU ")
                     $("#searchterm").focus();
                 }, scene)
                 
@@ -248,7 +246,6 @@ define([
                 }, scene)
 
                 subMenu.on('onfocus', function() {
-                  $log("subMenu on focus, ", this)
                     $("#subMenu").animate({
                         left: 50,
                         opacity: 1
@@ -286,13 +283,11 @@ define([
                 }, scene)
 
                 keyMenu.on('leftfrommenu', function() {
-                    $log("KEY MENU LEFT FROM MENU ")
                     mainMenu.focus();
                 }, scene)
 
                 keyMenu.on('valueselect', function(item) {
                     var currentval = $("#searchterm").val();
-                    $log(" VALUE SELECT", item, item.length);
                     if (item.length == 1) $("#searchterm").val(currentval + item);
                     else if (item.toLowerCase() === "del") $("#searchterm").val(currentval.substring(0, currentval.length - 1));
                     else if (item.toLowerCase() === "space") $("#searchterm").val(currentval + " ");
@@ -347,6 +342,11 @@ define([
                   });
                   
                 };
+                
+                var resetGridPosition = function (){
+                  $log(">>>>> resetGridPosition");
+                  $("#gridMenuContainer").css({top: "0px"});
+                }
                 
                 var updateHTMLforGrid = function(item) {
                     $('.title').html('Title: ' + item.get("title"))
