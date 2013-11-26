@@ -204,7 +204,7 @@ img#logo {
 }
 
 #hideTrayButton{
-  position: absolute; bottom: 140px; right: 48px;
+  position: absolute; bottom: 205px; right: 48px;
   width: 55px; height: 55px;
   @include button;
   font-size: 36px;
@@ -223,7 +223,7 @@ img#logo {
   @include silvergradient;
   @include outerglow;
   position:absolute; bottom:0px; left:0px;
-  width:1280px; height:140px;
+  width:1280px; height:205px;
 
   #progressBarWrapper{
     position:absolute;
@@ -244,13 +244,30 @@ img#logo {
       background:#2F5CA9;
     }
   }
-
+  #vinfo{
+    position: absolute;
+    width: 1172px;
+    font-family: Helvetica, Arial, sans-serif;
+    left: 50px;
+    top: 120px;
+    font-size: 18px;
+    
+    #vtitle{
+      font-weight: bold;
+      display: block;
+    }
+    #vdescription{
+      clear: both;
+      display: block;
+    }
+  }
+  
   #timecode{
     font: 19px;
     color: $dark;
     font-weight: bold;
     position:absolute;
-    bottom:30px;
+    bottom:95px;
     left:1196px;
   }
 
@@ -324,66 +341,7 @@ img#logo {
   
 }
 
-.now-playing-text{
-  position:absolute;
-  left:109px; top:64px;
-  color:#535c61;
-  font: 20px HelveticaNeue;
-  font-weight:bold;
-}
 
-#loadingVideoIndicator{
-  position:absolute;
-  top:0px; left:0px;
-  width:1280px; height:720px;
-  background: -webkit-radial-gradient(center, ellipse cover, #dde0e7 1%,#b6cadb 100%);
-  z-index:100;
-  #splash{
-    position: absolute; top: 250px; left: 185px;
-  }
-  #loading-text{
-    font-size: 36px;
-    position: absolute; top: 450px; left: 535px;
-  }
-}
-
-#loadingDots{
-  font-size: 38pt;
-  position: absolute;
-  left: -42px;
-  top: 373px;
-}
-
-#videoInfoButton{
-  position:absolute;
-  left:319px;
-  width:128px; height:53px;
-  background:url(../images/video-infobutton-sprite.png) no-repeat;
-  background-position: 0px 0px;
-  &.focused{
-    background-position: -128px 0px;
-  }
-}
-
-.closeButton{
-  position: absolute; 
-  top:50px; left:49px;
-  width:47px; height:53px;
-  background:url(../images/close-playback-sprite.png) no-repeat top left;
-  background-position: 0px 0px;
-  
-  &.focused{
-    background-position:-47px 0px;
-  }
-}
-
-#errorModal{
-  position:absolute;
-  z-index:100;
-  width:1280px; height:720px;
-  background:url(../images/error-modal.jpg) no-repeat top left;
-  visibility:hidden;
-}
 #networkErrorModal{
   position:absolute;
   z-index:100;

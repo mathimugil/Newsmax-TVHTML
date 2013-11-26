@@ -1600,7 +1600,7 @@ img#logo {
 
 #hideTrayButton {
   position: absolute;
-  bottom: 140px;
+  bottom: 205px;
   right: 48px;
   width: 55px;
   height: 55px;
@@ -1627,7 +1627,7 @@ img#logo {
   bottom: 0px;
   left: 0px;
   width: 1280px;
-  height: 140px; }
+  height: 205px; }
   #playBackTray #progressBarWrapper {
     position: absolute;
     left: 51px;
@@ -1647,12 +1647,25 @@ img#logo {
       width: 400px;
       height: 10px;
       background: #2F5CA9; }
+  #playBackTray #vinfo {
+    position: absolute;
+    width: 1172px;
+    font-family: Helvetica, Arial, sans-serif;
+    left: 50px;
+    top: 120px;
+    font-size: 18px; }
+    #playBackTray #vinfo #vtitle {
+      font-weight: bold;
+      display: block; }
+    #playBackTray #vinfo #vdescription {
+      clear: both;
+      display: block; }
   #playBackTray #timecode {
     font: 19px;
     color: black;
     font-weight: bold;
     position: absolute;
-    bottom: 30px;
+    bottom: 95px;
     left: 1196px; }
   #playBackTray #trickPlayContainer {
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
@@ -1715,67 +1728,6 @@ img#logo {
     left: 0px;
     width: 845px;
     line-height: 23px; }
-
-.now-playing-text {
-  position: absolute;
-  left: 109px;
-  top: 64px;
-  color: #535c61;
-  font: 20px HelveticaNeue;
-  font-weight: bold; }
-
-#loadingVideoIndicator {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  width: 1280px;
-  height: 720px;
-  background: -webkit-radial-gradient(center, ellipse cover, #dde0e7 1%, #b6cadb 100%);
-  z-index: 100; }
-  #loadingVideoIndicator #splash {
-    position: absolute;
-    top: 250px;
-    left: 185px; }
-  #loadingVideoIndicator #loading-text {
-    font-size: 36px;
-    position: absolute;
-    top: 450px;
-    left: 535px; }
-
-#loadingDots {
-  font-size: 38pt;
-  position: absolute;
-  left: -42px;
-  top: 373px; }
-
-#videoInfoButton {
-  position: absolute;
-  left: 319px;
-  width: 128px;
-  height: 53px;
-  background: url(../images/video-infobutton-sprite.png) no-repeat;
-  background-position: 0px 0px; }
-  #videoInfoButton.focused {
-    background-position: -128px 0px; }
-
-.closeButton {
-  position: absolute;
-  top: 50px;
-  left: 49px;
-  width: 47px;
-  height: 53px;
-  background: url(../images/close-playback-sprite.png) no-repeat top left;
-  background-position: 0px 0px; }
-  .closeButton.focused {
-    background-position: -47px 0px; }
-
-#errorModal {
-  position: absolute;
-  z-index: 100;
-  width: 1280px;
-  height: 720px;
-  background: url(../images/error-modal.jpg) no-repeat top left;
-  visibility: hidden; }
 
 #networkErrorModal {
   position: absolute;
