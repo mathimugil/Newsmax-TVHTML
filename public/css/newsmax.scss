@@ -9,14 +9,15 @@ src: url(../fonts/HelveticaNeueLight.ttf);
 
 @mixin button {
   font-family: FontAwesome;
+  font-size: 26px;
   font-style: normal;
   font-weight: normal;
   color: $tvwhite;
-  background-color: $dark;
+  background-color: $gray;
 }
 @mixin buttonhover {
   color: $tvwhite;
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ff7a2a), color-stop(100%,#ff7a2a));
+  background-color: $nblue;
 }
 @mixin menubg {
   background: rgba(45,91,169, 0.95);
@@ -39,6 +40,21 @@ img#logo {
   right: 32px;
   width: 238px; height: 40px;
   display: none;
+}
+
+#loadingVideoIndicator{
+  position:absolute;
+  top:0px; left:0px;
+  width:1280px; height:720px;
+  background: -webkit-radial-gradient(center, ellipse cover, #dde0e7 1%,#b6cadb 100%);
+  z-index:100;
+  #splash{
+    position: absolute; top: 250px; left: 185px;
+  }
+  #loading-text{
+    font-size: 36px;
+    position: absolute; top: 450px; left: 535px;
+  }
 }
 
 #mainMenu {
@@ -146,12 +162,13 @@ img#logo {
   @include outerglow;
   display: none;
   position: absolute;
-  top: 373px; left: 390px;
+  top: 353px; left: 390px;
   width: 785px; height: 118px;
   color: $dark;
   padding: 10px;
   font-size: 18px;
   background-color: $silver;
+  font-family: Helvetica, Arial, sans-serif;
   
   #gridArrow{
     position: absolute;
@@ -172,6 +189,7 @@ img#logo {
   span{ 
     display: block; 
     margin-bottom: 10px;
+    line-height: 1.2em;
     &.title{
       font-weight: bold;
     }
@@ -187,12 +205,13 @@ img#logo {
 .backButton {
 	position:absolute;
   top:50px; left:49px;
-	width:47px; height:53px;
+	width:55px; height:55px;
   @include button;
+  font-size: 36px;
   
   &:before {
     position: absolute;
-    top: 17px; left: 20px;
+    top: 10px; left: 13px;
     content: "\f053";
   }
   
@@ -201,20 +220,15 @@ img#logo {
   }
 }
 
-#playBackTray{
-	position:absolute; bottom:0px; left:0px;
-	width:1280px; height:140px;
-	background:url(../images/playback-tray.png) no-repeat top left;
-}
-
 #hideTrayButton{
-	position:absolute; bottom:130px; right:48px;
-	width:69px; height:59px;
+  position: absolute; bottom: 205px; right: 48px;
+  width: 55px; height: 55px;
   @include button;
+  font-size: 36px;
   
   &:before{
     position: absolute;
-    top: 17px; left: 20px;
+    top: 10px; left: 10px;
     content: "\f078";
   }
   &.focused{
@@ -222,76 +236,103 @@ img#logo {
   }
 }
 
-#progressBarWrapper{
-	position:absolute;
-	left:51px; top:23px;
-}
+#playBackTray{
+  @include silvergradient;
+  @include outerglow;
+  position:absolute; bottom:0px; left:0px;
+  width:1280px; height:205px;
 
-#progressBarBack{
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	width: 1129px;
-	height: 10px;
-	background-color: #cacccc;
-}
-#progressBar{
-	position:absolute;
-	top:0px; left:0px;
-	width:400px; height:10px;
-	background:$nblue;
-}
-#timecode{
-	font: 19px HelveticaNeue;
-	color:#69747a;
-	position:absolute;
-	bottom:101px;
-	left:1196px;
-}
-
-#trickPlayContainer{
-	position:absolute;
-	bottom:32px; left:393px;
-
-}
-
-.trickPlayButton{
-	float:left;
-	width:62px; height:53px;
-	background-repeat: no-repeat;
-  display: inline-block;
-  position: relative;
-  float: left;
-  @include button;
-  
-  &:before{
+  #progressBarWrapper{
+    position:absolute;
+    left: 51px; top: 90px;
+    #progressBarBack{
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      width: 1129px;
+      height: 10px;
+      background-color: #e1e2e3;
+      @include outerglow;
+    }
+    #progressBar{
+      position:absolute;
+      top:0px; left:0px;
+      width:400px; height:10px;
+      background:#2F5CA9;
+    }
+  }
+  #vinfo{
     position: absolute;
-    top: 17px; left: 20px;
+    width: 1172px;
+    font-family: Helvetica, Arial, sans-serif;
+    left: 50px;
+    top: 120px;
+    font-size: 18px;
+    
+    #vtitle{
+      font-weight: bold;
+      display: block;
+    }
+    #vdescription{
+      clear: both;
+      display: block;
+    }
   }
-  &.stop:before{
-    content: "\f04d";
+  
+  #timecode{
+    font: 19px;
+    color: $dark;
+    font-weight: bold;
+    position:absolute;
+    bottom:95px;
+    left:1196px;
   }
 
-  &.play:before{
-  	content: "\f04b";
-  }
+  #trickPlayContainer{
+    @include outerglow;
+    position: absolute;
+    top: 20px; left: 452px;
 
-  &.pause:before{
-  	content: "\f04c";
-  }
-
-  &.rewind:before{
-  	content: "\f04a";
-  }
-
-  &.fastforward:before{
-  	content: "\f04e";
-  }
-
-  &.focused{
-    @include buttonhover;
+    .trickPlayButton{
+      float: left;
+      width: 62px; height: 53px;
+      background-repeat: no-repeat;
+      display: inline-block;
+      position: relative;
+      float: left;
+      border-right: 1px solid #555;
+      @include button;
+  
+      &:before{
+        position: absolute;
+        top: 15px; left: 20px;
+      }
+      &.stop:before{
+        content: "\f04d";
+      }
+      &.play:before{
+      	content: "\f04b";
+      }
+      &.pause:before{
+      	content: "\f04c";
+      }
+      &.rewind:before{
+      	content: "\f04a";
+      }
+      &.fastforward {
+        border-right: none;
+      }
+      &.fastforward:before{
+      	content: "\f04e";
+      }
+      &.focused{
+        @include buttonhover;
+      }
+    }
   }
 }
+
+
 
 #videoInfo{
   position:absolute;
@@ -317,66 +358,7 @@ img#logo {
   
 }
 
-.now-playing-text{
-  position:absolute;
-  left:109px; top:64px;
-  color:#535c61;
-  font: 20px HelveticaNeue;
-  font-weight:bold;
-}
 
-#loadingVideoIndicator{
-  position:absolute;
-  top:0px; left:0px;
-  width:1280px; height:720px;
-  background: -webkit-radial-gradient(center, ellipse cover, #dde0e7 1%,#b6cadb 100%);
-  z-index:100;
-  #splash{
-    position: absolute; top: 250px; left: 185px;
-  }
-  #loading-text{
-    font-size: 36px;
-    position: absolute; top: 450px; left: 535px;
-  }
-}
-
-#loadingDots{
-  font-size: 38pt;
-  position: absolute;
-  left: -42px;
-  top: 373px;
-}
-
-#videoInfoButton{
-  position:absolute;
-  left:319px;
-  width:128px; height:53px;
-  background:url(../images/video-infobutton-sprite.png) no-repeat;
-  background-position: 0px 0px;
-  &.focused{
-    background-position: -128px 0px;
-  }
-}
-
-.closeButton{
-  position: absolute; 
-  top:50px; left:49px;
-  width:47px; height:53px;
-  background:url(../images/close-playback-sprite.png) no-repeat top left;
-  background-position: 0px 0px;
-  
-  &.focused{
-    background-position:-47px 0px;
-  }
-}
-
-#errorModal{
-  position:absolute;
-  z-index:100;
-  width:1280px; height:720px;
-  background:url(../images/error-modal.jpg) no-repeat top left;
-  visibility:hidden;
-}
 #networkErrorModal{
   position:absolute;
   z-index:100;

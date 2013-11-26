@@ -3,6 +3,8 @@
 //     var global = this;
 // })();
 define(['jquery', 'underscore', 'backbone', 'tvengine', 'enginelite/enginelite.platform', 'domReady'], function($, _, Backbone, TVEngine, Platform, domReady) {
+    
+    $("#videoDebug").append($('<div>adding samsung platform<div>'))
     console.log("CREATING SMSUNG PLATFORM ");
     var platform = new Platform('Samsung');
     platform.setResolution(1280, 720);
@@ -66,58 +68,93 @@ define(['jquery', 'underscore', 'backbone', 'tvengine', 'enginelite/enginelite.p
         });
 
 
-        $log('running legacy code to add localStorage');
-        //Legacy code?
-        if (typeof localStorage == "undefined" && typeof FileSystem == "function") {
-            $log('yes we are adding localStorage');
-            var fileSyObj = new FileSystem();
-            var fileName = curWidget.id + "_localStorage.db";
-            var lStorage = {};
-            var changed = false;
+        // samsung local stoage implementation
+        var fileSyObj = new FileSystem();
 
-            // load or init localStorage file
-            var fileObj = fileSyObj.openCommonFile(fileName, "r+");
-            if (fileObj !== null) {
-                try {
-                    lStorage = JSON.parse(fileObj.readAll());
-                } catch (e) {}
-            } else {
-                fileObj = fileSyObj.openCommonFile(fileName, "w")
-                fileObj.writeAll("{}");
-            }
-            fileSyObj.closeCommonFile(fileObj);
-
-            // Save storage
-            lStorage.saveFile = function(delay) {
-                if (changed && typeof JSON == 'object') {
-                    var $self = this;
-                    var save = function() {
-                        fileObj = fileSyObj.openCommonFile(fileName, "w")
-                        fileObj.writeAll(JSON.stringify($self));
-                        fileSyObj.closeCommonFile(fileObj);
-                        changed = false;
-                    }
-                    if (typeof delay != 'undefined' && delay) setTimeout(save, 100);
-                    else save();
-                }
-            }
-
-            lStorage.setItem = function(key, value) {
-                changed = true;
-                this[key] = value;
-                this.saveFile(true);
-                return this[key];
-            }
-
-            lStorage.getItem = function(key) {
-                return this[key];
-            }
-
-            window.$storage = lStorage;
-            $log('window.localStorage = ', window.localStorage);
-            $log('finished loading localStorage');
-            //$log(_.keys(window.localStorage));
+        var bValid = fileSyObj.isValidCommonPath(curWidget.id);
+        if(!bValid){
+            // Need to create new directory for local user data
+            //$log("bValid = false");
+            fileSyObj.createCommonDir(curWidget.id);
+        }else{
+            //$log("bValid = true");
         }
+
+        var fileName = curWidget.id + "/_localStorage.db";
+        //$log('filename = ' + fileName);
+        var lStorage = {};
+        var changed = false;
+
+        // load or init localStorage file
+        var fileObj = fileSyObj.openCommonFile(fileName, "r+");
+        if (fileObj != null) {
+            //$log('fileObj != null');
+            //$log(fileObj.readAll());
+            try {
+                lStorage = JSON.parse(fileObj.readAll());
+            } catch (e) {}
+        } else {
+            //$log('fileObj == null');
+            fileObj = fileSyObj.openCommonFile(fileName, "w")
+            fileObj.writeAll("{}");
+        }
+        fileSyObj.closeCommonFile(fileObj);
+
+        // Save storage
+        lStorage.saveFile = function(delay) {
+            if (changed && typeof JSON == 'object') {
+                var $self = this;
+                var save = function() {
+                    fileObj = fileSyObj.openCommonFile(fileName, "w")
+                    fileObj.writeAll(JSON.stringify($self));
+                    fileSyObj.closeCommonFile(fileObj);
+                    changed = false;
+                }
+                if (typeof delay != 'undefined' && delay)
+                    setTimeout(save, 100);
+                else
+                    save();
+            }
+        }
+
+        lStorage.setItem = function(key, value) {
+            changed = true;
+            this[key] = value;
+            this.saveFile(true);
+            return this[key];
+        }
+
+        lStorage.removeItem = function(key){
+            changed = true;
+            delete this[key];
+            this.saveFile(true);
+        }
+
+        lStorage.getItem = function(key) {
+            return this[key];
+        }
+        /*lStorage.clear = function(){
+                var save = function() {
+                    fileObj = fileSyObj.openCommonFile(fileName, "w")
+                    fileObj.writeAll("{}");
+                    fileSyObj.closeCommonFile(fileObj);
+                    //changed = false;
+                }
+                setTimeout(save, 100);
+
+                var read = function(){
+                    fileObj = fileSyObj.openCommonFile(fileName, "w")
+                    $log('fileObj.readAll() is below');
+                    $log(fileObj.readAll());
+                    fileSyObj.closeCommonFile(fileObj);
+                }
+                setTimeout(read,5000);
+
+        }*/
+
+        window.$storage = lStorage;
+        console.log('arrived to $storage = ');
+
 
         return this;
     } //end init
@@ -298,6 +335,7 @@ define(['jquery', 'underscore', 'backbone', 'tvengine', 'enginelite/enginelite.p
     } //end platform start
 
     platform.startNetworkCheck = function() {
+        $("#videoDebug").append($('<div>running platform startNetworkCheck for samsung<div>'))
         var networkPlugin = document.getElementById('pluginObjectNetwork');
         var internetConnectionInterval = 2000;
         var _t = this;
@@ -337,8 +375,12 @@ define(['jquery', 'underscore', 'backbone', 'tvengine', 'enginelite/enginelite.p
         clearInterval(_t.checkInternetInterval);
         
         _t.checkInternetInterval = setInterval(function() {
-            if (!checkConnection()) platform.trigger('network:disconnected');
-            else platform.trigger('network:connected');
+            if (!checkConnection()){
+              platform.trigger('network:disconnected');  
+            } 
+            else {
+             platform.trigger('network:connected');   
+            }
         }, internetConnectionInterval);
     }
 
@@ -366,8 +408,10 @@ define(['jquery', 'underscore', 'backbone', 'tvengine', 'enginelite/enginelite.p
 
     }
     domReady(function() {
+        $("#videoDebug").append($('<div>running platform.startup() on domReady<div>'))
         platform.startup();
     })
     platform.init();
-    return platform;
+    return platform.start();
 });
+

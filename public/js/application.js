@@ -12,7 +12,6 @@ require.config({
     hbs: 'lib/hbs',
     'jquery.imagesloaded': 'lib/jqplugins/jquery.imagesloaded',
     'jquery.ellipsis': 'lib/jquery.ellipsis.min',
-    'jquery.loadingdotdotdot': 'lib/jquery.loadingdotdotdot',
     domReady: 'lib/domReady',
     handlebars: 'lib/handlebars-1.0.0',
     tvengine: 'enginelite/tvengine',
@@ -46,9 +45,6 @@ require.config({
     ],
     'jquery.ellipsis': [
       'jquery'
-    ],
-    'jquery.loadingdotdotdot': [
-      'jquery'
     ]
   }
 });
@@ -61,8 +57,7 @@ require(
     'newsmax/scenes/newsmax.scene.main',
     'newsmax/scenes/newsmax.scene.videoplayback',
     'newsmax/scenes/newsmax.scrubber',
-    'jquery.ellipsis',
-    'jquery.loadingdotdotdot',
+    'jquery.ellipsis'
   ],
   function ( domReady, TVEngine) {
     domReady(function() {

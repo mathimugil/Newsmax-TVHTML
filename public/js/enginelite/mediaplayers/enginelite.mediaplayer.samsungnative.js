@@ -1,12 +1,12 @@
-
 /* globals PLR_FALSE, alert */
-define(['jquery', 'underscore', 'backbone', 'tvengine', 'enginelite/enginelite.mediaplayer'], function($, _, Backbone, TVEngine, MediaPlayer) {
+define(['jquery', 'underscore', 'backbone', 'tvengine', 'enginelite/enginelite.mediaplayer', 'platform', 'domReady'], function($, _, Backbone, TVEngine, MediaPlayer, Platform, domReady) {
 
 	var error_reporter = function() {
 		return function(err) {
 			this.videoError(err);
 		}
 	}
+	
 
 	var SamsungNative = {
 		plugin: null,
@@ -39,17 +39,15 @@ define(['jquery', 'underscore', 'backbone', 'tvengine', 'enginelite/enginelite.m
 			width: "unknown"
 		},
 
-		currentInfo: {},
+		currentInfo: {}, 
 
 		init: function() {
-			// $log(" ___  SAMSUNG PLAYER INIT ___ ")
-			if (_.isFunction(this._init)) this._init();
 			var success = true;
 			this.state = this.STOPPED;
 			this.plugin = document.getElementById("pluginPlayer");
 			this.audioPlugin = document.getElementById("pluginAudio");
 			if (!this.plugin) {
-				// $log(" Could not find video plugin ")
+				// console.log(" Could not find video plugin ")
 				return false;
 			} else {
 				var mwPlugin = document.getElementById("pluginTVMW");
@@ -62,13 +60,12 @@ define(['jquery', 'underscore', 'backbone', 'tvengine', 'enginelite/enginelite.m
 					mwPlugin.SetMediaSource();
 				}
 			}
-			// $log(this.plugin)
+			// console.log(this.plugin)
 
 			// Reset Platform to default sets.
-			// $log("Resetting Coordinates");
+			// console.log("Resetting Coordinates");
 			//this.setCoordinates(0,0,TVEngine.getPlatform().resolution.width, TVEngine.getPlatform().resolution.height);
-			//this.setCoordinates(0, 0, TVEngine.getPlatform().resolution.width, TVEngine.getPlatform().resolution.height);
-			this.setCoordinates(0, 0, 960, 540);	/* hard coding this because of flickering video on weaker samsung systems */
+			this.setCoordinates(0, 0, 960, 540);
 			this.plugin.OnAuthenticationFailed = 'TVEngine.MediaPlayer.errorAuthFailed';
 			this.plugin.OnBufferingComplete = 'TVEngine.MediaPlayer.bufferingComplete';
 			this.plugin.OnBufferingProgress = 'TVEngine.MediaPlayer.bufferingProgress';
@@ -77,11 +74,10 @@ define(['jquery', 'underscore', 'backbone', 'tvengine', 'enginelite/enginelite.m
 			this.plugin.OnCurrentPlayTime = 'TVEngine.MediaPlayer.currentPlayTime';
 			this.plugin.OnNetworkDisconnected = 'TVEngine.MediaPlayer.errorNetDFailed';
 			this.plugin.OnRenderError = 'TVEngine.MediaPlayer.errorRender';
-			this.plugin.OnMute = "TVEngine.MediaPlaye.Events.mute";
+			this.plugin.OnMute = "TVEngine.MediaPlaye.Events.muted";
 			this.plugin.OnRenderingComplete = "TVEngine.MediaPlayer.streamEnded";
 			this.plugin.OnStreamInfoReady = 'TVEngine.MediaPlayer._streamInfoReady';
 			this.plugin.OnStreamNotFound = 'TVEngine.MediaPlayer.streamNotFound';
-			this.speedtest();
 			return success;
 		},
 
@@ -114,15 +110,15 @@ define(['jquery', 'underscore', 'backbone', 'tvengine', 'enginelite/enginelite.m
 						return false;
 					} else {
 						this.state = this.PLAYING;
-						this.trigger("onresume videoup");
+						this.trigger("onresume");
 						return true;
 					}
 				} else {
-					$log('6th next video');
 					this.nextVideo();
-				};
+				}
 			}
 		},
+
 		_playVideo: function(url, offset) {
 			if (typeof url !== 'string') {
 				$error("_playVideo: url must be a string, was:" + typeof url);
@@ -132,11 +128,13 @@ define(['jquery', 'underscore', 'backbone', 'tvengine', 'enginelite/enginelite.m
 			this.currentVideoUrl = url;
 			this.plugin.Stop();
 			this.streamready = false;
-			var platform = TVEngine.getPlatform();
 
-			if ((platform.name.toLowerCase() === "samsung" || platform.name.toLowerCase() === "samsunglow" || platform.name.toLowerCase() === "samsung2012") && url.toString().match(/\.m3u8/i)) {
+
+			if (url.toString().match(/\.m3u8/i)) {
 				url = url + "|COMPONENT=HLS";
 			}
+
+			console.log(" PLAYING URL ", url);
 			var self = this;
 
 			function play(url, offset) {
@@ -145,6 +143,7 @@ define(['jquery', 'underscore', 'backbone', 'tvengine', 'enginelite/enginelite.m
 					url = url[0];
 				}
 				if (typeof url !== 'string') $error("url must be a string, was " + (typeof url));
+				console.log("about to play = ", [url, offset]);
 				return self.plugin.ResumePlay(url, offset);
 			}
 
@@ -161,12 +160,7 @@ define(['jquery', 'underscore', 'backbone', 'tvengine', 'enginelite/enginelite.m
 			}
 		},
 
-		//time is passed in as seconds
-		//duration is in ms
-		//resumePlay should take a floor of seconds...
-		//this.ct = ms (current time)
 		jumpToTime: function(time) {
-
 			if (this.durationInSec() && time >= this.durationInSec() - 5) time = Math.floor(this.durationInSec()) - 5;
 			if (time < 0) time = 0;
 
@@ -178,14 +172,15 @@ define(['jquery', 'underscore', 'backbone', 'tvengine', 'enginelite/enginelite.m
 		stop: function() {
 			this.state = this.STOPPED
 			if (this.plugin) {
-				$log(this.plugin);
-				$log(" Calling MediaPlayer Stop ")
+				console.log(this.plugin);
+				console.log(" Calling MediaPlayer Stop ")
 				this.plugin.Stop();
 				this.plugin.ClearScreen();
 				this.currentStream = null;
 				this.trigger('onstop videodown');
 			}
 		},
+
 
 
 		pause: function() {
@@ -202,14 +197,9 @@ define(['jquery', 'underscore', 'backbone', 'tvengine', 'enginelite/enginelite.m
 		},
 
 		jump: function(amount) {
-			$log('jump called with amount = ', amount);
-			$log('currentTimeInSec = ', this.currentTimeInSec());
-			$log('durationInSec = ', this.durationInSec());
-			$log('jumpTo time = ', this.currentTimeInSec() + amount);
 			if (!this.allowFastForward) return;
 			amount = _.isNumber(amount) ? amount : 5;
 			if (amount > 0) {
-				$log('calling jumpForward with amount = ', amount);
 				this.plugin.JumpForward(amount);
 			} else if (amount < 0) {
 				this.plugin.JumpBackward(-amount);
@@ -238,7 +228,7 @@ define(['jquery', 'underscore', 'backbone', 'tvengine', 'enginelite/enginelite.m
 		},
 
 
-		/* returns ms */
+
 		duration: function() {
 			if (this.streamready) {
 				return this.plugin.GetDuration();
@@ -263,17 +253,18 @@ define(['jquery', 'underscore', 'backbone', 'tvengine', 'enginelite/enginelite.m
 		},
 
 
+
 		shutdown: function() {
 			this.stop();
 			var mwPlugin = document.getElementById("pluginTVMW");
-			if (mwPlugin && (this.originalSource != null)) {
+			if (mwPlugin && (this.originalSource !== null)) {
 				mwPlugin.SetSource(this.originalSource);
 				alert("Restore source to " + this.originalSource);
 			}
 		},
 
 		currentTime: function() {
-			//$log('currentTIme in samsungNative = ', this._ct);
+			//console.log('currentTIme in samsungNative = ', this._ct);
 			return this._ct;
 		},
 
@@ -282,12 +273,12 @@ define(['jquery', 'underscore', 'backbone', 'tvengine', 'enginelite/enginelite.m
 		},
 
 		videoError: function(message, type) {
-			$log(" `OR: ", message, ' for ', type);
+			console.log(" `OR: ", message, ' for ', type);
 
 			// Samsung native player throws an error on videos that don't contain audio stream
 			// This is expected, we don't want to bail on it.
 			if (!this.playlist.videosContainsAudio && message === '3' && type === 'rendering failed') {
-				$log('we are avoiding the rendering failed error for samsung audio error');
+				console.log('we are avoiding the rendering failed error for samsung audio error');
 				return;
 			}
 
@@ -297,42 +288,92 @@ define(['jquery', 'underscore', 'backbone', 'tvengine', 'enginelite/enginelite.m
 			this.trigger.apply(this, args);
 			this.nextVideo();
 		},
+
 		bufferingStart: function() {
 			this.trigger("bufferingstart");
 		},
 		bufferingProgress: function(progress) {
+			console.log("buffering progress", progress);
 			this.trigger("bufferingprogress", progress)
 		},
 		bufferingComplete: function() {
+			console.log("buffering end");
 			this.trigger("bufferingend");
 		},
 
 		currentPlayTime: function(currentTime) {
+//			console.log(" CURRENT PLAY TIME UPDATE ", currentTime);
 			this._ct = parseInt(currentTime, 10);
 			this.trigger("timeupdate", currentTime);
 		},
 		streamEnded: function() {
-			$log(" STREAM ENDED ", this);
+			console.log(" STREAM ENDED ", this);
 			this.trigger("videoend videodown");
 			this.nextVideo();
-			$log('after nextVideo is fired');
+			console.log('after nextVideo is fired');
 		},
-		mute: function(mute) {
+		muted: function(mute) {
 			this.trigger("muted", mute);
 		},
 		_streamInfoReady: function() {
-			// $log("Stream info ready: " +  Array.prototype.slice.call(arguments, 0).join("\n ") );
+			// console.log("Stream info ready: " +  Array.prototype.slice.call(arguments, 0).join("\n ") );
 			this.streamready = true;
 			this.trigger("streaminfoready")
 		},
 		streamNotFound: function() {
-			// $log(" STREAM NOT FOUND ");
+			// console.log(" STREAM NOT FOUND ");
 			this.trigger("videoerror videodown", "stream not found");
 		}
 	}
 	// unfortunately in this case we need to pollute the TVEngine namespace
 	//  so Samsung can have its call backs.
+	domReady(function() {
+		var pluginAPI = new window.Common.API.Plugin();
+        // Done in start instead of init() b/c mediaplayer is not loaded until after init().
+        
+        $("#videoDebug").append($('<div>domReady launched, setting screensaver to on<div>'))
+        pluginAPI.setOnScreenSaver();
+
+        MediaPlayer.bind('videoup',function(){
+        	$("#videoDebug").append($('<div>videoup triggered - setting screensaver to off<div>'))
+        	pluginAPI.setOffScreenSaver();
+        });
+
+        MediaPlayer.bind('videodown',function(){
+        	$("#videoDebug").append($('<div>videodown triggered -setting screensaver to on<div>'))
+        	pluginAPI.setOnScreenSaver();
+        });
+
+        /*MediaPlayer.bind('mediaplayer:onplay', function() {
+            //$rlog('got an event mediaplayer:onplay');
+            pluginAPI.setOffScreenSaver();
+        });
+        MediaPlayer.bind('mediaplayer:onresume', function() {
+            //$rlog('got an event mediaplayer:onresume');
+            pluginAPI.setOffScreenSaver();
+        });
+        MediaPlayer.bind('mediaplayer:onpause', function() {
+            //$rlog('got an event mediaplayer:onpause');
+            pluginAPI.setOnScreenSaver();
+        });
+        MediaPlayer.bind('mediaplayer:onstop', function() {
+            //$rlog('got an event mediaplayer:onstop');
+            pluginAPI.setOnScreenSaver();
+        });
+        MediaPlayer.bind('mediaplayer:mediaend', function() {
+            //$rlog('got an event mediaplayer:mediaend');
+            pluginAPI.setOnScreenSaver();
+        });*/
+	});
+	$(window).bind('unload', function() {
+	    try {
+	        MediaPlayer.stop();
+	    } catch (e) {
+	        console.error(' ON UNLOAD RESET CALLED BUT ERRORED!', e);
+	    }
+	});
 	_.extend(MediaPlayer, SamsungNative);
 	TVEngine.MediaPlayer = MediaPlayer;
+	window.TVEngine = TVEngine;
 	return MediaPlayer;
 });

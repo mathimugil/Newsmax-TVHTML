@@ -33,6 +33,7 @@ module.exports = function(grunt) {
                     modules: [{
                         name: "application"
                     }],
+                    optimize: 'none',
                     removeCombined: true,
                     mainConfigFile: "<%= yeoman.app %>/js/application.js",
                     dir: '<%= yeoman.dist %>'
@@ -136,7 +137,7 @@ module.exports = function(grunt) {
                     },
                     keepalive: true
                 }
-            } 
+            }
                 ,
             proxies: [
                 {
@@ -231,15 +232,16 @@ module.exports = function(grunt) {
                     }
                 },
                 files: {
-                    '<%= yeoman.dist %>/widgetlist.xml': ['<%= yeoman.app %>/widgetlist.xml']
+                    '<%= yeoman.dist %>/widgetlist.xml': ['<%= yeoman.app %>/_widgetlist.xml']
                 }
             }
         }
     });
     grunt.registerTask('build:samsung', ['clean:samsung','compress:samsung', 'template:widgetlist'])
     grunt.registerTask('build', ['bower', 'sass', 'clean:dist', 'requirejs', 'imagemin', 'cssmin', 'clean:post_build_cleanup','build:samsung']);
-    grunt.registerTask('server:dev', ['bower', 'sass', 'build:samsung:dev', 'configureProxies', 'connect:livereload', 'open', 'watch']);
+    grunt.registerTask('server:dev', ['bower', 'sass', 'configureProxies', 'connect:livereload', 'open', 'watch']);
     grunt.registerTask('server', ['build', 'configureProxies', 'connect:buildserver', 'open']);
+    grunt.registerTask('server:restart',['configureProxies', 'connect:buildserver', 'open']);
     grunt.registerTask('default', ['bower', 'sass']);
     grunt.registerTask('proserve', ['build','forever:start'])
 };

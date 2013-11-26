@@ -10,28 +10,21 @@ define([
     'utils', 
     'newsmax/scenes/newsmax.scrubber', 
     'newsmax/menus/newsmax.menus.trickplay', 
-    'newsmax/menus/newsmax.menus.backmenu', 
-    'jquery.loadingdotdotdot'
+    'newsmax/menus/newsmax.menus.backmenu'
     ],
     function(
-        StageManager, 
-        Navigation, 
-        Platform, 
-        $, 
-        //sampleTemplate, 
-        _, 
-        Backbone, 
-        //API, 
-        MediaPlayer, 
-        KeyHandler, 
-        Util, 
-        scrubManager, 
+        StageManager,
+        Navigation,
+        Platform,
+        $,
+        _,
+        Backbone,
+        MediaPlayer,
+        KeyHandler,
+        Util,
+        scrubManager,
         TrickMenu, 
-        //appconfig, 
-        //Models, 
-        BackMenu, 
-        //Send,
-        jqLoadingdotdotdot
+        BackMenu
         ) {
 
     var videoPlayback,
@@ -49,24 +42,13 @@ define([
 
     var controlsUp      = videoPlayback.createState('controlsup', true);
     var controlsDown    = videoPlayback.createState('controlsdown', false);
-    //var aboutState      = videoPlayback.createState('about',false);
-    //var expiredState    = videoPlayback.createState('expired',false);
-
     var backMenu        = new BackMenu();
     var dummy           = new Navigation.Menu();
     var closeMenu       = new Navigation.Menu();
     var disableBack     = false;
     var timeout;
     var $disableHiding  = false;
-    var video, continueB, joinB;
-    var trackInterval;
-    var lastState;
-       
-    /*var showBackButtonAndText;
-    showBackButtonAndText=function(){
-        $('.backButton').show();
-        $('.now-playing-text').show();
-    }*/
+    var video, trackInterval, lastState;
 
     videoPlayback.handlesback = function(){
         if(disableBack == true) return false;
@@ -76,32 +58,21 @@ define([
     videoPlayback.onenterscene = function() {
 
         TrickMenu.disable();
-        $('#loadingVideoIndicator').show();
-        $("#loadingDots").Loadingdotdotdot({"speed": 400,"maxDots": 3,"word":""});
-        $('#wrapper').css({'background-image':'none'});
-        $("#logo").hide();
+        showLoader();
         
         if (!this.persist.params) $error('!video scene needs paramater!');
 
-        video = this.persist.params.item //|| Send.currentVideo();
-        
-        //Analytics.watchedClass(video.attributes.idvideo)
-        setupTrickPlayMenu();
-        
-        $('.now-playing-text').html("sample text");
+        video = this.persist.params.item
+
+        $('#vtitle').html(video.attributes.title);
+        $('#vdescription').html(video.attributes.description);
+        $('#vdescription').ellipsis({ row: 2 });
         initVideoPlayback();
-        /*if ($storage.getItem('access_token') !== null) {
-            appconfig.access_token = $storage.getItem('access_token')
-        }*/
 
         //initKeyhandlers();
         bindMediaEventHandler();
 
         TrickMenu.setElement("#trickPlayContainer");
-
-        /*var trackMyPractice = function(_video){
-            API.trackPractice(_video.attributes.idvideo)
-        }*/
  
         MediaPlayer.once('timeupdate',function(){
             TrickMenu.enable();
@@ -115,6 +86,7 @@ define([
         hideMenu.on('onfocus', function() {
             $('#hideTrayButton').addClass('focused');
         }, this);
+        
         hideMenu.on('onblur', function() {
             $('#hideTrayButton').removeClass('focused');
         }, this);
@@ -127,30 +99,17 @@ define([
         }, this)
 
         hideMenu.on('onup',function(){
-            //if(scene.isPlayingWhatIsYogaGlo) return;
             if($('.backButton:visible').length!==0){  backMenu.focus();}    
         },this);
-
-        
-        //if(!appconfig.userId) return;   
-
-        /*return API.fetchUserFavoritesIDs().done(function(favorites) {
-            video.set('favorite', _.include(favorites, video.get('idvideo')));
-            updateFavoriteDisplay(true);
-        })*/
     }
 
     videoPlayback.onleavescene = function() {
-      
-        //$('#wrapper').css({'background-image':'url(images/background.png)'})
-        teardownKeyhandlers();
-        scrubManager.deactivate();
-        MediaPlayer.stop();
-        //$("#logo").show();
-        $('#loadingVideoIndicator').hide();   
-        hideMenu.off(null, null, this);
-        TrickMenu.off(null, null, this);  
-        MediaPlayer.off(null,null,this);
+      teardownKeyhandlers();
+      scrubManager.deactivate();
+      MediaPlayer.stop();
+      hideMenu.off(null, null, this);
+      TrickMenu.off(null, null, this);  
+      MediaPlayer.off(null,null,this);
     }
 
     controlsUp.onenterstate = function() {
@@ -164,20 +123,6 @@ define([
         backMenu.on('ondown',function(){
             hideMenu.focus();
         },this)
-        
-        /*TrickMenu.on('selectedindex',function(idx){
-            if(idx == 5) {
-                if(!videoPlayback.isPlayingWhatIsYogaGlo){
-                  videoPlayback.changeState('about');
-                  closeMenu.focus();  
-                } 
-                else {
-                    $log('skip this video');
-                    StageManager.changeScene('main',{blowStack:true});
-                }   
-            }
-            else if (idx == 6) toggleFavorite();
-        }, this);*/
 
         if( MediaPlayer.playing() ) {
              touchTimeout();
@@ -222,55 +167,6 @@ define([
         disableBack = false;
     }
 
-    function convertLevel(l){
-        
-        //Delete this
-        return;
-
-        /*var thisLevel = null;
-
-        if (l == "12") {
-            thisLevel = "1/2"
-        } else if (l == "23") {
-            thisLevel = "2/3"
-        } else {
-            thisLevel = l
-        }
-
-        return thisLevel;*/
-    }
-
-    function updateVideoInfo(video){
-        //TODO: implement if we need something like that on this screen
-        return;
-        /*$('.aboutModal #videoInfo h2').html(video.get('title'));
-        $('.aboutModal #videoInfo .data .style').html('<span>Style:</span>' + video.get('style'));
-        $('.aboutModal #videoInfo .description').text(video.get('description'));
-        $('.aboutModal #videoInfo .data .teacher').html(video.get('teacher'));
-        $('.aboutModal #videoInfo .data .level').html(convertLevel('Level '+video.get('level')));
-        $('.aboutModal #videoInfo .data .duration').html(video.get('durationMin')+'min');*/
-    }
-
-    function setupTrickPlayMenu(){
-
-        //If this videoplayback scene can vary then we should remove this part
-        return;
-
-        /*$("#trickPlayContainer").find('.option').remove();
-        
-        if(videoPlayback.isPlayingWhatIsYogaGlo){
-            $('#trickPlayContainer').append($('<div id="skipThisButton" class="option">&nbsp;</div>'));
-        }else if(videoPlayback.persist.params.option == 'about'){ //TODO: need the introductory video to allow the skipThisButton
-            //$('#trickPlayContainer').append($('<div id="skipThisButton" class="option">&nbsp;</div>'));
-        }else {
-            $('#trickPlayContainer').append($('<div id="videoInfoButton" class="option">&nbsp;</div>'));
-            if(appconfig.userId) $('#trickPlayContainer').append($('<div id="videoFavoriteButton" class="option">&nbsp;</div>'));
-        }
-
-        TrickMenu._currentIndex = 0;    //because we could have left the scene and be on a different item (videoFavoriteButton) and then removed it
-        */
-    }
-    
     var touchTimeout = function(){
         clearTimeout(timeout);
         timeout = setTimeout(function(){
@@ -425,8 +321,10 @@ define([
             case 'playlist:newplaylistitem':
                 break;
             case 'bufferingend':
+                hideLoader();
                 break;
             case 'bufferingstart':
+                showLoader();
                 break;
             case 'playlist:ended':
                 StageManager.StageHistory.back();  
@@ -444,6 +342,14 @@ define([
     function teardownKeyhandlers() {
         MediaPlayer.off(null, null, videoPlayback);
         KeyHandler.off(null, null, videoPlayback);
+    }
+    
+    var showLoader = function(){
+      $("#circularG").fadeIn();
+    }
+    
+    var hideLoader = function(){
+      $("#circularG").fadeOut();
     }
 
     return videoPlayback;
