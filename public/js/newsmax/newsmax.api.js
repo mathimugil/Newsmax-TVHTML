@@ -1,10 +1,11 @@
-define(['navigation'], function(Navigation) {
+define(['navigation','platform'], function(Navigation, Platform) {
 	return {
 		fetchItem: function(url, parser, options) {
 
 			options = _.isFunction(parser) ? options : parser;
 			options = _.defaults(options || {},{
 				url : url,
+				skipProxy: !Platform.needsProxy
 				// skipProxy: true,
 				// xhrFields: {
 				//   				withCredentials: true
