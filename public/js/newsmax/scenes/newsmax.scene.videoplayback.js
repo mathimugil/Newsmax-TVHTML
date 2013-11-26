@@ -99,7 +99,6 @@ define([
         }, this)
 
         hideMenu.on('onup',function(){
-            //if(scene.isPlayingWhatIsYogaGlo) return;
             if($('.backButton:visible').length!==0){  backMenu.focus();}    
         },this);
     }
@@ -124,20 +123,6 @@ define([
         backMenu.on('ondown',function(){
             hideMenu.focus();
         },this)
-        
-        /*TrickMenu.on('selectedindex',function(idx){
-            if(idx == 5) {
-                if(!videoPlayback.isPlayingWhatIsYogaGlo){
-                  videoPlayback.changeState('about');
-                  closeMenu.focus();  
-                } 
-                else {
-                    $log('skip this video');
-                    StageManager.changeScene('main',{blowStack:true});
-                }   
-            }
-            else if (idx == 6) toggleFavorite();
-        }, this);*/
 
         if( MediaPlayer.playing() ) {
              touchTimeout();
