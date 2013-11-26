@@ -10,28 +10,21 @@ define([
     'utils', 
     'newsmax/scenes/newsmax.scrubber', 
     'newsmax/menus/newsmax.menus.trickplay', 
-    'newsmax/menus/newsmax.menus.backmenu', 
-    'jquery.loadingdotdotdot'
+    'newsmax/menus/newsmax.menus.backmenu'
     ],
     function(
-        StageManager, 
-        Navigation, 
-        Platform, 
-        $, 
-        //sampleTemplate, 
-        _, 
-        Backbone, 
-        //API, 
-        MediaPlayer, 
-        KeyHandler, 
-        Util, 
-        scrubManager, 
+        StageManager,
+        Navigation,
+        Platform,
+        $,
+        _,
+        Backbone,
+        MediaPlayer,
+        KeyHandler,
+        Util,
+        scrubManager,
         TrickMenu, 
-        //appconfig, 
-        //Models, 
-        BackMenu, 
-        //Send,
-        jqLoadingdotdotdot
+        BackMenu
         ) {
 
     var videoPlayback,
@@ -49,24 +42,13 @@ define([
 
     var controlsUp      = videoPlayback.createState('controlsup', true);
     var controlsDown    = videoPlayback.createState('controlsdown', false);
-    //var aboutState      = videoPlayback.createState('about',false);
-    //var expiredState    = videoPlayback.createState('expired',false);
-
     var backMenu        = new BackMenu();
     var dummy           = new Navigation.Menu();
     var closeMenu       = new Navigation.Menu();
     var disableBack     = false;
     var timeout;
     var $disableHiding  = false;
-    var video, continueB, joinB;
-    var trackInterval;
-    var lastState;
-       
-    /*var showBackButtonAndText;
-    showBackButtonAndText=function(){
-        $('.backButton').show();
-        $('.now-playing-text').show();
-    }*/
+    var video, trackInterval, lastState;
 
     videoPlayback.handlesback = function(){
         if(disableBack == true) return false;
@@ -80,9 +62,11 @@ define([
         
         if (!this.persist.params) $error('!video scene needs paramater!');
 
-        video = this.persist.params.item //|| Send.currentVideo();
-        
-        $('.now-playing-text').html("sample text");
+        video = this.persist.params.item
+
+        $('#vtitle').html(video.attributes.title);
+        $('#vdescription').html(video.attributes.description);
+        $('#vdescription').ellipsis({ row: 2 });
         initVideoPlayback();
 
         //initKeyhandlers();
@@ -102,6 +86,7 @@ define([
         hideMenu.on('onfocus', function() {
             $('#hideTrayButton').addClass('focused');
         }, this);
+        
         hideMenu.on('onblur', function() {
             $('#hideTrayButton').removeClass('focused');
         }, this);
@@ -117,14 +102,6 @@ define([
             //if(scene.isPlayingWhatIsYogaGlo) return;
             if($('.backButton:visible').length!==0){  backMenu.focus();}    
         },this);
-
-        
-        //if(!appconfig.userId) return;   
-
-        /*return API.fetchUserFavoritesIDs().done(function(favorites) {
-            video.set('favorite', _.include(favorites, video.get('idvideo')));
-            updateFavoriteDisplay(true);
-        })*/
     }
 
     videoPlayback.onleavescene = function() {
@@ -205,18 +182,6 @@ define([
         disableBack = false;
     }
 
-
-    function updateVideoInfo(video){
-        //TODO: implement if we need something like that on this screen
-        return;
-        /*$('.aboutModal #videoInfo h2').html(video.get('title'));
-        $('.aboutModal #videoInfo .data .style').html('<span>Style:</span>' + video.get('style'));
-        $('.aboutModal #videoInfo .description').text(video.get('description'));
-        $('.aboutModal #videoInfo .data .teacher').html(video.get('teacher'));
-        $('.aboutModal #videoInfo .data .level').html(convertLevel('Level '+video.get('level')));
-        $('.aboutModal #videoInfo .data .duration').html(video.get('durationMin')+'min');*/
-    }
-    
     var touchTimeout = function(){
         clearTimeout(timeout);
         timeout = setTimeout(function(){
