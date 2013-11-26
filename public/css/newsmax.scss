@@ -162,12 +162,13 @@ img#logo {
   @include outerglow;
   display: none;
   position: absolute;
-  top: 373px; left: 390px;
+  top: 353px; left: 390px;
   width: 785px; height: 118px;
   color: $dark;
   padding: 10px;
   font-size: 18px;
   background-color: $silver;
+  font-family: Helvetica, Arial, sans-serif;
   
   #gridArrow{
     position: absolute;
@@ -188,6 +189,7 @@ img#logo {
   span{ 
     display: block; 
     margin-bottom: 10px;
+    line-spacing: 1.2em;
     &.title{
       font-weight: bold;
     }

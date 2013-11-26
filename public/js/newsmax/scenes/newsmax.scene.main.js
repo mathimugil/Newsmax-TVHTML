@@ -352,9 +352,9 @@ define([
                 }
 
                 var updateHTMLforGrid = function(item) {
-
                     $('.description').html(item.get('description'));
                     $('.title').html(item.get("title"));
+                    $('.description').ellipsis({ row: 4 });
                 };
 
                 mainMenu.focus();
