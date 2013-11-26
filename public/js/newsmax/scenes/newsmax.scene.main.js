@@ -291,10 +291,13 @@ define([
 
                 keyMenu.on('valueselect', function(item) {
                     var currentval = $("#searchterm").val();
-                    $log(" VALUE SELECT", item, item.length);
-                    if (item.length == 1) $("#searchterm").val(currentval + item);
-                    else if (item.toLowerCase() === "del") $("#searchterm").val(currentval.substring(0, currentval.length - 1));
-                    else if (item.toLowerCase() === "space") $("#searchterm").val(currentval + " ");
+                    if (item.length == 1 && $("#searchterm").val().length < 20){
+                      $("#searchterm").val(currentval + item);
+                    } else if (item.toLowerCase() === "del") {
+                      $("#searchterm").val(currentval.substring(0, currentval.length - 1));
+                    }else if (item.toLowerCase() === "space"){
+                      $("#searchterm").val(currentval + " ");
+                    } 
                 })
 
                 keyMenu.on('rightfrommenu', function() {

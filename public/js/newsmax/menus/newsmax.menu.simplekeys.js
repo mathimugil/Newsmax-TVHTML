@@ -116,7 +116,7 @@ define(['navigation', 'hbs!newsmax/templates/KeyBoard','underscore'], function(N
 
         render: function() {
             $(this.el).html(KeyboardTemplate({
-                rows: _("abcdefghijklmnopqrstuvqxyz0123456789".match(/.{1,6}/g)).map(function(row) {
+                rows: _("abcdefghijklmnopqrstuvwxyz0123456789".match(/.{1,6}/g)).map(function(row) {
                     return row.split("");
                 })
             }))
