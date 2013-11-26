@@ -65,8 +65,6 @@ define([
                       //touchTimeout();
                   },this);
 
-                  $("#loadingVideoIndicator").fadeOut();
-                  $("img#logo").fadeIn();
                    MediaPlayer.play();
                 }
                 initLiveStream();
@@ -112,7 +110,6 @@ define([
                     },
                     resetIndex: function() {
                       resetGridPosition();
-                      $log(">>>>>>> resetIndex");
                       /* we have to do a little fanciness. If there are less than two full rows of
                        * items, we have to set the index differently
                        */
@@ -380,7 +377,7 @@ define([
                 Grid.resetIndex();
                 gridRowHeight = $("ul.gridMenuPage:first").outerHeight();
                 updateSelectorsForGrid();
-                Grid.focus();
+                //Grid.focus();
             })
         }
 
