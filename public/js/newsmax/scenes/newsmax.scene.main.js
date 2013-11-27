@@ -44,6 +44,7 @@ define([
         // var searchState = scene.createState('search');
 
         var Grid, gridRowHeight;
+        var hideSubNav = false;
 
         scene.onenterscene = function() {
 
@@ -64,8 +65,9 @@ define([
                       $("img#logo").fadeIn();
                       //touchTimeout();
                   },this);
-
-                   MediaPlayer.play();
+                  $("#loadingVideoIndicator").fadeOut();
+                  $("img#logo").fadeIn();
+                   //MediaPlayer.play();
                 }
                 initLiveStream();
 
@@ -152,7 +154,8 @@ define([
                         this._currentIndex--;
                         this.setFocus();
                       } else {
-                        subMenu.focus();
+                        $log("hide sub menu? ", hideSubNav);
+                        hideSubNav ? mainMenu.focus() : subMenu.focus();
                       }
                     },
                     _rowUp: function() {
@@ -200,6 +203,7 @@ define([
                 mainMenu.on('selectedindex', function(index) {
                     mainMenuIndex = index;
                     var item = MenuItems.at(index);
+                    hideSubNav = false;
                     $log("action is: ", item.get('action') );
                     $log("item is: ", item );
                     switch (item.get('action')) {
@@ -208,6 +212,11 @@ define([
                             updateGrid(item.get('subcategory').at(0).get('url'));
                             subMenu.focus();
                             $("#subMenu li.sm-focused").addClass("selected").removeClass("sm-focused");
+                            break;
+                        case 'videos':
+                            hideSubNav = true;
+                            $log("setting hideSubNav to true: ", hideSubNav);
+                            updateGrid(item.get("url"));
                             break;
                         case 'search':
                             keyMenu.focus();
@@ -265,7 +274,8 @@ define([
 
                 //direction etc.
                 mainMenu.on('onright', function() {
-                    subMenu.focus();
+                    $("#mainMenu li").removeClass("sm-focused");
+                    hideSubNav ? Grid.focus() : subMenu.focus();
                 }, scene)
 
                 subMenu.on('onleft', function() {
@@ -304,9 +314,6 @@ define([
                     VideoGrid.focus();
                 }, scene)
 
-                Grid.on('leftedge', function() {
-                    subMenu.focus();
-                }, scene)
 
                 Grid.on('newfocus', function(item) {
                   updateHTMLforGrid(item);
@@ -320,6 +327,7 @@ define([
                 });
 
                 var positionArrow = function() {
+                  $log("position arrow")
                   $("#gridArrow").removeClass();
 
                   switch (Grid._currentIndex % Grid.options.cols) {
@@ -359,7 +367,6 @@ define([
                     $('.title').html(item.get("title"));
                     $('.description').ellipsis({ row: 4 });
                 };
-
                 mainMenu.focus();
 
             })
@@ -380,7 +387,6 @@ define([
                 Grid.resetIndex();
                 gridRowHeight = $("ul.gridMenuPage:first").outerHeight();
                 updateSelectorsForGrid();
-                //Grid.focus();
             })
         }
 
