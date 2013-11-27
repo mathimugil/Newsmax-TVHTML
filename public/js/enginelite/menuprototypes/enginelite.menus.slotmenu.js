@@ -78,6 +78,7 @@ define(['navigation', 'underscore'], function(Navigation, _) {
 
     _incrementIndex: function() {
         $log(" INCREMENT INDEX ", this._currentIndex)
+        $log(" slot menu is: ", this)
       if(this._currentIndex < this._maxIndex) {
         this._currentIndex++;
         this.trigger('newfocus', this._currentIndex);
@@ -114,7 +115,7 @@ define(['navigation', 'underscore'], function(Navigation, _) {
         $(this.el).children().on('mouseover', function() {
             // $log(" MOUSEOVER ITEM ", $(this).index());
         })
-        this._maxIndex = $(this.el).children().length
+        this._maxIndex = $(this.el).children().length - 1;
         return this;
     }
   });

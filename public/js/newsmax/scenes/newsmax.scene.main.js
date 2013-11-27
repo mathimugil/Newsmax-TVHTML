@@ -65,9 +65,8 @@ define([
                       $("img#logo").fadeIn();
                       //touchTimeout();
                   },this);
-                  $("#loadingVideoIndicator").fadeOut();
-                  $("img#logo").fadeIn();
-                   //MediaPlayer.play();
+                  
+                  MediaPlayer.play();
                 }
                 initLiveStream();
 
@@ -133,11 +132,9 @@ define([
                       $("#gridMenuHolder").fadeOut();
                     },
                     pageDown: function(){
-                      $log("page down: ");
                       moveGrid("down");
                     },
                     pageUp: function(){
-                      $log("page up");
                       moveGrid("up");
                     },
                     // OVERRIDE DEFAULT FUNCTIONS
@@ -154,7 +151,6 @@ define([
                         this._currentIndex--;
                         this.setFocus();
                       } else {
-                        $log("hide sub menu? ", hideSubNav);
                         hideSubNav ? mainMenu.focus() : subMenu.focus();
                       }
                     },
