@@ -118,7 +118,7 @@ define([
                         this._currentIndex = this.options.cols; //we want the first item in the 2nd row
                       }else{
                         //we have to apply an offset
-                        $(this.el).addClass("offset");
+                        moveGrid("down");
                         this._currentIndex = 0;
                       }
 
