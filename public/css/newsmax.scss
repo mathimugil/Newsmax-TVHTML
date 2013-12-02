@@ -119,7 +119,7 @@ img#logo {
 }
 
 #mainMenu li, #subMenu li {
-  width: 240px;
+  width: 275px;
   text-align:right;
   padding: 15px 20px 0px 30px; 
   color: $menuTextBlue;
@@ -128,28 +128,35 @@ img#logo {
   font-weight: normal;
   font-size: 26px;
   
-  &.sm-focused, &.selected, &.selected.sm-focused {
+  &.sm-focused {
     border-bottom: 8px solid $highlight;
-    color:$tvwhite;
     font: Helvetica;
     font-weight: bold;
   }
   &.selected {
     border-bottom: 8px solid transparent;
+    color:$tvwhite;
+    font: Helvetica;
+    font-weight: bold;
+  }
+  &.selected.sm-focused{
+    border-bottom: 8px solid $highlight;
   }
 }
 #gridMenuHolder{
   @include silvergradient;
   display: none;
   position: absolute;
-  top: 100px; left: 360px;
-  width: 850px; height: 545px;
-  padding: 20px;
+  top: 100px; left: 385px;
+  width: 820px; height: 545px;
+  padding: 0 20px;
   overflow: hidden;
   border: 1px solid #cccccb;
   
   #gridMenuContainer {
     position: absolute;
+    top: 10px;
+    display: block;
   
     ul { 
       display: table; 
@@ -180,7 +187,7 @@ img#logo {
   @include outerglow;
   display: none;
   position: absolute;
-  top: 353px; left: 390px;
+  top: 365px; left: 418px;
   width: 785px; height: 118px;
   color: $dark;
   padding: 10px;

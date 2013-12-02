@@ -87,7 +87,7 @@ body {
   width: 1280px;
   height: 720px; }
 
-#wrapper {
+#wrapper, #videowrapper {
   overflow: hidden;
   position: absolute;
   top: 0;
@@ -1531,7 +1531,7 @@ img#logo {
     text-align: left; }
 
 #mainMenu li, #subMenu li {
-  width: 240px;
+  width: 275px;
   text-align: right;
   padding: 15px 20px 0px 30px;
   color: #66a1d6;
@@ -1539,27 +1539,33 @@ img#logo {
   border-bottom: 8px solid transparent;
   font-weight: normal;
   font-size: 26px; }
-  #mainMenu li.sm-focused, #mainMenu li.selected, #mainMenu li.selected.sm-focused, #subMenu li.sm-focused, #subMenu li.selected, #subMenu li.selected.sm-focused {
+  #mainMenu li.sm-focused, #subMenu li.sm-focused {
     border-bottom: 8px solid #5186c6;
-    color: #e1e1e1;
     font: Helvetica;
     font-weight: bold; }
   #mainMenu li.selected, #subMenu li.selected {
-    border-bottom: 8px solid transparent; }
+    border-bottom: 8px solid transparent;
+    color: #e1e1e1;
+    font: Helvetica;
+    font-weight: bold; }
+  #mainMenu li.selected.sm-focused, #subMenu li.selected.sm-focused {
+    border-bottom: 8px solid #5186c6; }
 
 #gridMenuHolder {
   background: -webkit-linear-gradient(top, rgba(239, 239, 239, 0.9) 0%, rgba(204, 204, 203, 0.9) 81%, rgba(154, 155, 159, 0.9) 100%);
   display: none;
   position: absolute;
   top: 100px;
-  left: 360px;
-  width: 850px;
+  left: 385px;
+  width: 820px;
   height: 545px;
-  padding: 20px;
+  padding: 0 20px;
   overflow: hidden;
   border: 1px solid #cccccb; }
   #gridMenuHolder #gridMenuContainer {
-    position: absolute; }
+    position: absolute;
+    top: 10px;
+    display: block; }
     #gridMenuHolder #gridMenuContainer ul {
       display: table; }
       #gridMenuHolder #gridMenuContainer ul.currentRow {
@@ -1581,8 +1587,8 @@ img#logo {
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
   display: none;
   position: absolute;
-  top: 353px;
-  left: 390px;
+  top: 365px;
+  left: 418px;
   width: 785px;
   height: 118px;
   color: black;
