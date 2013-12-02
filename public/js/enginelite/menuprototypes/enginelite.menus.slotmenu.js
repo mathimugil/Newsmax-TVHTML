@@ -116,6 +116,7 @@ define(['navigation', 'underscore'], function(Navigation, _) {
             // $log(" MOUSEOVER ITEM ", $(this).index());
         })
         this._maxIndex = $(this.el).children().length - 1;
+        this.trigger("rendered");
         return this;
     }
   });

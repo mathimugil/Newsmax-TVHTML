@@ -36,7 +36,7 @@ define([
     videoPlayback = new StageManager.Scene({
         defaultScene: false,
         name: "videoPlayback",
-        target: "#wrapper",
+        target: "#videowrapper",
         view: "views/newsmax.videoplayback.html"
     });
 
@@ -56,7 +56,7 @@ define([
     }
 
     videoPlayback.onenterscene = function() {
-
+        $("#videowrapper").show();
         TrickMenu.disable();
         showLoader();
         
@@ -68,8 +68,7 @@ define([
         $('#vdescription').html(video.attributes.description);
         $('#vdescription').ellipsis({ row: 2 });
         initVideoPlayback();
-
-        //initKeyhandlers();
+        initKeyhandlers();
         bindMediaEventHandler();
 
         TrickMenu.setElement("#trickPlayContainer");
@@ -104,6 +103,7 @@ define([
     }
 
     videoPlayback.onleavescene = function() {
+      $("#videowrapper").hide();
       teardownKeyhandlers();
       scrubManager.deactivate();
       MediaPlayer.stop();
@@ -113,9 +113,8 @@ define([
     }
 
     controlsUp.onenterstate = function() {
-        
+        $("#videowrapper").fadeIn();
         $log(" CONTORLSUP onenterstate");
-        
         TrickMenu.on('onup', function() {
             hideMenu.focus();
         }, this);
@@ -146,7 +145,7 @@ define([
 
     controlsDown.onenterstate = function() {
         disableBack = true;
-        $('#wrapper').hide();
+        $('#videowrapper').fadeOut();
         $log('E N T E R I N G controlsDown state');
 
         dummy.on('onright onleft onup ondown onselect',function(e,l){
@@ -163,7 +162,7 @@ define([
     controlsDown.onleavestate = function() {
         dummy.off(null,null,this);
         KeyHandler.off(null,null,this);
-        $('#wrapper').show();
+        $('#videowrapper').show();
         disableBack = false;
     }
 
@@ -180,26 +179,19 @@ define([
     }
 
     function timeUpdateHandler(currentTime) {
-
         var duration;
-
         duration = MediaPlayer.duration();
-
         if (_.isNumber(duration)) {
             videoProgressInMS = currentTime;
             videoPlayback.updateTimeDisplay(currentTime, duration);
         } else {
             return;
         }
-
     }
 
     videoPlayback.updateTimeDisplay = function(currentTime, duration) {
-
         var current, total, progress, progress_width;
-
         total = Util.convertMstoHumanReadable(duration);
-
         if (currentTime > duration) {
             current = total;
             progress = 1;
@@ -207,10 +199,7 @@ define([
             current = Util.convertMstoHumanReadable(currentTime);
             progress = (currentTime / duration);
         }
-
         progress_width = Math.ceil(progress * 1129);
-
-
         $("#timecode").text(current);
         $("#progressBar").css({ width: progress_width });
         $('#scrubDirection').css({ left: (progress_width - 33) });
