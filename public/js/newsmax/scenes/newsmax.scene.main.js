@@ -162,7 +162,9 @@ define([
                         //we need to consider the last line carefully
                         if (coords.pageIndex == coords.maxPageIndex - 1){
                           if ((this._currentIndex + this.options.cols) > (this.collection.length - 1) ){
+                            // we can't just move down, we need to go to the end of the collection
                             this._currentIndex = this.collection.length - 1;
+                            positionArrow();
                           }else{
                             this._currentIndex += this.options.cols;
                           }
