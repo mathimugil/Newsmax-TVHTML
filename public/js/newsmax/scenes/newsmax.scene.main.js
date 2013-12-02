@@ -160,7 +160,7 @@ define([
                       var coords = this.coords();
                       if( this._currentIndex < (this.collection.length - 1) ) {
                         //we need to consider the last line carefully
-                        if (coords.pageIndex = coords.maxPageIndex - 1){
+                        if (coords.pageIndex == coords.maxPageIndex - 1){
                           if ((this._currentIndex + this.options.cols) > (this.collection.length - 1) ){
                             this._currentIndex = this.collection.length - 1;
                           }else{
