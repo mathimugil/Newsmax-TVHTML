@@ -235,7 +235,7 @@ define([
 
                 keyMenu.on('onfocus', function() {
                     $("#searchMenu").animate({
-                        left: 300,
+                        left: 350,
                         opacity: 1
                     });
                     //hideMainMenu();
@@ -312,9 +312,11 @@ define([
                       $("#searchterm").val(currentval + item);
                     } else if (item.toLowerCase() === "del") {
                       $("#searchterm").val(currentval.substring(0, currentval.length - 1));
-                    }else if (item.toLowerCase() === "space"){
+                    } else if (item.toLowerCase() === "space"){
                       $("#searchterm").val(currentval + " ");
-                    } 
+                    } else if (item.toLowerCase() === "clear"){
+                      $("#searchterm").val("");
+                    }
                 })
 
                 keyMenu.on('rightfrommenu', function() {
