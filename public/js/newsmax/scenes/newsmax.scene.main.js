@@ -202,7 +202,7 @@ define([
                             subCollection.reset(item.get('subcategory').models);
                             updateGrid(item.get('subcategory').at(0).get('url'));
                             subMenu.focus();
-                            $("#subMenu li.sm-focused").addClass("selected").removeClass("sm-focused");
+                            $("#subMenu li.sm-focused").addClass("selected");
                             break;
                         case 'videos':
                             hideSubNav = true;
