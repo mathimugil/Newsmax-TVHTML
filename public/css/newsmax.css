@@ -1455,6 +1455,18 @@ img#logo {
   #mainMenu li.selected.sm-focused, #subMenu li.selected.sm-focused {
     border-bottom: 8px solid #5186c6; }
 
+#searchTermBox {
+  display: none;
+  position: absolute;
+  top: 63px;
+  left: 385px;
+  width: 580px;
+  height: 18px;
+  color: black;
+  text-transform: uppercase;
+  background: rgba(205, 205, 205, 0.9);
+  padding: 10px; }
+
 #gridMenuHolder {
   background: -webkit-linear-gradient(top, rgba(239, 239, 239, 0.9) 0%, rgba(204, 204, 203, 0.9) 81%, rgba(154, 155, 159, 0.9) 100%);
   display: none;

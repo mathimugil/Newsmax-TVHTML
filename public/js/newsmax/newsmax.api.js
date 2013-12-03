@@ -1,7 +1,10 @@
 define(['navigation','platform'], function(Navigation, Platform) {
+  var imageProcessingLink = "http://www.nmax.tv/NewsmaxVideoServices/api/Image?uri=";
+  var imageSizeSlug = "&height=110&width=197";
+  
 	return {
 		fetchItem: function(url, parser, options) {
-
+      $log("fetching: ", url);
 			options = _.isFunction(parser) ? options : parser;
 			options = _.defaults(options || {},{
 				url : url,
@@ -24,39 +27,45 @@ define(['navigation','platform'], function(Navigation, Platform) {
 					title: $(i).find('title').eq(0).text(),
 					streamUrl: $(i).find('content').eq(0).attr('url'),
 					description: $(i).find('description').eq(0).text(),
-					thumbnail: $(i).find('thumbnail').eq(0).attr('url')
+					thumbnail: imageProcessingLink + $(i).find('thumbnail').eq(0).attr('url') + imageSizeSlug
 				}
 			})
 		},
-		fetchMRSS: function (url){
+		fetchMRSS: function (url) {
 			proxypath = (url.indexOf("www.nmax.tv") > 2)  ? 'proxy.api' : 'proxy.ooo';
-			return this.fetchItem(url,this.mrssParser, {
+			return this.fetchItem(url, this.mrssParser, {
 				proxypath: proxypath
 			});
 		},
-		fetchMainConfig: function (){
-			return this.fetchItem('http://cdn.nmax.tv/NewsmaxVideoServices/api/Configuration?DC=iPhone&SN=3535252235252',this.parseMainConfig,{
+		fetchMainConfig: function () {
+			return this.fetchItem('http://cdn.nmax.tv/NewsmaxVideoServices/api/Configuration?DC=iPhone&SN=3535252235252', this.parseMainConfig, {
 				proxypath:'proxy.cdn'
 			})
 		},
-		parseMainConfig: function (data){
+		parseMainConfig: function (data) {
 			try{
 				data = JSON.parse(data.configDocument.trim());
 			} catch(e){
 				$log(e)
 			}
 			return data;
-		}
+		},
+    doSearch: function (term){
+      return this.fetchItem('http://www.nmax.tv/newsmaxvideoservices/api/Search?Criteria=' + term, this.searchParser, {
+        proxypath:'proxy.api'
+      })
+    },
+    searchParser: function(data){
+      $xmlDoc = $.parseXML( data.MRSS_Feed );
+      $xml = $( $xmlDoc );
+      return _($($xml).find('item')).map(function(i) {
+        return {
+          title: $(i).find('title').eq(0).text(),
+          streamUrl: $(i).find('content').eq(0).attr('url'),
+          description: $(i).find('description').eq(0).text(),
+          thumbnail: imageProcessingLink + $(i).find('thumbnail').eq(0).attr('url') + imageSizeSlug
+        }
+      })
+    }
 	}
 })
-
-/*a.fetchItem().done(function(d) {
-	_($(d).find('item')).map(function(i) {
-		return {
-			title: $(i).find('title').text(),
-			streamUrl: $(i).find('content').attr('url'),
-			description: $(i).find('description').text(),
-			thumbnail: $(i).find('thumbnail').attr('url')
-		}
-	})
-})*/

@@ -146,6 +146,16 @@ img#logo {
     border-bottom: 8px solid $highlight;
   }
 }
+#searchTermBox{
+  display: none;
+  position: absolute; top: 63px; left: 385px;
+  width: 580px; height: 18px;
+  color: $dark;
+  text-transform: uppercase;
+  background: rgba(205, 205, 205, 0.9);
+  padding: 10px;
+  
+}
 #gridMenuHolder{
   @include silvergradient;
   display: none;

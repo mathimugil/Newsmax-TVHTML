@@ -42,7 +42,7 @@ define([
         // var visibleMenus = scene.createState('visibleMenus', true);
 
         var Grid, mainMenu, subMenu, keyMenu, gridRowHeight;
-        var hideSubNav = false;
+        var hideSubNav = false; //we use this in the case where there is no grid - i.e. Top of the Hour News
         var wrapperVisible = true;
         //var dummyMenu = new Navigation.Menu(); //we use this for hidden controls state
 
@@ -189,30 +189,35 @@ define([
                 })
 
                 mainMenu.on('selectedindex', function(index) {
-                    mainMenuIndex = index;
-                    var item = MenuItems.at(index);
-                    hideSubNav = false;
-                    $log("action is: ", item.get('action') );
-                    switch (item.get('action')) {
-                        case 'livefeed':
-                            //scene.changeState('hiddenMenus');
-                            hideWrapper();
-                            break;
-                        case 'subcategory':
-                            subCollection.reset(item.get('subcategory').models);
-                            updateGrid(item.get('subcategory').at(0).get('url'));
-                            subMenu.focus();
-                            $("#subMenu li.sm-focused").addClass("selected");
-                            break;
-                        case 'videos':
-                            hideSubNav = true;
-                            $log("setting hideSubNav to true: ", hideSubNav);
-                            updateGrid(item.get("url"));
-                            break;
-                        case 'search':
-                            keyMenu.focus();
-                            break;
-                    }
+                  $("#mainMenu li").removeClass("selected");
+                  $("#mainMenu li").eq(index).addClass("selected");
+                  //make sure search term box is hidden
+                  $("#searchTermBox").hide();
+                  mainMenuIndex = index;
+                  var item = MenuItems.at(index);
+                  hideSubNav = false;
+                  $log("action is: ", item.get('action') );
+                  switch (item.get('action')) {
+                      case 'livefeed':
+                          //scene.changeState('hiddenMenus');
+                          hideWrapper();
+                          break;
+                      case 'subcategory':
+                          subCollection.reset(item.get('subcategory').models);
+                          updateGrid(item.get('subcategory').at(0).get('url'));
+                          subMenu.focus();
+                          $("#subMenu li.sm-focused").addClass("selected");
+                          break;
+                      case 'videos':
+                          hideSubNav = true;
+                          $log("setting hideSubNav to true: ", hideSubNav);
+                          updateGrid(item.get("url"));
+                          break;
+                      case 'search':
+                          hideSubNav = true;
+                          keyMenu.focus();
+                          break;
+                  }
                 });
                 
                 mainMenu.on('rendered', function(){
@@ -312,10 +317,12 @@ define([
                       $("#searchterm").val(currentval + item);
                     } else if (item.toLowerCase() === "del") {
                       $("#searchterm").val(currentval.substring(0, currentval.length - 1));
-                    } else if (item.toLowerCase() === "space"){
+                    } else if (item.toLowerCase() === "space") {
                       $("#searchterm").val(currentval + " ");
-                    } else if (item.toLowerCase() === "clear"){
+                    } else if (item.toLowerCase() === "clear") {
                       $("#searchterm").val("");
+                    } else if (item.toLowerCase() === "ok") {
+                      runSearch($("#searchterm").val());
                     }
                 })
 
@@ -329,7 +336,6 @@ define([
                 }, scene);
 
                 Grid.on('selecteditem', function(item) {
-                  $log(">>>>> item: ", item);
                     StageManager.changeScene('videoPlayback', {
                         item: item
                     });
@@ -395,7 +401,6 @@ define([
         scene.onleavescene = function() {
           $log(">>> LEAVING SCENE!!");
           scene.tearDownMenus();
-          
         }
         
         
@@ -424,44 +429,54 @@ define([
  //          $('#wrapper').fadeIn();
  //        }
         
-        /* UTILITY LAYOUT FUNCTIONS */
+        /* UTILITY FUNCTIONS */
         var updateSelectorsForGrid = function() {
           $(Grid.el).children().removeClass("currentRow");
           $(Grid.el).children().children().eq(Grid._currentIndex).parent().addClass("currentRow");
         }
 
+        var runSearch = function(term){
+          $("#searchTermBox span").empty().html(term);
+          showLoader();
+          mainMenu.focus();
+          API.doSearch(term).then(function(data){
+            $("#searchTermBox").show();
+            populateGrid(data); 
+          });
+        }
+
         var updateGrid = function(url){
           showLoader();
             API.fetchMRSS(url).done(function(data){
-                hideLoader();
-                showGrid();
-                Grid.collection.reset(data);
-                Grid.resetIndex();
-                gridRowHeight = $("ul.gridMenuPage:first").outerHeight();
-                updateSelectorsForGrid();
-            })
+              populateGrid(data);
+            });
+        }
+        
+        var populateGrid = function(data){
+          hideLoader();
+          showGrid();
+          Grid.collection.reset(data);
+          Grid.resetIndex();
+          gridRowHeight = $("ul.gridMenuPage:first").outerHeight();
+          updateSelectorsForGrid();
         }
         
         var showWrapper = function(){
-          $log("SHOWING WRAPPER!");
           wrapperVisible = true;
           $("#wrapper").fadeIn();
         }
         
         var hideWrapper = function(){
-          $log("HIDING WRAPPER!")
           wrapperVisible = false;
           $("#wrapper").fadeOut();
         }
         
         var hideGrid = function(){
-          $log(">>> HIDING GRID")
           $("#gridMenuHolder").fadeOut();
           $("#gridHTML").fadeOut();
         }
         
         var showGrid = function(){
-          $log(">> SHOWING GRID")
           $("#gridMenuHolder").fadeIn();
           $("#gridMenuContainer").fadeIn();
           $("#gridHTML").fadeIn();
