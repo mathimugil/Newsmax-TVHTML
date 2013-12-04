@@ -40,13 +40,15 @@ define([
         });        // 
         // var hiddenMenus = scene.createState('hiddenMenus', false);
         // var visibleMenus = scene.createState('visibleMenus', true);
+        var mainState = scene.createState('mainState', true);
 
-        var Grid, mainMenu, subMenu, keyMenu, gridRowHeight;
+        var Grid, mainMenu, subMenu, keyMenu, gridRowHeight, lastFocusIndex, lastGridCollection;
         var hideSubNav = false; //we use this in the case where there is no grid - i.e. Top of the Hour News
         var wrapperVisible = true;
         //var dummyMenu = new Navigation.Menu(); //we use this for hidden controls state
 
         scene.onenterscene = function() {
+          $log(">>> ENTERING MAIN SCENE!!");
           $("#wrapper").fadeIn();
             return MenuItemsDeferred.done(function(MenuItems) {
               $log("menuitems", MenuItems)
@@ -257,7 +259,6 @@ define([
                 }, scene)
 
                 subMenu.on('onfocus', function() {
-                  $log("subMenu on focus, ", this);
                   $("#subMenu li").eq(this._currentIndex).addClass("sm-focused");
                     $("#subMenu").animate({
                         left: 50,
@@ -336,9 +337,11 @@ define([
                 }, scene);
 
                 Grid.on('selecteditem', function(item) {
-                    StageManager.changeScene('videoPlayback', {
-                        item: item
-                    });
+                  lastFocusIndex = this._currentIndex;
+                  lastGridCollection = this.collection;
+                  StageManager.changeScene('videoPlayback', {
+                    item: item
+                  });
                 });
 
                 var positionArrow = function() {
@@ -386,6 +389,7 @@ define([
                 mainMenu.focus();
             })
 
+           
         }
         scene.tearDownMenus = function(){
           $log("tearing down menus on main scene");
@@ -393,41 +397,29 @@ define([
           subMenu.off(null, null, this);
           keyMenu.off(null, null, this);
           Grid.off(null, null, this);
-          dummyMenu.off(null, null, this);
         }
-        scene.initMenus = function(){
-          
-        }
+        
         scene.onleavescene = function() {
-          $log(">>> LEAVING SCENE!!");
+          $log(">>> LEAVING MAIN SCENE!!");
           scene.tearDownMenus();
+          hideWrapper();
         }
+
         
-        
-        /* SCENE MANAGEMENT */
-        // visibleMenus.onenterstate = function() {
- //          $log('>>>> visibleMenus state');
- //          scene.initMenus();
- //          mainMenu.focus();
- //        }
- //        
- //        hiddenMenus.onenterstate = function() {
- //          $('#wrapper').fadeOut();
- //          $log('>>>> hiddenMenus state');
- // 
- //          dummyMenu.on('onright onleft onup ondown onselect',function(e,l){
- //            scene.changeState('visibleMenus');
- //            //Navigation.back();
- //          }, this);
- // 
- //          dummyMenu.focus();     
- //        }
- //        
- //        hiddenMenus.onleavestate = function() {
- //          $log('>>>> leaving hiddenMenus state');
- //          dummyMenu.off(null,null,this);
- //          $('#wrapper').fadeIn();
- //        }
+        /* STATE MANAGEMENT */
+        mainState.onenterstate = function(){
+          // if we're re-entering this scene, reset the state of the grid, as it forgets
+          // the only way into video playback is via the grid, so no special handling is required
+          if (typeof(lastFocusIndex) != "undefined") {
+            Grid.collection = lastGridCollection;
+            Grid._currentIndex = lastFocusIndex;
+            showGrid();
+            Grid.focus();
+          }
+        }
+        mainState.onleavestate = function(){
+          $log("%%%%%%%%%%%% leaving main state");
+        }
         
         /* UTILITY FUNCTIONS */
         var updateSelectorsForGrid = function() {

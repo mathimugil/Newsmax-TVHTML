@@ -56,6 +56,7 @@ define([
     }
 
     videoPlayback.onenterscene = function() {
+      $log(">>>>>> Entering Video Playback state");
         $("#videowrapper").show();
         TrickMenu.disable();
         showLoader();
@@ -103,6 +104,8 @@ define([
     }
 
     videoPlayback.onleavescene = function() {
+      $log(">>>>>> Leaving Video Playback state");
+      clearTimeout(timeout);
       $("#videowrapper").hide();
       teardownKeyhandlers();
       scrubManager.deactivate();
