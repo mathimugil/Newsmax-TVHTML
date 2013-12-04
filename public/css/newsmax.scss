@@ -33,6 +33,54 @@ src: url(../fonts/HelveticaNeueLight.ttf);
 body{
   font-family: HelveticaNeueLight, Helvetica, Arial, sans-serif;
 }
+
+#errormodal{
+  display: none;
+  position: absolute;
+  top: 0; left: 0;
+  height: 720px;
+  width: 1280px;
+  z-index: 1000;
+  background-color: rgba(225,225,225, 0.8);
+  font-family: Helvetica, Arial, sans-serif;
+  
+  #errorInner{
+    background-color: $nblue;
+    position: absolute; top: 170px; left: 300px;
+    color: #e8e8e7; width: 650px;
+    padding: 30px 50px;
+    box-shadow: 7px 7px 5px rgba(00, 00, 00, 0.75);
+    
+    h1{
+      padding-left: 70px;
+      font-weight: bold;
+      height: 50px;
+      margin-bottom: 15px;
+      line-height: 2.5em;
+      background: url(../images/alert.png) no-repeat top left;
+    }
+    span{ margin-left: 70px;}
+    
+    #buttonBar{
+      clear: both;
+      width: 100%;
+      padding-top: 20px;
+      
+      .errorButton{
+        background-color: #e8e8e7;
+        @include outerglow;
+        color: $dark;
+        display: block;
+        width: 100px;
+        text-align: center;
+        padding: 5px 15px;
+        margin: 0px auto;
+      }
+    }
+    
+  }
+}
+
 img#logo {
   position: absolute;
   z-index: 99999;

@@ -5,8 +5,10 @@ define([
         'hbs!newsmax/templates/MainMenu',
         'enginelite/menuprototypes/enginelite.menus.gridmenu',
         'enginelite/menuprototypes/enginelite.menus.slotmenu',
-        'newsmax/newsmax.mainmenu', 'newsmax/newsmax.utils',
+        'newsmax/newsmax.mainmenu', 
+        'newsmax/newsmax.utils',
         'newsmax/menus/newsmax.menu.simplekeys',
+        'newsmax/menus/newsmax.menu.modalmenu',
         'newsmax/newsmax.api',
         'hbs!newsmax/templates/GridMenu',
         'mediaplayer'
@@ -23,6 +25,7 @@ define([
       MenuItemsDeferred,
       Utils,
       KeyboardMenu,
+      ModalMenu,
       API,
       GridMenuTemplate,
       MediaPlayer
@@ -43,6 +46,7 @@ define([
         var mainState = scene.createState('mainState', true);
 
         var Grid, mainMenu, subMenu, keyMenu, gridRowHeight, lastFocusIndex, lastGridCollection;
+        var modalMenu = new ModalMenu();
         var hideSubNav = false; //we use this in the case where there is no grid - i.e. Top of the Hour News
         var wrapperVisible = true;
         //var dummyMenu = new Navigation.Menu(); //we use this for hidden controls state
@@ -421,6 +425,8 @@ define([
             showGrid();
             Grid.focus();
           }
+          //example of modal implementation
+          //renderModal("Sorry!", "Boo, Ba!");
         }
         mainState.onleavestate = function(){
           $log("%%%%%%%%%%%% leaving main state");
@@ -485,6 +491,13 @@ define([
 
         var hideLoader = function(){
           $("#circularG").fadeOut();
+        }
+        
+        var renderModal = function(header, message){
+          $("#errormodal h1").empty().html(header);
+          $("#errormodal span").empty().html(message);
+          $("#errormodal").fadeIn();
+          modalMenu.focus();
         }
 
         return scene;
