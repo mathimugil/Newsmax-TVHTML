@@ -160,22 +160,27 @@ define([
 
                     _rowDown: function() {
                       var coords = this.coords();
-                      if( this._currentIndex < (this.collection.length - 1) ) {
+                      if( this._currentIndex < (this.collection.length - 1) && (coords.pageIndex !== coords.maxPageIndex) ) {
                         //we need to consider the last line carefully
-                        if (coords.pageIndex == coords.maxPageIndex - 1){
+                        if (coords.pageIndex == coords.maxPageIndex - 1 ){
+                          $log("]]] we're on our last page here...")
                           if ((this._currentIndex + this.options.cols) > (this.collection.length - 1) ){
                             // we can't just move down, we need to go to the end of the collection
+                            $log("]]] moving to end of list, as there isn't an item right below me")
                             this._currentIndex = this.collection.length - 1;
                             positionArrow();
                           }else{
+                            $log("]]] moving down a row normally")
                             this._currentIndex += this.options.cols;
                           }
-                        }else{
+                        }  else {
+                          $log("we're not on our last page, let's move down as normal, pageindex: ", coords.pageIndex);
+                          $log("max apge index: ", coords.maxPageIndex)
                           this._currentIndex += this.options.cols;
                         }
-
                         this.setFocus();
                         this.trigger("pageup");
+                        
                        } else {
                         //not sure if we'll need this
                         this.trigger("downfrombottom");
