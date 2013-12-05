@@ -225,6 +225,7 @@ define([
                           updateGrid(item.get("url"));
                           break;
                       case 'search':
+                          hideGrid();
                           hideSubNav = true;
                           keyMenu.focus();
                           break;
@@ -448,15 +449,24 @@ define([
         }
 
         var runSearch = function(term){
-          $("#searchTermBox span").empty().html(term);
           showLoader();
           mainMenu.focus();
           API.doSearch(term).then(function(data){
+            if(data.length > 0){
+              $("#searchTermBox span.label").empty().html("Search Results for: ")
+              $("#searchTermBox span.term").empty().html(term);
+              populateGrid(data);
+              Grid.resetIndex();
+              Grid.focus(); 
+            }else{ // no search results
+              $("#searchTermBox span.label").empty().html('0 Search Results for: "' + term + '"');
+              $("#searchTermBox span.term").empty();
+              emptyGrid();
+              hideLoader();
+              $("#gridMenuHolder").fadeIn();
+              $("#gridMenuContainer").fadeIn();
+            }
             $("#searchTermBox").show();
-            $log("data", data);
-            populateGrid(data);
-            Grid.resetIndex();
-            Grid.focus(); 
           });
         }
 
@@ -495,6 +505,10 @@ define([
           $("#gridMenuHolder").fadeIn();
           $("#gridMenuContainer").fadeIn();
           $("#gridHTML").fadeIn();
+        }
+        
+        var emptyGrid = function(){
+          $("#gridMenuContainer").empty();
         }
 
         var showLoader = function(){
