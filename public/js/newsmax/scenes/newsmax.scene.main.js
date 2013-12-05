@@ -299,6 +299,11 @@ define([
                   if (!wrapperVisible){
                     showWrapper();
                   }
+                });
+                
+                mainMenu.on('onblur', function(){
+                  $log("MM BLUR")
+                  $("#mainMenu li").removeClass("sm-focused");
                 })
 
                 subMenu.on('onleft', function() {
