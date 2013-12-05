@@ -451,7 +451,9 @@ define([
           mainMenu.focus();
           API.doSearch(term).then(function(data){
             $("#searchTermBox").show();
+            $log("data", data);
             populateGrid(data);
+            Grid.resetIndex();
             Grid.focus(); 
           });
         }

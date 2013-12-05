@@ -58,14 +58,18 @@ define(['navigation','platform'], function(Navigation, Platform) {
     searchParser: function(data){
       $xmlDoc = $.parseXML( data.MRSS_Feed );
       $xml = $( $xmlDoc );
-      return _($($xml).find('item')).map(function(i) {
-        return {
+      
+      var resultsArray = [];
+      _($($xml).find('item')).map(function(i) {
+        var newItem = { 
           title: $(i).find('title').eq(0).text(),
           streamUrl: $(i).find('content').eq(0).attr('url'),
           description: $(i).find('description').eq(0).text(),
           thumbnail: imageProcessingLink + $(i).find('thumbnail').eq(0).attr('url') + imageSizeSlug
-        }
+        };
+        if(_.findWhere(resultsArray, newItem) == null) resultsArray.push(newItem);
       })
+      return resultsArray;
     }
 	}
 })
