@@ -107,6 +107,7 @@ define([
       $log(">>>>>> Leaving Video Playback state");
       clearTimeout(timeout);
       $("#videowrapper").hide();
+      $("#progressBar").css({ width: 0 });
       teardownKeyhandlers();
       scrubManager.deactivate();
       MediaPlayer.stop();
