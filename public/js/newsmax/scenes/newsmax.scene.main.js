@@ -45,7 +45,7 @@ define([
         // var visibleMenus = scene.createState('visibleMenus', true);
         var mainState = scene.createState('mainState', true);
 
-        var Grid, mainMenu, subMenu, keyMenu, gridRowHeight, lastFocusIndex, lastGridCollection;
+        var Grid, mainMenu, subMenu, keyMenu, gridRowHeight, lastFocusIndex, lastGridCollection, lastSubmenuIndex, lastSubmenuCollection, lastMainmenuIndex;
         var modalMenu = new ModalMenu();
         var hideSubNav = false; //we use this in the case where there is no grid - i.e. Top of the Hour News
         var wrapperVisible = true;
@@ -346,8 +346,11 @@ define([
                 }, scene);
 
                 Grid.on('selecteditem', function(item) {
+                  lastMainmenuIndex = mainMenu._currentIndex;
                   lastFocusIndex = this._currentIndex;
                   lastGridCollection = this.collection;
+                  lastSubmenuCollection = subMenu.collection;
+                  lastSubmenuIndex = subMenu._currentIndex;
                   StageManager.changeScene('videoPlayback', {
                     item: item
                   });
@@ -422,6 +425,10 @@ define([
           if (typeof(lastFocusIndex) != "undefined") {
             Grid.collection = lastGridCollection;
             Grid._currentIndex = lastFocusIndex;
+            subMenu.collection = lastSubmenuCollection;
+            subMenu._currentIndex = lastSubmenuIndex;
+            mainMenu._currentIndex = lastMainmenuIndex;
+            $("#mainMenu li").removeClass("selected").eq(mainMenu._currentIndex).addClass("selected");
             showGrid();
             Grid.focus();
           }
