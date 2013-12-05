@@ -72,7 +72,9 @@ define([
                       //touchTimeout();
                   },this);
                   
-                  MediaPlayer.play();
+                  // MediaPlayer.play();
+                  $("#loadingVideoIndicator").fadeOut();
+                  $("img#logo").fadeIn();
                 }
                 initLiveStream();
 
