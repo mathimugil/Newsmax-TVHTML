@@ -395,6 +395,8 @@ define([
                     if(item && item.attributes && item.attributes.description){ 
                       $('.description').html(item.get('description')); 
                       $('.description').ellipsis({ row: 4 });
+                    }else{
+                      $('.description').empty();
                     }
                     $('.title').html(item.get("title"));
                 };
