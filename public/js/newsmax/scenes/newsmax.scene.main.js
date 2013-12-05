@@ -444,7 +444,8 @@ define([
           mainMenu.focus();
           API.doSearch(term).then(function(data){
             $("#searchTermBox").show();
-            populateGrid(data); 
+            populateGrid(data);
+            Grid.focus(); 
           });
         }
 
