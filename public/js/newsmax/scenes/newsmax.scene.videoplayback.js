@@ -56,7 +56,12 @@ define([
     }
 
     videoPlayback.onenterscene = function() {
-      $log(">>>>>> Entering Video Playback state");
+      
+        MediaPlayer.on('videoup',function(){
+            $('body').css('background','transparent');
+        }, videoPlayback);
+
+        $log(">>>>>> Entering Video Playback state");
         $("#videowrapper").show();
         TrickMenu.disable();
         showLoader();
@@ -105,6 +110,8 @@ define([
 
     videoPlayback.onleavescene = function() {
       $log(">>>>>> Leaving Video Playback state");
+      MediaPlayer.off("videoup",null,videoPlayback);
+      $("body").css('background','transparent');
       clearTimeout(timeout);
       $("#videowrapper").hide();
       $("#progressBar").css({ width: 0 });
