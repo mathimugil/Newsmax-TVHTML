@@ -268,7 +268,7 @@ define(['enginelite/enginelite.mediaplayer', 'platform', 'jquery','underscore'],
       switch (e.type) {
         case 'timeupdate':
           //$log('timeupdate = ', Math.round(e.currentTarget.currentTime * 1000));
-          this.trigger("timeupdate", Math.round(e.currentTarget.currentTime * 1000));
+          if(!this._timeUpdatesDisabled) this.trigger("timeupdate", Math.round(e.currentTarget.currentTime * 1000));
           break;
         case 'loadstart':
           this.trigger("bufferingstart");

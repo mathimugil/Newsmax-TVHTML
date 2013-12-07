@@ -304,7 +304,7 @@ define(['jquery', 'underscore', 'backbone', 'tvengine', 'enginelite/enginelite.m
 		currentPlayTime: function(currentTime) {
 //			console.log(" CURRENT PLAY TIME UPDATE ", currentTime);
 			this._ct = parseInt(currentTime, 10);
-			this.trigger("timeupdate", currentTime);
+			if(!this._timeupdatesDisabled) this.trigger("timeupdate", currentTime);
 		},
 		streamEnded: function() {
 			console.log(" STREAM ENDED ", this);

@@ -31,16 +31,63 @@ define([
       MediaPlayer
     ) {
 
-        'use strict';
+        //'use strict';
 
-        $log(API);
+        //$log(API);
 
         var scene = new StageManager.Scene({
             defaultScene: true, // Make this our default scene
             name: "main",
             target: "#wrapper",
             view: "views/newsmax.main.html"
-        });        // 
+        });        
+
+        var cancelFetch = false;  //used to cancel fetches when used with back button
+        var searchState = false;  //if true in search state, if false, in non-search state ie. other grids
+        
+        scene.handlesback = function(){
+          
+          cancelFetch = true;
+          
+          if(!wrapperVisible){                      //if wrapper is hidden
+            mainMenu.trigger('onright');  
+            return false;            
+          }
+
+          if(searchState){                          //if we are actually on search grid w/ results
+            mainMenu.trigger('selectedindex', 6);   //TODO: this should not be hard coded fix soon.
+            searchState = false;
+            return false;
+          }
+
+          if(mainMenu.focused && hideSubNav){     //top of the hour news no submenu
+            hideGrid();
+            return false;
+          }
+
+          if(mainMenu.focused)
+            return true;
+
+          if(subMenu.focused){
+            subMenu.trigger('onleft');
+            hideGrid();
+            return false;
+          }
+
+          if(keyMenu.focused){
+            mainMenu.focus();
+            return false;
+          }
+
+          if(Grid.focused){
+            subMenu.trigger('onleft');
+            hideGrid();
+            return false;
+          }
+
+          return true;
+        }
+
         // var hiddenMenus = scene.createState('hiddenMenus', false);
         // var visibleMenus = scene.createState('visibleMenus', true);
         var mainState = scene.createState('mainState', true);
@@ -59,6 +106,7 @@ define([
 
               /* LIVE STREAM CONTROLS */
                 var initLiveStream = function(){
+                 
                   var liveObj = MenuItems.find(function(i) {
                     return i.get('action') === "livefeed";
                   });
@@ -72,7 +120,7 @@ define([
                       //touchTimeout();
                   },this);
                   
-                  // MediaPlayer.play();
+                  MediaPlayer.play();
                   $("#loadingVideoIndicator").fadeOut();
                   $("img#logo").fadeIn();
                 }
@@ -199,7 +247,7 @@ define([
                     el: "#gridMenuContainer",
                     collection: videoCollection,
                     template: GridMenuTemplate
-                })
+                });
 
                 mainMenu.on('selectedindex', function(index) {
                   $("#mainMenu li").removeClass("selected");
@@ -209,7 +257,9 @@ define([
                   mainMenuIndex = index;
                   var item = MenuItems.at(index);
                   hideSubNav = false;
+                  cancelFetch = false;
                   $log("action is: ", item.get('action') );
+                  
                   switch (item.get('action')) {
                       case 'livefeed':
                           //scene.changeState('hiddenMenus');
@@ -456,9 +506,18 @@ define([
         }
 
         var runSearch = function(term){
+          searchState = true;
+          cancelFetch = false;
           showLoader();
           mainMenu.focus();
           API.doSearch(term).then(function(data){
+            
+            if(cancelFetch){
+                cancelFetch = false;
+                hideLoader();
+                return;
+            }
+
             if(data.length > 0){
               $("#searchTermBox span.label").empty().html("Search Results for: ")
               $("#searchTermBox span.term").empty().html(term);
@@ -473,13 +532,23 @@ define([
               $("#gridMenuHolder").fadeIn();
               $("#gridMenuContainer").fadeIn();
             }
-            $("#searchTermBox").show();
+            $("#searchTermBox").show(); 
+            searchState = true;
+
           });
         }
 
         var updateGrid = function(url){
-          showLoader();
+            showLoader();
             API.fetchMRSS(url).done(function(data){
+              
+              if(cancelFetch){
+                cancelFetch = false;
+                hideLoader();
+                return;
+              }
+              
+              searchState = false;
               populateGrid(data);
             });
         }

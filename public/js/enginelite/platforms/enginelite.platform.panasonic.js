@@ -1,4 +1,5 @@
-define(['enginelite/enginelite.platform'], function(Platform)  {
+define(['enginelite/enginelite.platform', 'tvengine'], function(Platform, TVEngine)  {
+  
   var platform = new Platform('panasonic');
   platform.setResolution(1280, 720);
   //platform.needsProxy = true;
@@ -21,20 +22,48 @@ define(['enginelite/enginelite.platform'], function(Platform)  {
     }
   }
 
+  platform.exitToTv = function() {
+    window.history.back();
+  };
+  platform.exitToMenu = function() {
+    window.history.back();
+  }
+
   platform.init = function() {
+   
+    $("#errorField").append($('<div>panasonic init fired</div>'));
+
+    var self = this;
+
+    TVEngine.on('exit', function() {
+        self.exitToTv();
+    }, this);
+    TVEngine.on('exittomenu', function() {
+        self.exitToMenu();
+    }, this);
+
     this._setupLocalStorage();
   }
 
   platform.deviceId = function() {
-    //var device =  document.getElementById("panasonic-device");
-    //return device.serialNumber;
-    return "aabbaacc";
+    var saved_did = $storage.getItem("ade.deviceid");
+    if(!saved_did) {
+      saved_did = this.__generateDeviceId();
+      $storage.setItem("ade.deviceid", saved_did);
+    }
+    return saved_did;
   }
 
   platform.deviceType = function() {
-    //var device =  document.getElementById("panasonic-device");
-    //return device.manufacturer + "  - " + device.modelName;
-    return "TV";
+    return navigator.appCodeName + " - " + navigator.appName;
+  }
+
+  platform.__generateDeviceId  = function() {
+    // Note no guarantee this is actually unique.
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+      return v.toString(16);
+    });
   }
 
   platform._setupLocalStorage = function() {
@@ -131,5 +160,6 @@ define(['enginelite/enginelite.platform'], function(Platform)  {
     window.$storage = new Storage('local');
   }
 
+  platform.init();
   return platform.start();
 });

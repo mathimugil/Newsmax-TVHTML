@@ -34,24 +34,25 @@ define([  'stagemanager'
         stopStickyScrubbing: function(pausebutton) {
             this._stopScrubState();
             var _t = this;
-            var _pausebutton = pausebutton || false
-            if (_pausebutton !== false) {
-                var self = this;
-                var seconds, curTime, translated;
-                curTime = this._currentScrubTime;
-                translated = Util.convertMstoHumanReadable(curTime);
-                seconds = translated.totalSeconds;
-                _t.shouldScrub = true;
-                clearTimeout(_t.scrubInterval);
-                MediaPlayer.jumpToTime(seconds);
-                MediaPlayer.pause();
-                self.step = 0;
-                self._scrubbing = false;
-                self._stopScrubState();
-                self.lockScrubbing = false;
+            //var _pausebutton = pausebutton || false
+            
+            // if (_pausebutton !== false) {
+            //     var self = this;
+            //     var seconds, curTime, translated;
+            //     curTime = this._currentScrubTime;
+            //     translated = Util.convertMstoHumanReadable(curTime);
+            //     seconds = translated.totalSeconds;
+            //     _t.shouldScrub = true;
+            //     clearTimeout(_t.scrubInterval);
+            //     MediaPlayer.jumpToTime(seconds);
+            //     MediaPlayer.pause();
+            //     self.step = 0;
+            //     self._scrubbing = false;
+            //     self._stopScrubState();
+            //     self.lockScrubbing = false;
 
-                return
-            }
+            //     return;
+            // }
 
             if (!_t._scrubbing) return;
            
@@ -117,7 +118,6 @@ define([  'stagemanager'
         },
         isScrubbing: function(){
             return false;
-            //return this._scrubbing;
         },
         _startScrubState: function(){
             $('#scrubDirection').show();
@@ -198,7 +198,7 @@ define([  'stagemanager'
 
             // $('#videoDebug').append(d+"<br>")
             //    $('#videoDebug2').append(MediaPlayer.duration()+"<br>")
-
+            $log('newstep called for updatedProgressTime = ', updatedProgressTime);
          	this.trigger('scrubTimeupdate',updatedProgressTime);
             //scene.updateTimeDisplay(updatedProgressTime, d);		///hook this up to the scene
 
@@ -210,12 +210,19 @@ define([  'stagemanager'
                 this.stopStickyScrubbing();  
         },
         _stepSet: function(){
-            
+            $log('step set called ');
             var seconds, curTime, translated;
             curTime     = this._currentScrubTime;
             translated  = Util.convertMstoHumanReadable(curTime);
             seconds     = translated.totalSeconds;
+           
+            MediaPlayer.disableTimeUpdates();
+            MediaPlayer.play();                 //pansonic bug
             MediaPlayer.jumpToTime(seconds);
+            setTimeout(function(){
+                MediaPlayer.enableTimeUpdates();
+            },10000);
+            
             if(!MediaPlayer.playing()){
                 MediaPlayer.play();
             }
@@ -254,10 +261,15 @@ define([  'stagemanager'
 
             this._setJumpMode();
             
+            $log('activete called ');
+
+            //TODO: why is this being called twice?
+            this.off('newstep',null,this);
             this.on('newstep',function(){
                 self._newStep();
             }, this);
 
+            this.off("stepset",null,this);
             this.on("stepset",function(){
                 self._stepSet();
             }, this);

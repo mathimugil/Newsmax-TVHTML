@@ -194,6 +194,10 @@ define([
         duration = MediaPlayer.duration();
         if (_.isNumber(duration)) {
             videoProgressInMS = currentTime;
+            $log("timeupdates from mediaplayer are firing", currentTime);
+            if(currentTime==0){
+                $("#errorField").append($("<div>mediaplayer firing 0</div>"))
+            }
             videoPlayback.updateTimeDisplay(currentTime, duration);
         } else {
             return;
@@ -247,6 +251,7 @@ define([
 
             if (scrubManager._scrubbing) {
                 scrubManager.stopStickyScrubbing("pausebutton");
+                MediaPlayer.pause();
                 return;
             }
 
@@ -300,6 +305,11 @@ define([
         MediaPlayer.on('all', mediaEventHandler, videoPlayback);
 
         scrubManager.on('scrubTimeupdate', function(updatetime) {
+            //$log("scrubTimeupdate updating time: ", updatetime);
+            if(updatetime==0){
+                $("#errorField").append($("<div>scrubber firing 0</div>"))                
+            }
+
             videoPlayback.updateTimeDisplay(updatetime, MediaPlayer.duration());
         }, videoPlayback);
        
