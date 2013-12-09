@@ -39,6 +39,7 @@ define(['navigation', 'underscore'], function(Navigation, _) {
     },
     _currentIndex: 0,
     _slotIndex: 0,
+    _selectedIndex: 0,
 
     initialize: function() {
       Navigation.Menu.prototype.initialize.apply(this, arguments);
@@ -57,6 +58,11 @@ define(['navigation', 'underscore'], function(Navigation, _) {
         $log(" SLOT MENU ON SELECT ")
         this.trigger('selectedindex', this._currentIndex);
         this.trigger('selecteditem', this.collection.at(this._currentIndex));
+        this._selectedIndex = this._currentIndex;
+        
+        $(this.el).children().removeClass('selected');
+        $(this.el).children().eq(this._currentIndex).addClass('selected');
+
       }, this);
 
       var _t = this;
@@ -64,6 +70,7 @@ define(['navigation', 'underscore'], function(Navigation, _) {
       this.listenTo(this.collection, 'reset add remove', function () {
         _t._slotIndex = 0;
         _t._currentIndex = 0;
+        _t._selectedIndex = 0;
         _t.render();
         _t._maxIndex = _t.collection.length - 1;
       });

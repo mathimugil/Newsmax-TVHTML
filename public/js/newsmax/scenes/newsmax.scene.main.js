@@ -5,7 +5,7 @@ define([
         'hbs!newsmax/templates/MainMenu',
         'enginelite/menuprototypes/enginelite.menus.gridmenu',
         'enginelite/menuprototypes/enginelite.menus.slotmenu',
-        'newsmax/newsmax.mainmenu', 
+        'newsmax/newsmax.mainmenu',
         'newsmax/newsmax.utils',
         'newsmax/menus/newsmax.menu.simplekeys',
         'newsmax/menus/newsmax.menu.modalmenu',
@@ -14,21 +14,21 @@ define([
         'mediaplayer'
     ],
     function(
-      StageManager,
-      Navigation,
-      BackBone,
-      sampleTemplate,
-      MainMenu,
-      MainMenuTemplate,
-      GridMenu,
-      SlotMenu,
-      MenuItemsDeferred,
-      Utils,
-      KeyboardMenu,
-      ModalMenu,
-      API,
-      GridMenuTemplate,
-      MediaPlayer
+        StageManager,
+        Navigation,
+        BackBone,
+        sampleTemplate,
+        MainMenu,
+        MainMenuTemplate,
+        GridMenu,
+        SlotMenu,
+        MenuItemsDeferred,
+        Utils,
+        KeyboardMenu,
+        ModalMenu,
+        API,
+        GridMenuTemplate,
+        MediaPlayer
     ) {
 
         //'use strict';
@@ -40,104 +40,114 @@ define([
             name: "main",
             target: "#wrapper",
             view: "views/newsmax.main.html"
-        });        
+        });
 
-        var cancelFetch = false;  //used to cancel fetches when used with back button
-        var searchState = false;  //if true in search state, if false, in non-search state ie. other grids
-        
-        scene.handlesback = function(){
-          
-          cancelFetch = true;
-          
-          if(!wrapperVisible){                      //if wrapper is hidden
-            mainMenu.trigger('onright');  
-            return false;            
-          }
+        var cancelFetch = false; //used to cancel fetches when used with back button
+        var searchState = false; //if true in search state, if false, in non-search state ie. other grids
 
-          if(searchState){                          //if we are actually on search grid w/ results
-            mainMenu.trigger('selectedindex', 6);   //TODO: this should not be hard coded fix soon.
-            searchState = false;
-            return false;
-          }
+        scene.handlesback = function() {
 
-          if(mainMenu.focused && hideSubNav){     //top of the hour news no submenu
-            hideGrid();
-            return false;
-          }
+            cancelFetch = true;
 
-          if(mainMenu.focused)
+            if (!wrapperVisible) { //if wrapper is hidden
+                mainMenu.trigger('onright');
+                return false;
+            }
+
+            if (searchState) { //if we are actually on search grid w/ results
+                mainMenu.trigger('selectedindex', 6); //TODO: this should not be hard coded fix soon.
+                searchState = false;
+                return false;
+            }
+
+            if (mainMenu.focused && hideSubNav) { //top of the hour news no submenu
+                hideGrid();
+                return false;
+            }
+
+            if (mainMenu.focused)
+                return true;
+
+            if (subMenu.focused) {
+                subMenu.trigger('onleft');
+                hideGrid();
+                return false;
+            }
+
+            if (keyMenu.focused) {
+                mainMenu.focus();
+                return false;
+            }
+
+            if (Grid.focused) {
+                subMenu.trigger('onleft');
+                hideGrid();
+                return false;
+            }
+
             return true;
-
-          if(subMenu.focused){
-            subMenu.trigger('onleft');
-            hideGrid();
-            return false;
-          }
-
-          if(keyMenu.focused){
-            mainMenu.focus();
-            return false;
-          }
-
-          if(Grid.focused){
-            subMenu.trigger('onleft');
-            hideGrid();
-            return false;
-          }
-
-          return true;
         }
 
         // var hiddenMenus = scene.createState('hiddenMenus', false);
         // var visibleMenus = scene.createState('visibleMenus', true);
         var mainState = scene.createState('mainState', true);
 
-        var Grid, mainMenu, subMenu, keyMenu, gridRowHeight, lastFocusIndex, lastGridCollection, lastSubmenuIndex, lastSubmenuCollection, lastMainmenuIndex;
+        var Grid, mainMenu, subMenu, keyMenu, gridRowHeight, lastFocusIndex, lastGridCollection, lastSubmenuIndex, lastSubmenuCollection, lastMainmenuIndex, gridShowing;
         var modalMenu = new ModalMenu();
         var hideSubNav = false; //we use this in the case where there is no grid - i.e. Top of the Hour News
         var wrapperVisible = true;
         //var dummyMenu = new Navigation.Menu(); //we use this for hidden controls state
 
         scene.onenterscene = function() {
-          $log(">>> ENTERING MAIN SCENE!!");
-          $("#wrapper").fadeIn();
+            $log(">>> ENTERING MAIN SCENE!!");
+            $("#wrapper").fadeIn();
             return MenuItemsDeferred.done(function(MenuItems) {
-              $log("menuitems", MenuItems)
+                $log("menuitems", MenuItems)
 
-              /* LIVE STREAM CONTROLS */
-                var initLiveStream = function(){
-                 
-                  var liveObj = MenuItems.find(function(i) {
-                    return i.get('action') === "livefeed";
-                  });
-                  var playlist = new MediaPlayer.Playlist();
-                  playlist.addVideo(liveObj.get('url'));
-                  MediaPlayer.setPlaylist(playlist);
+                /* LIVE STREAM CONTROLS */
+                var initLiveStream = function() {
 
-                  MediaPlayer.once('timeupdate',function(){
-                      $("#loadingVideoIndicator").fadeOut();
-                      $("img#logo").fadeIn();
-                      //touchTimeout();
-                  },this);
-                  
-                  MediaPlayer.play();
-                  $("#loadingVideoIndicator").fadeOut();
-                  $("img#logo").fadeIn();
+                    var liveObj = MenuItems.find(function(i) {
+                        return i.get('action') === "livefeed";
+                    });
+                    var playlist = new MediaPlayer.Playlist();
+                    playlist.addVideo(liveObj.get('url'));
+                    MediaPlayer.setPlaylist(playlist);
+
+                    MediaPlayer.once('timeupdate', function() {
+                        $("#loadingVideoIndicator").fadeOut();
+                        $("img#logo").fadeIn();
+                        //touchTimeout();
+                    }, this);
+
+                    MediaPlayer.play();
+                    $("#loadingVideoIndicator").fadeOut();
+                    $("img#logo").fadeIn();
                 }
                 initLiveStream();
 
-              /* MENUS */
-                mainMenu = new SlotMenu({
-                    el: '#mainMenu',
-                    collection: MenuItems,
-                    template: MainMenuTemplate,
-                    direction: 'vertical',
-                });
+                /* MENUS */
+                if (!mainMenu) {
+                    mainMenu = new SlotMenu({
+                        el: '#mainMenu',
+                        collection: MenuItems,
+                        template: MainMenuTemplate,
+                        direction: 'vertical',
+                    });
 
-                keyMenu = new KeyboardMenu({
-                    el: "#keyboard"
-                })
-                keyMenu.render();
+                    mainMenu.on('rendered', function() {
+                        $("#mainMenu li:first").addClass("selected");
+                    });
+
+                    mainMenu.render();
+                }
+
+                if (!keyMenu) {
+                    keyMenu = new KeyboardMenu({
+                        el: "#keyboard"
+                    })
+                    keyMenu.render();
+                }
 
                 var firstSub = MenuItems.find(function(i) {
                     return i.get('action') === "subcategory"
@@ -145,13 +155,15 @@ define([
                 var mainMenuIndex = MenuItems.indexOf(firstSub);
                 var subCollection = new Utils.categoryCollection(firstSub.models);
 
-                subMenu = new SlotMenu({
-                    el: '#subMenu',
-                    collection: subCollection,
-                    template: MainMenuTemplate,
-                    direction: 'vertical'
-                });
-                subMenu.render();
+                if (!subMenu) {
+                    subMenu = new SlotMenu({
+                        el: '#subMenu',
+                        collection: subCollection,
+                        template: MainMenuTemplate,
+                        direction: 'vertical'
+                    });
+                    subMenu.render();
+                }
 
                 var videoCollection = Utils.createCollection()
                 var VideoGrid = GridMenu.extend({
@@ -166,128 +178,125 @@ define([
                         this.on('pagedown', this.pageDown, this);
                     },
                     resetIndex: function() {
-                      resetGridPosition();
-                      /* we have to do a little fanciness. If there are less than two full rows of
-                       * items, we have to set the index differently
-                       */
-                      if (this.collection.models.length >= (this.options.cols * this.options.rows * 2) ){
-                        this._currentIndex = this.options.cols; //we want the first item in the 2nd row
-                      }else{
-                        moveGrid("down");
-                        this._currentIndex = 0;
-                      }
+                        resetGridPosition();
+                        /* we have to do a little fanciness. If there are less than two full rows of
+                         * items, we have to set the index differently
+                         */
+                        if (this.collection.models.length >= (this.options.cols * this.options.rows * 2)) {
+                            this._currentIndex = this.options.cols; //we want the first item in the 2nd row
+                        } else {
+                            moveGrid("down");
+                            this._currentIndex = 0;
+                        }
 
                     },
-                    pageDown: function(){
-                      moveGrid("down");
+                    pageDown: function() {
+                        moveGrid("down");
                     },
-                    pageUp: function(){
-                      moveGrid("up");
+                    pageUp: function() {
+                        moveGrid("up");
                     },
                     // OVERRIDE DEFAULT FUNCTIONS
                     _columnUp: function() { // move right
-                      if((this._currentIndex % this.options.cols) == (this.options.cols -1)) {
-                        // don't do anything on the far right
-                      } else if (this._currentIndex < this.collection.length - 1) {
-                        this._currentIndex++;
-                        this.setFocus();
-                      }
+                        if ((this._currentIndex % this.options.cols) == (this.options.cols - 1)) {
+                            // don't do anything on the far right
+                        } else if (this._currentIndex < this.collection.length - 1) {
+                            this._currentIndex++;
+                            this.setFocus();
+                        }
                     },
                     _columnDown: function() { // move left
-                      if((this._currentIndex % this.options.cols) !== 0 ) {
-                        this._currentIndex--;
-                        this.setFocus();
-                      } else {
-                        hideSubNav ? mainMenu.focus() : subMenu.focus();
-                      }
+                        if ((this._currentIndex % this.options.cols) !== 0) {
+                            this._currentIndex--;
+                            this.setFocus();
+                        } else {
+                            hideSubNav ? mainMenu.focus() : subMenu.focus();
+                        }
                     },
                     _rowUp: function() {
-                      if ( (this._currentIndex > 0) && (this._currentIndex > (this.options.cols - 1)) ){
-                        this._currentIndex -= this.options.cols;
-                        this.setFocus();
-                        this.trigger("pagedown");
-                      } else {
-                        //not sure if we'll need this or not
-                        this.trigger("upfromtop")
-                      }
+                        if ((this._currentIndex > 0) && (this._currentIndex > (this.options.cols - 1))) {
+                            this._currentIndex -= this.options.cols;
+                            this.setFocus();
+                            this.trigger("pagedown");
+                        } else {
+                            //not sure if we'll need this or not
+                            this.trigger("upfromtop")
+                        }
                     },
 
                     _rowDown: function() {
-                      var coords = this.coords();
-                      if( this._currentIndex < (this.collection.length - 1) && (coords.pageIndex !== coords.maxPageIndex) ) {
-                        //we need to consider the last line carefully
-                        if (coords.pageIndex == coords.maxPageIndex - 1 ){
-                          $log("]]] we're on our last page here...")
-                          if ((this._currentIndex + this.options.cols) > (this.collection.length - 1) ){
-                            // we can't just move down, we need to go to the end of the collection
-                            $log("]]] moving to end of list, as there isn't an item right below me")
-                            this._currentIndex = this.collection.length - 1;
-                            positionArrow();
-                          }else{
-                            $log("]]] moving down a row normally")
-                            this._currentIndex += this.options.cols;
-                          }
-                        }  else {
-                          $log("we're not on our last page, let's move down as normal, pageindex: ", coords.pageIndex);
-                          $log("max apge index: ", coords.maxPageIndex)
-                          this._currentIndex += this.options.cols;
+                        var coords = this.coords();
+                        if (this._currentIndex < (this.collection.length - 1) && (coords.pageIndex !== coords.maxPageIndex)) {
+                            //we need to consider the last line carefully
+                            if (coords.pageIndex == coords.maxPageIndex - 1) {
+                                $log("]]] we're on our last page here...")
+                                if ((this._currentIndex + this.options.cols) > (this.collection.length - 1)) {
+                                    // we can't just move down, we need to go to the end of the collection
+                                    $log("]]] moving to end of list, as there isn't an item right below me")
+                                    this._currentIndex = this.collection.length - 1;
+                                    positionArrow();
+                                } else {
+                                    $log("]]] moving down a row normally")
+                                    this._currentIndex += this.options.cols;
+                                }
+                            } else {
+                                $log("we're not on our last page, let's move down as normal, pageindex: ", coords.pageIndex);
+                                $log("max apge index: ", coords.maxPageIndex)
+                                this._currentIndex += this.options.cols;
+                            }
+                            this.setFocus();
+                            this.trigger("pageup");
+
+                        } else {
+                            //not sure if we'll need this
+                            this.trigger("downfrombottom");
                         }
-                        this.setFocus();
-                        this.trigger("pageup");
-                        
-                       } else {
-                        //not sure if we'll need this
-                        this.trigger("downfrombottom");
-                       }
                     },
 
                 });
 
-                Grid = new VideoGrid({
-                    el: "#gridMenuContainer",
-                    collection: videoCollection,
-                    template: GridMenuTemplate
-                });
+                if (!Grid) {
+                    Grid = new VideoGrid({
+                        el: "#gridMenuContainer",
+                        collection: videoCollection,
+                        template: GridMenuTemplate
+                    });
+                }
 
                 mainMenu.on('selectedindex', function(index) {
-                  $("#mainMenu li").removeClass("selected");
-                  $("#mainMenu li").eq(index).addClass("selected");
-                  //make sure search term box is hidden
-                  $("#searchTermBox").hide();
-                  mainMenuIndex = index;
-                  var item = MenuItems.at(index);
-                  hideSubNav = false;
-                  cancelFetch = false;
-                  $log("action is: ", item.get('action') );
-                  
-                  switch (item.get('action')) {
-                      case 'livefeed':
-                          //scene.changeState('hiddenMenus');
-                          hideWrapper();
-                          break;
-                      case 'subcategory':
-                          subCollection.reset(item.get('subcategory').models);
-                          updateGrid(item.get('subcategory').at(0).get('url'));
-                          subMenu.focus();
-                          $("#subMenu li.sm-focused").addClass("selected");
-                          break;
-                      case 'videos':
-                          hideSubNav = true;
-                          $log("setting hideSubNav to true: ", hideSubNav);
-                          updateGrid(item.get("url"));
-                          break;
-                      case 'search':
-                          hideGrid();
-                          hideSubNav = true;
-                          keyMenu.focus();
-                          break;
-                  }
-                });
-                
-                mainMenu.on('rendered', function(){
-                  $log("rendered triggered");
-                  $("#mainMenu li:first").addClass("selected");
-                });
+                    //$("#mainMenu li").removeClass("selected");
+                    //$("#mainMenu li").eq(index).addClass("selected");
+                    //make sure search term box is hidden
+                    $("#searchTermBox").hide();
+                    mainMenuIndex = index;
+                    var item = MenuItems.at(index);
+                    hideSubNav = false;
+                    cancelFetch = false;
+                    $log("action is: ", item.get('action'));
+
+                    switch (item.get('action')) {
+                        case 'livefeed':
+                            //scene.changeState('hiddenMenus');
+                            hideWrapper();
+                            break;
+                        case 'subcategory':
+                            subCollection.reset(item.get('subcategory').models);
+                            updateGrid(item.get('subcategory').at(0).get('url'));
+                            subMenu.focus();
+                            $("#subMenu li.sm-focused").addClass("selected");
+                            break;
+                        case 'videos':
+                            hideSubNav = true;
+                            $log("setting hideSubNav to true: ", hideSubNav);
+                            updateGrid(item.get("url"));
+                            break;
+                        case 'search':
+                            hideGrid();
+                            hideSubNav = true;
+                            keyMenu.focus();
+                            break;
+                    }
+                },scene);
 
                 var hideMainMenu = function() {
                     $("#mainMenu").animate({
@@ -321,7 +330,7 @@ define([
                 }, scene)
 
                 subMenu.on('onfocus', function() {
-                  $("#subMenu li").eq(this._currentIndex).addClass("sm-focused");
+                    $("#subMenu li").eq(this._currentIndex).addClass("sm-focused");
                     $("#subMenu").animate({
                         left: 50,
                         opacity: 1
@@ -330,33 +339,34 @@ define([
                 }, scene);
 
                 subMenu.on('selecteditem', function(item) {
-                  $("#subMenu li").removeClass("selected");
-                  $("#subMenu li.sm-focused").addClass("selected"); 
-                  updateGrid(item.get('url'));
+                    $("#subMenu li").removeClass("selected");
+                    $("#subMenu li.sm-focused").addClass("selected");
+                    updateGrid(item.get('url'));
                 }, scene);
 
-                mainMenu.render();
+
 
                 //direction etc.
+
                 mainMenu.on('onright', function() {
-                  if (!wrapperVisible){
-                    showWrapper();
-                  }else{
-                    $("#mainMenu li").removeClass("sm-focused");
-                    hideSubNav ? Grid.focus() : subMenu.focus();
-                  }
+                    if (!wrapperVisible) {
+                        showWrapper();
+                    } else {
+                        $("#mainMenu li").removeClass("sm-focused");
+                        hideSubNav ? Grid.focus() : subMenu.focus();
+                    }
                 }, scene);
-                
-                mainMenu.on('onup ondown onleft', function(){
-                  if (!wrapperVisible){
-                    showWrapper();
-                  }
-                });
-                
-                mainMenu.on('onblur', function(){
-                  $log("MM BLUR")
-                  $("#mainMenu li").removeClass("sm-focused");
-                })
+
+                mainMenu.on('onup ondown onleft', function() {
+                    if (!wrapperVisible) {
+                        showWrapper();
+                    }
+                },scene);
+
+                mainMenu.on('onblur', function() {
+                    $log("MM BLUR")
+                    $("#mainMenu li").removeClass("sm-focused");
+                },scene)
 
                 subMenu.on('onleft', function() {
                     showMainMenu();
@@ -368,10 +378,10 @@ define([
                 }, scene)
 
                 subMenu.on('onright', function() {
-                  $("#subMenu li").removeClass("sm-focused");
-                  if( $.trim( $('#gridMenuContainer').html() ).length ) {
-                    Grid.focus();
-                  }
+                    $("#subMenu li").removeClass("sm-focused");
+                    if ($.trim($('#gridMenuContainer').html()).length) {
+                        Grid.focus();
+                    }
                 }, scene)
 
                 keyMenu.on('leftfrommenu', function() {
@@ -381,18 +391,18 @@ define([
 
                 keyMenu.on('valueselect', function(item) {
                     var currentval = $("#searchterm").val();
-                    if (item.length == 1 && $("#searchterm").val().length < 20){
-                      $("#searchterm").val(currentval + item);
+                    if (item.length == 1 && $("#searchterm").val().length < 20) {
+                        $("#searchterm").val(currentval + item);
                     } else if (item.toLowerCase() === "del") {
-                      $("#searchterm").val(currentval.substring(0, currentval.length - 1));
+                        $("#searchterm").val(currentval.substring(0, currentval.length - 1));
                     } else if (item.toLowerCase() === "space") {
-                      $("#searchterm").val(currentval + " ");
+                        $("#searchterm").val(currentval + " ");
                     } else if (item.toLowerCase() === "clear") {
-                      $("#searchterm").val("");
+                        $("#searchterm").val("");
                     } else if (item.toLowerCase() === "ok") {
-                      runSearch($("#searchterm").val());
+                        runSearch($("#searchterm").val());
                     }
-                })
+                },scene)
 
                 keyMenu.on('rightfrommenu', function() {
                     VideoGrid.focus();
@@ -400,206 +410,230 @@ define([
 
 
                 Grid.on('newfocus', function(item) {
-                  updateHTMLforGrid(item);
+                    updateHTMLforGrid(item);
                 }, scene);
 
                 Grid.on('selecteditem', function(item) {
-                  lastMainmenuIndex = mainMenu._currentIndex;
-                  lastFocusIndex = this._currentIndex;
-                  lastGridCollection = this.collection;
-                  lastSubmenuCollection = subMenu.collection;
-                  lastSubmenuIndex = subMenu._currentIndex;
-                  StageManager.changeScene('videoPlayback', {
-                    item: item
-                  });
-                });
+                    saveState();
+                    StageManager.changeScene('videoPlayback', {
+                        item: item
+                    });
+                },scene);
 
                 var positionArrow = function() {
-                  $("#gridArrow").removeClass();
+                    $("#gridArrow").removeClass();
 
-                  switch (Grid._currentIndex % Grid.options.cols) {
-                    case 0:
-                      $("#gridArrow").addClass("left");
-                      break;
-                    case 1:
-                      $("#gridArrow").addClass("middle-left");
-                      break;
-                    case 2:
-                      $("#gridArrow").addClass("middle-right");
-                      break;
-                    case 3:
-                      $("#gridArrow").addClass("right");
-                      break;
-                  }
+                    switch (Grid._currentIndex % Grid.options.cols) {
+                        case 0:
+                            $("#gridArrow").addClass("left");
+                            break;
+                        case 1:
+                            $("#gridArrow").addClass("middle-left");
+                            break;
+                        case 2:
+                            $("#gridArrow").addClass("middle-right");
+                            break;
+                        case 3:
+                            $("#gridArrow").addClass("right");
+                            break;
+                    }
                 }
                 // we need to control the info box arrow position as we move left and right
-                Grid.on('onright', positionArrow);
-                Grid.on('onleft', positionArrow);
+                Grid.on('onright', positionArrow,scene);
+                Grid.on('onleft', positionArrow,scene);
 
-                var moveGrid = function (direction) {
-                  updateSelectorsForGrid();
-                  var options = {};
-                  direction == "up" ? options = {"top": "-=" + gridRowHeight + "px"} : options = { "top": "+=" + gridRowHeight + "px"};
-                  $("#gridMenuContainer").animate(options, 0, function(){
-                    //animation completed
-                  });
+                var moveGrid = function(direction) {
+                    updateSelectorsForGrid();
+                    var options = {};
+                    direction == "up" ? options = {
+                        "top": "-=" + gridRowHeight + "px"
+                    } : options = {
+                        "top": "+=" + gridRowHeight + "px"
+                    };
+                    $("#gridMenuContainer").animate(options, 0, function() {
+                        //animation completed
+                    });
 
                 };
-                var resetGridPosition = function (){
-                  $("#gridMenuContainer").css({top: "10px"});
+                var resetGridPosition = function() {
+                    $("#gridMenuContainer").css({
+                        top: "10px"
+                    });
                 }
 
                 var updateHTMLforGrid = function(item) {
-                    if(item && item.attributes && item.attributes.description){ 
-                      $('.description').html(item.get('description')); 
-                      $('.description').ellipsis({ row: 4 });
-                    }else{
-                      $('.description').empty();
+                    if (item && item.attributes && item.attributes.description) {
+                        $('.description').html(item.get('description'));
+                        $('.description').ellipsis({
+                            row: 4
+                        });
+                    } else {
+                        $('.description').empty();
                     }
                     $('.title').html(item.get("title"));
                 };
                 mainMenu.focus();
             })
 
-           
+
         }
-        scene.tearDownMenus = function(){
-          $log("tearing down menus on main scene");
-          mainMenu.off(null, null, this);
-          subMenu.off(null, null, this);
-          keyMenu.off(null, null, this);
-          Grid.off(null, null, this);
-        }
-        
-        scene.onleavescene = function() {
-          $log(">>> LEAVING MAIN SCENE!!");
-          scene.tearDownMenus();
-          hideWrapper();
+        scene.tearDownMenus = function() {
+            $log("tearing down menus on main scene");
+            mainMenu.off(null, null, this);
+            subMenu.off(null, null, this);
+            keyMenu.off(null, null, this);
+            Grid.off(null, null, this);
         }
 
-        
+        scene.onleavescene = function() {
+            $log(">>> LEAVING MAIN SCENE!!");
+            saveState();
+            scene.tearDownMenus();
+            hideWrapper();
+        }
+
+
         /* STATE MANAGEMENT */
-        mainState.onenterstate = function(){
-          // if we're re-entering this scene, reset the state of the grid, as it forgets
-          // the only way into video playback is via the grid, so no special handling is required
-          if (typeof(lastFocusIndex) != "undefined") {
-            Grid.collection = lastGridCollection;
-            Grid._currentIndex = lastFocusIndex;
-            subMenu.collection = lastSubmenuCollection;
-            subMenu._currentIndex = lastSubmenuIndex;
-            mainMenu._currentIndex = lastMainmenuIndex;
-            $("#mainMenu li").removeClass("selected").eq(mainMenu._currentIndex).addClass("selected");
-            showGrid();
-            Grid.focus();
-          }
-          //example of modal implementation
-          //renderModal("Sorry!", "Boo, Ba!");
+        mainState.onenterstate = function() {
+            // if we're re-entering this scene, reset the state of the grid, as it forgets
+            // the only way into video playback is via the grid, so no special handling is required
+            if (typeof(lastFocusIndex) != "undefined") {
+                Grid.collection = lastGridCollection;
+                Grid._currentIndex = lastFocusIndex;
+                subMenu.collection = lastSubmenuCollection;
+                subMenu._currentIndex = lastSubmenuIndex;
+                //mainMenu._currentIndex = lastMainmenuIndex;
+                //$("#mainMenu li").removeClass("selected").eq(mainMenu._currentIndex).addClass("selected");
+                if (gridShowing) showGrid();
+                //if(lastMenuFocus.name == "")
+                //Grid.focus();
+
+                lastMenuFocus.focus();
+            }
+            //example of modal implementation
+            //renderModal("Sorry!", "Boo, Ba!");
         }
-        mainState.onleavestate = function(){
-          $log("%%%%%%%%%%%% leaving main state");
+        mainState.onleavestate = function() {
+            $log("%%%%%%%%%%%% leaving main state");
         }
-        
+
         /* UTILITY FUNCTIONS */
         var updateSelectorsForGrid = function() {
-          $(Grid.el).children().removeClass("currentRow");
-          $(Grid.el).children().children().eq(Grid._currentIndex).parent().addClass("currentRow");
+            $(Grid.el).children().removeClass("currentRow");
+            $(Grid.el).children().children().eq(Grid._currentIndex).parent().addClass("currentRow");
         }
 
-        var runSearch = function(term){
-          searchState = true;
-          cancelFetch = false;
-          showLoader();
-          mainMenu.focus();
-          API.doSearch(term).then(function(data){
-            
-            if(cancelFetch){
-                cancelFetch = false;
-                hideLoader();
-                return;
-            }
-
-            if(data.length > 0){
-              $("#searchTermBox span.label").empty().html("Search Results for: ")
-              $("#searchTermBox span.term").empty().html(term);
-              populateGrid(data);
-              Grid.resetIndex();
-              Grid.focus(); 
-            }else{ // no search results
-              $("#searchTermBox span.label").empty().html('0 Search Results for: "' + term + '"');
-              $("#searchTermBox span.term").empty();
-              emptyGrid();
-              hideLoader();
-              $("#gridMenuHolder").fadeIn();
-              $("#gridMenuContainer").fadeIn();
-            }
-            $("#searchTermBox").show(); 
+        var runSearch = function(term) {
             searchState = true;
-
-          });
-        }
-
-        var updateGrid = function(url){
+            cancelFetch = false;
             showLoader();
-            API.fetchMRSS(url).done(function(data){
-              
-              if(cancelFetch){
-                cancelFetch = false;
-                hideLoader();
-                return;
-              }
-              
-              searchState = false;
-              populateGrid(data);
+            mainMenu.focus();
+            API.doSearch(term).then(function(data) {
+
+                if (cancelFetch) {
+                    cancelFetch = false;
+                    hideLoader();
+                    return;
+                }
+
+                if (data.length > 0) {
+                    $("#searchTermBox span.label").empty().html("Search Results for: ")
+                    $("#searchTermBox span.term").empty().html(term);
+                    populateGrid(data);
+                    Grid.resetIndex();
+                    Grid.focus();
+                } else { // no search results
+                    $("#searchTermBox span.label").empty().html('0 Search Results for: "' + term + '"');
+                    $("#searchTermBox span.term").empty();
+                    emptyGrid();
+                    hideLoader();
+                    $("#gridMenuHolder").fadeIn();
+                    $("#gridMenuContainer").fadeIn();
+                }
+                $("#searchTermBox").show();
+                searchState = true;
+
             });
         }
-        
-        var populateGrid = function(data){
-          hideLoader();
-          showGrid();
-          Grid.collection.reset(data);
-          Grid.resetIndex();
-          gridRowHeight = $("ul.gridMenuPage:first").outerHeight();
-          updateSelectorsForGrid();
-        }
-        
-        var showWrapper = function(){
-          wrapperVisible = true;
-          $("#wrapper").fadeIn();
-        }
-        
-        var hideWrapper = function(){
-          wrapperVisible = false;
-          $("#wrapper").fadeOut();
-        }
-        
-        var hideGrid = function(){
-          $("#gridMenuHolder").fadeOut();
-          $("#gridHTML").fadeOut();
-        }
-        
-        var showGrid = function(){
-          $("#gridMenuHolder").fadeIn();
-          $("#gridMenuContainer").fadeIn();
-          $("#gridHTML").fadeIn();
-        }
-        
-        var emptyGrid = function(){
-          $("#gridMenuContainer").empty();
+
+        var updateGrid = function(url) {
+            showLoader();
+            API.fetchMRSS(url).done(function(data) {
+
+                if (cancelFetch) {
+                    cancelFetch = false;
+                    hideLoader();
+                    return;
+                }
+
+                searchState = false;
+                populateGrid(data);
+            });
         }
 
-        var showLoader = function(){
-          $("#circularG").fadeIn();
+        var populateGrid = function(data) {
+            hideLoader();
+            showGrid();
+            Grid.collection.reset(data);
+            Grid.resetIndex();
+            gridRowHeight = $("ul.gridMenuPage:first").outerHeight();
+            updateSelectorsForGrid();
         }
 
-        var hideLoader = function(){
-          $("#circularG").fadeOut();
+        var showWrapper = function() {
+            wrapperVisible = true;
+            $("#wrapper").fadeIn();
         }
-        
-        var renderModal = function(header, message){
-          $("#errormodal h1").empty().html(header);
-          $("#errormodal span").empty().html(message);
-          $("#errormodal").fadeIn();
-          modalMenu.focus();
+
+        var hideWrapper = function() {
+            wrapperVisible = false;
+            $("#wrapper").fadeOut();
+        }
+
+        var hideGrid = function() {
+            gridShowing = false;
+            $("#gridMenuHolder").fadeOut();
+            $("#gridHTML").fadeOut();
+
+        }
+
+        var showGrid = function() {
+            gridShowing = true;
+            $("#gridMenuHolder").fadeIn();
+            $("#gridMenuContainer").fadeIn();
+            $("#gridHTML").fadeIn();
+        }
+
+        var emptyGrid = function() {
+            $("#gridMenuContainer").empty();
+        }
+
+        var showLoader = function() {
+            $("#circularG").fadeIn();
+        }
+
+        var hideLoader = function() {
+            $("#circularG").fadeOut();
+        }
+
+        var renderModal = function(header, message) {
+            $("#errormodal h1").empty().html(header);
+            $("#errormodal span").empty().html(message);
+            $("#errormodal").fadeIn();
+            modalMenu.focus();
+        }
+
+        var saveState = function() {
+            //gridShowing   = global
+
+            lastMenuFocus = Navigation.currentFocus.menu;
+            //lastItemInMenu  = Navigation.currentMenu._lastItem;
+
+            lastMainmenuIndex = mainMenu._currentIndex;
+            lastFocusIndex = Grid._currentIndex;
+            lastGridCollection = Grid.collection;
+            lastSubmenuCollection = subMenu.collection;
+            lastSubmenuIndex = subMenu._currentIndex;
         }
 
         return scene;
