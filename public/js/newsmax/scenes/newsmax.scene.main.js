@@ -49,13 +49,13 @@ define([
         scene.disableBack = false;
 
         scene.handlesback = function() {
-
+            
             if(this.disableBack) return;
 
             cancelFetch = true;
 
             if (!wrapperVisible) { //if wrapper is hidden
-                mainMenu.trigger('onright');
+                //mainMenu.trigger('onright');
                 return false;
             }
 
@@ -98,7 +98,8 @@ define([
         var mainState = scene.createState('mainState', true);
 
         var Grid, mainMenu, subMenu, keyMenu, gridRowHeight, lastFocusIndex, lastGridCollection, lastSubmenuIndex, lastSubmenuCollection, lastMainmenuIndex, gridShowing;
-        var modalMenu = new ModalMenu();
+
+        var dummyMenu = new Navigation.Menu();
         var hideSubNav = false; //we use this in the case where there is no grid - i.e. Top of the Hour News
         var wrapperVisible = true;
         //var dummyMenu = new Navigation.Menu(); //we use this for hidden controls state
@@ -283,6 +284,9 @@ define([
                         case 'livefeed':
                             //scene.changeState('hiddenMenus');
                             hideWrapper();
+                            lastMenuFocus = mainMenu;
+                            dummyMenu.focus();
+
                             break;
                         case 'subcategory':
                             subCollection.reset(item.get('subcategory').models);
@@ -354,18 +358,24 @@ define([
                 //direction etc.
 
                 mainMenu.on('onright', function() {
-                    if (!wrapperVisible) {
+                    /*if (!wrapperVisible) {
                         showWrapper();
-                    } else {
+                    } else {*/
                         $("#mainMenu li").removeClass("sm-focused");
                         hideSubNav ? Grid.focus() : subMenu.focus();
-                    }
+                    //}
                 }, scene);
 
-                mainMenu.on('onup ondown onleft', function() {
+                /*mainMenu.on('onup ondown onleft', function() {
                     if (!wrapperVisible) {
                         showWrapper();
                     }
+                },scene);*/
+                
+                window.$dummy= dummyMenu;
+                dummyMenu.on('onup ondown onleft onright onreturn onselect',function(){
+                    showWrapper();
+                    lastMenuFocus.focus();
                 },scene);
 
                 mainMenu.on('onblur', function() {

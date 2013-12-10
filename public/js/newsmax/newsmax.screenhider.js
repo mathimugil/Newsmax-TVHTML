@@ -54,12 +54,19 @@ define(['backbone', 'keyhandler', 'jquery', 'stagemanager','navigation'], functi
                 return;
             }
 
+            if($("#wrapper").is(':hidden')){
+                screenHider.touchHideTimeout();
+                $log("ignoring this hide trigger");
+                return;
+            }
+
             if ($disableScreenHider) return;
             
             StageManager.getScene('main').disableBack = true;   //could be in the homeScene, lets disable the backbutton there
 
             lastMenu = Navigation.currentFocus.menu;
 
+            $log("hiding screen -screenhider");
             $('#wrapper').fadeOut();
             
             menu.focus();

@@ -1867,6 +1867,12 @@ img#logo {
     transform: scale(0.3);
     background-color: #af2827; } }
 
+#vignette {
+  background: url(../images/vignette.png) top left no-repeat;
+  position: absolute;
+  width: 1280px;
+  height: 720px; }
+
 #circularG {
   position: relative;
   width: 175px;

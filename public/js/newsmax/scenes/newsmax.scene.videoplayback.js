@@ -186,7 +186,7 @@ define([
             }   
             else
                 touchTimeout();
-        }, 15000);
+        }, $globalTimeout);
     }
 
     function timeUpdateHandler(currentTime) {

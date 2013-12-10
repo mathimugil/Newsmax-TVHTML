@@ -23,7 +23,6 @@ define(['navigation','platform'], function(Navigation, Platform) {
 		},
 		mrssParser: function (data) {
 			return _($(data).find('item')).map(function(i) {
-        $log("i: ", i);
 				return {
 					title: $(i).find('title').eq(0).text(),
 					streamUrl: $(i).find('content').eq(0).attr('url'),
