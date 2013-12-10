@@ -70,7 +70,7 @@ require(
     window.$platform      = require('platform');
     window.$tvengine      = require('tvengine');
 
-    screenHider = require("newsmax/newsmax.screenhider");
+    //screenHider = require("newsmax/newsmax.screenhider");
 
     $('#return_button').click(function(){
       $keyhandler.trigger('onReturn');

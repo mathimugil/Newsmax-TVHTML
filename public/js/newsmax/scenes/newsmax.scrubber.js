@@ -77,7 +77,7 @@ define([  'stagemanager'
                 _t.scrubInterval =
                     setInterval(function() {
                     _t.trigger("newstep");
-                }, 250);
+                }, 125);
 
             } else {
                 _t.stopStickyScrubbing();
@@ -100,7 +100,7 @@ define([  'stagemanager'
                 _t.scrubInterval =
                     setInterval(function() {
                     _t.trigger("newstep");
-                }, 250);
+                }, 125);
 
             } else {
                 _t.stopStickyScrubbing();
@@ -144,7 +144,7 @@ define([  'stagemanager'
             if(this.isUsingJumpMode())
                 updateStepDivisor = 50;
             else
-                updateStepDivisor = 100;
+                updateStepDivisor = 50;
 
 
             if(MediaPlayer.playing()){
@@ -199,10 +199,11 @@ define([  'stagemanager'
             // $('#videoDebug').append(d+"<br>")
             //    $('#videoDebug2').append(MediaPlayer.duration()+"<br>")
             $log('newstep called for updatedProgressTime = ', updatedProgressTime);
-         	this.trigger('scrubTimeupdate',updatedProgressTime);
+         	
             //scene.updateTimeDisplay(updatedProgressTime, d);		///hook this up to the scene
 
             this._currentScrubTime  = updatedProgressTime;
+            this.trigger('scrubTimeupdate',updatedProgressTime);
 
             if(updatedProgressTime === 0)            // for the beginning
                 this.stopStickyScrubbing();
@@ -210,18 +211,22 @@ define([  'stagemanager'
                 this.stopStickyScrubbing();  
         },
         _stepSet: function(){
-            $log('step set called ');
+            $log('step set called for time = ' , this._currentScrubTime);
             var seconds, curTime, translated;
             curTime     = this._currentScrubTime;
             translated  = Util.convertMstoHumanReadable(curTime);
             seconds     = translated.totalSeconds;
            
             MediaPlayer.disableTimeUpdates();
-            MediaPlayer.play();                 //pansonic bug
+            
+            if(Platform.name == "panasonic")
+                MediaPlayer.play();                 //pansonic bug
+            
             MediaPlayer.jumpToTime(seconds);
+            
             setTimeout(function(){
                 MediaPlayer.enableTimeUpdates();
-            },10000);
+            },1000);
             
             if(!MediaPlayer.playing()){
                 MediaPlayer.play();

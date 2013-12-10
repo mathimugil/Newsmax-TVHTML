@@ -56,7 +56,9 @@ define([
     }
 
     videoPlayback.onenterscene = function() {
-      
+        
+        videoPlayback.hasScrubbed = false;
+
         MediaPlayer.on('videoup',function(){
             $('body').css('background','transparent');
         }, videoPlayback);
@@ -180,6 +182,7 @@ define([
     var touchTimeout = function(){
         clearTimeout(timeout);
         timeout = setTimeout(function(){
+            if($disableScreenHider) return;
             if(MediaPlayer.playing()){
                 if($disableHiding) return;
                 videoPlayback.changeState('controlsdown');
@@ -194,7 +197,6 @@ define([
         duration = MediaPlayer.duration();
         if (_.isNumber(duration)) {
             videoProgressInMS = currentTime;
-            $log("timeupdates from mediaplayer are firing", currentTime);
             if(currentTime==0){
                 $("#errorField").append($("<div>mediaplayer firing 0</div>"))
             }
@@ -204,7 +206,10 @@ define([
         }
     }
 
+    
     videoPlayback.updateTimeDisplay = function(currentTime, duration) {
+        if(currentTime==0 && videoPlayback.hasScrubbed)
+            return;
         var current, total, progress, progress_width;
         total = Util.convertMstoHumanReadable(duration);
         if (currentTime > duration) {
@@ -306,9 +311,10 @@ define([
 
         scrubManager.on('scrubTimeupdate', function(updatetime) {
             //$log("scrubTimeupdate updating time: ", updatetime);
-            if(updatetime==0){
+            videoPlayback.hasScrubbed = true;
+            /*if(updatetime==0){
                 $("#errorField").append($("<div>scrubber firing 0</div>"))                
-            }
+            }*/
 
             videoPlayback.updateTimeDisplay(updatetime, MediaPlayer.duration());
         }, videoPlayback);
