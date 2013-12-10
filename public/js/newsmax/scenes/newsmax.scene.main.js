@@ -64,7 +64,7 @@ define([
             }
 
             if (searchState) { //if we are actually on search grid w/ results
-                mainMenu.trigger('selectedindex', 6); //TODO: this should not be hard coded fix soon.
+                mainMenu.trigger("selectedindex", mainMenu._maxIndex); 
                 searchState = false;
                 return false;
             }
@@ -355,18 +355,24 @@ define([
                 //direction etc.
 
                 mainMenu.on('onright', function() {
-                    $("#mainMenu li").removeClass("sm-focused");
-                    hideSubNav ? Grid.focus() : subMenu.focus();
+                    if (hideSubNav && $("#gridMenuHolder").is(':visible')){ //top of the hour news matches this case
+                        $log("focusing on grid menu")
+                        $("#mainMenu li").removeClass("sm-focused");
+                        Grid.focus();
+                    }else if($("#mainMenu li:last").hasClass("sm-focused")){
+                        return;
+                    }else{
+                        subMenu.focus();  
+                        return;
+                    } 
                 }, scene);
                 
-                window.$dummy= dummyMenu;
                 dummyMenu.on('onup ondown onleft onright onreturn onselect',function(){
                     showWrapper();
                     lastMenuFocus.focus();
                 },scene);
 
                 mainMenu.on('onblur', function() {
-                    //$log("MM BLUR")
                     $("#mainMenu li").removeClass("sm-focused");
                 },scene)
 
@@ -456,7 +462,7 @@ define([
                   $log("grid is on focus")
                   $(Grid.el).children().children().eq(Grid._currentIndex).parent().addClass("currentRow");
                   $("#gridHTML").show();
-                })
+                });
 
                 var moveGrid = function(direction) {
                     clearSelectorsForGrid();
