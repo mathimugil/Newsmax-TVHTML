@@ -41,6 +41,11 @@ define(['navigation', 'underscore'], function(Navigation, _) {
     _slotIndex: 0,
     _selectedIndex: 0,
 
+    events : {
+      "click .button" : "onSelect",
+      "mouseover .button" : "setFocus"
+    },
+
     initialize: function() {
       Navigation.Menu.prototype.initialize.apply(this, arguments);
       this.options = _.defaults(this.options, this.defaults);
@@ -53,17 +58,7 @@ define(['navigation', 'underscore'], function(Navigation, _) {
         this.on('onup', this._decrementIndex, this);
       }
 
-      this.on('onselect', function() {
-
-        $log(" SLOT MENU ON SELECT ")
-        this.trigger('selectedindex', this._currentIndex);
-        this.trigger('selecteditem', this.collection.at(this._currentIndex));
-        this._selectedIndex = this._currentIndex;
-        
-        $(this.el).children().removeClass('selected');
-        $(this.el).children().eq(this._currentIndex).addClass('selected');
-
-      }, this);
+      this.on('onselect', this.onSelect, this);
 
       var _t = this;
 
@@ -74,12 +69,30 @@ define(['navigation', 'underscore'], function(Navigation, _) {
         _t.render();
         _t._maxIndex = _t.collection.length - 1;
       });
-      this.on('onfocus newfocus', function(idx) {
-        idx = _.isNumber(idx) ? idx : this._currentIndex;
-        $(this.el).children().removeClass('sm-focused');
-        $(this.el).children().eq(idx).addClass('sm-focused');
-      }, this)
+      this.on('onfocus newfocus', this.setFocus, this)
+    },
 
+    setFocus: function (event){
+        $log(" Event ",event);
+
+        if(_.isObject(event)) {
+          this.focus();
+          this._currentIndex = $(event.currentTarget).index();
+        }
+        idx = _.isNumber(event) ? event : this._currentIndex;
+        $(this.el).children().removeClass('sm-focused');
+        $(this.el).children().eq(this._currentIndex).addClass('sm-focused');
+    },
+
+    onSelect: function() {
+
+        $log(" SLOT MENU ON SELECT ")
+        this.trigger('selectedindex', this._currentIndex);
+        this.trigger('selecteditem', this.collection.at(this._currentIndex));
+        this._selectedIndex = this._currentIndex;
+        
+        $(this.el).children().removeClass('selected');
+        $(this.el).children().eq(this._currentIndex).addClass('selected');
 
     },
 
@@ -120,7 +133,7 @@ define(['navigation', 'underscore'], function(Navigation, _) {
         }
         $log(" SLOT MENU RENDER AND BIND ")
         $(this.el).children().on('mouseover', function() {
-            // $log(" MOUSEOVER ITEM ", $(this).index());
+            $log(" MOUSEOVER ITEM ", $(this).index());
         })
         this._maxIndex = $(this.el).children().length - 1;
         this.trigger("rendered");

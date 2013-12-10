@@ -1,6 +1,6 @@
 // HTML 5 Video tag Media Player
 // Note these are all
-define(['enginelite/enginelite.mediaplayer', 'platform', 'jquery','underscore'], function(MediaPlayer, Platform, $, _) {
+define(['enginelite/enginelite.mediaplayer', 'platform', 'jquery','underscore', 'config'], function(MediaPlayer, Platform, $, _, conf) {
   var videotag = {
     _active: false,
     active: function() {
@@ -108,7 +108,7 @@ define(['enginelite/enginelite.mediaplayer', 'platform', 'jquery','underscore'],
       this.stop(true);
       $(this._videoElement).attr('autoplay', 'play');
       $(this._videoElement).attr('src', url);
-      if($globalMute) $(this._videoElement).prop('muted',true);
+      if(conf.globalMute) $(this._videoElement).prop('muted',true);
       //$(this._videoElement).attr('muted',true);     //not sure why we were doing this?
       $(this._videoElement).show();
       if (_.isNumber(index)) {

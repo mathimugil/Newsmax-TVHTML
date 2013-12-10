@@ -12,7 +12,8 @@ define([
         'newsmax/newsmax.api',
         'hbs!newsmax/templates/GridMenu',
         'mediaplayer',
-        'utils'
+        'utils',
+        'config'
     ],
     function(
         StageManager,
@@ -30,7 +31,8 @@ define([
         API,
         GridMenuTemplate,
         MediaPlayer,
-        Util
+        Util,
+        conf
     ) {
 
         //'use strict';
@@ -111,7 +113,7 @@ define([
             showWrapper();
             return MenuItemsDeferred.done(function(MenuItems) {
                 $log("menuitems", MenuItems);
-                $pauseScreenhider = false;
+                conf.pauseScreenhider = false;
 
                 /* LIVE STREAM CONTROLS */
                 var initLiveStream = function() {
@@ -546,7 +548,7 @@ define([
             showLoader();
             mainMenu.focus();
             API.doSearch(term).then(function(data) {
-                $pauseScreenhider = false;
+                conf.pauseScreenhider = false;
                 if (cancelFetch) {
                     cancelFetch = false;
                     hideLoader();
@@ -594,7 +596,7 @@ define([
             Grid.resetIndex();
             gridRowHeight = $("ul.gridMenuPage:first").outerHeight();
             clearSelectorsForGrid();
-            $pauseScreenhider = false;
+            conf.pauseScreenhider = false;
         }
 
         var showWrapper = function() {

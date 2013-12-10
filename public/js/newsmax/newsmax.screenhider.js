@@ -1,4 +1,4 @@
-define(['backbone', 'keyhandler', 'jquery', 'stagemanager','navigation'], function(Backbone, KeyHandler, $, StageManager, Navigation) {
+define(['backbone', 'keyhandler', 'jquery', 'stagemanager', 'navigation', 'config'], function(Backbone, KeyHandler, $, StageManager, Navigation, conf) {
 
     
     window.ScreenHider = function() {
@@ -60,13 +60,13 @@ define(['backbone', 'keyhandler', 'jquery', 'stagemanager','navigation'], functi
                 return;
             }
             
-            if($pauseScreenhider){
+            if(conf.pauseScreenhider){
                 screenHider.touchHideTimeout();
                 $log(">>>>>>> ignoring this hide trigger, api is working");
                 return;
             }
 
-            if ($disableScreenHider) return;
+            if (conf.disableScreenHider) return;
             
             StageManager.getScene('main').disableBack = true;   //could be in the homeScene, lets disable the backbutton there
 
@@ -105,7 +105,7 @@ define(['backbone', 'keyhandler', 'jquery', 'stagemanager','navigation'], functi
 
         }, this);
 
-        screenHider.start($globalTimeout);
+        screenHider.start(conf.globalTimeout);
 
         return screenHider;
     }

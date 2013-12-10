@@ -10,7 +10,8 @@ define([
     'utils', 
     'newsmax/scenes/newsmax.scrubber', 
     'newsmax/menus/newsmax.menus.trickplay', 
-    'newsmax/menus/newsmax.menus.backmenu'
+    'newsmax/menus/newsmax.menus.backmenu',
+    'config'
     ],
     function(
         StageManager,
@@ -24,7 +25,8 @@ define([
         Util,
         scrubManager,
         TrickMenu, 
-        BackMenu
+        BackMenu,
+        conf
         ) {
 
     var videoPlayback,
@@ -178,14 +180,14 @@ define([
     var touchTimeout = function(){
         clearTimeout(timeout);
         timeout = setTimeout(function(){
-            if($disableScreenHider) return;
+            if(conf.disableScreenHider) return;
             if(MediaPlayer.playing()){
                 if($disableHiding) return;
                 videoPlayback.changeState('controlsdown');
             }   
             else
                 touchTimeout();
-        }, $globalTimeout);
+        }, conf.globalTimeout);
     }
 
     function timeUpdateHandler(currentTime) {

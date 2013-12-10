@@ -1,10 +1,10 @@
-define(['navigation','platform'], function(Navigation, Platform) {
+define(['navigation','platform','config'], function(Navigation, Platform, conf) {
   var imageProcessingLink = "http://www.nmax.tv/NewsmaxVideoServices/api/Image?uri=";
   var imageSizeSlug = "&height=110&width=197";
   
 	return {
 		fetchItem: function(url, parser, options) {
-            $pauseScreenhider = true;
+            conf.pauseScreenhider = true;
 			options = _.isFunction(parser) ? options : parser;
 			options = _.defaults(options || {},{
 				url : url,
