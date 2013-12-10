@@ -235,19 +235,14 @@ define([
                         if (this._currentIndex < (this.collection.length - 1) && (coords.pageIndex !== coords.maxPageIndex)) {
                             //we need to consider the last line carefully
                             if (coords.pageIndex == coords.maxPageIndex - 1) {
-                                $log("]]] we're on our last page here...")
                                 if ((this._currentIndex + this.options.cols) > (this.collection.length - 1)) {
                                     // we can't just move down, we need to go to the end of the collection
-                                    $log("]]] moving to end of list, as there isn't an item right below me")
                                     this._currentIndex = this.collection.length - 1;
                                     positionArrow();
                                 } else {
-                                    $log("]]] moving down a row normally")
                                     this._currentIndex += this.options.cols;
                                 }
                             } else {
-                                $log("we're not on our last page, let's move down as normal, pageindex: ", coords.pageIndex);
-                                $log("max apge index: ", coords.maxPageIndex)
                                 this._currentIndex += this.options.cols;
                             }
                             this.setFocus();
@@ -270,8 +265,6 @@ define([
                 }
 
                 mainMenu.on('selectedindex', function(index) {
-                    //$("#mainMenu li").removeClass("selected");
-                    //$("#mainMenu li").eq(index).addClass("selected");
                     //make sure search term box is hidden
                     $("#searchTermBox").hide();
                     mainMenuIndex = index;
@@ -282,7 +275,6 @@ define([
 
                     switch (item.get('action')) {
                         case 'livefeed':
-                            //scene.changeState('hiddenMenus');
                             hideWrapper();
                             lastMenuFocus = mainMenu;
                             dummyMenu.focus();
@@ -358,19 +350,9 @@ define([
                 //direction etc.
 
                 mainMenu.on('onright', function() {
-                    /*if (!wrapperVisible) {
-                        showWrapper();
-                    } else {*/
-                        $("#mainMenu li").removeClass("sm-focused");
-                        hideSubNav ? Grid.focus() : subMenu.focus();
-                    //}
+                    $("#mainMenu li").removeClass("sm-focused");
+                    hideSubNav ? Grid.focus() : subMenu.focus();
                 }, scene);
-
-                /*mainMenu.on('onup ondown onleft', function() {
-                    if (!wrapperVisible) {
-                        showWrapper();
-                    }
-                },scene);*/
                 
                 window.$dummy= dummyMenu;
                 dummyMenu.on('onup ondown onleft onright onreturn onselect',function(){
@@ -423,18 +405,6 @@ define([
                     VideoGrid.focus();
                 }, scene)
 
-
-                Grid.on('newfocus', function(item) {
-                    updateHTMLforGrid(item);
-                }, scene);
-
-                Grid.on('selecteditem', function(item) {
-                    saveState();
-                    StageManager.changeScene('videoPlayback', {
-                        item: item
-                    });
-                },scene);
-
                 var positionArrow = function() {
                     $("#gridArrow").removeClass();
 
@@ -453,12 +423,39 @@ define([
                             break;
                     }
                 }
+
+                Grid.on('newfocus', function(item) {
+                    updateHTMLforGrid(item);
+                }, scene);
+
+                Grid.on('selecteditem', function(item) {
+                    saveState();
+                    StageManager.changeScene('videoPlayback', {
+                        item: item
+                    });
+                }, scene);
+
                 // we need to control the info box arrow position as we move left and right
-                Grid.on('onright', positionArrow,scene);
-                Grid.on('onleft', positionArrow,scene);
+                Grid.on('onright', positionArrow, scene);
+                Grid.on('onleft', positionArrow, scene);
+                
+                // we hide the space and the info box; we also clear the info box
+                Grid.on('onblur', function(){
+                  $("#gridHTML").hide();
+                  $("#gridHTML .title, #gridHTML .trt, #gridHTML .description").empty();
+                  clearSelectorsForGrid();
+                }, scene);
+                
+                // we need to show and make space for the info box
+                Grid.on('onfocus', function(){
+                  $log("grid is on focus")
+                  $(Grid.el).children().children().eq(Grid._currentIndex).parent().addClass("currentRow");
+                  $("#gridHTML").show();
+                })
 
                 var moveGrid = function(direction) {
-                    updateSelectorsForGrid();
+                    clearSelectorsForGrid();
+                    $(Grid.el).children().children().eq(Grid._currentIndex).parent().addClass("currentRow");
                     var options = {};
                     direction == "up" ? options = {
                         "top": "-=" + gridRowHeight + "px"
@@ -487,7 +484,6 @@ define([
                     }
                     if(item && item.attributes && item.attributes.duration){ 
                       var duration = parseInt(item.get('duration')) * 1000;
-                      $log("duration, ", Util.convertMstoHumanReadable(duration))
                       $('.trt').text(Util.convertMstoHumanReadable(duration));
                     }else{
                       $log("no duration")
@@ -526,12 +522,7 @@ define([
                 Grid._currentIndex = lastFocusIndex;
                 subMenu.collection = lastSubmenuCollection;
                 subMenu._currentIndex = lastSubmenuIndex;
-                //mainMenu._currentIndex = lastMainmenuIndex;
-                //$("#mainMenu li").removeClass("selected").eq(mainMenu._currentIndex).addClass("selected");
                 if (gridShowing) showGrid();
-                //if(lastMenuFocus.name == "")
-                //Grid.focus();
-
                 lastMenuFocus.focus();
             }
             //example of modal implementation
@@ -542,9 +533,8 @@ define([
         }
 
         /* UTILITY FUNCTIONS */
-        var updateSelectorsForGrid = function() {
+        var clearSelectorsForGrid = function() {
             $(Grid.el).children().removeClass("currentRow");
-            $(Grid.el).children().children().eq(Grid._currentIndex).parent().addClass("currentRow");
         }
 
         var runSearch = function(term) {
@@ -601,7 +591,7 @@ define([
             Grid.collection.reset(data);
             Grid.resetIndex();
             gridRowHeight = $("ul.gridMenuPage:first").outerHeight();
-            updateSelectorsForGrid();
+            clearSelectorsForGrid();
         }
 
         var showWrapper = function() {
@@ -625,7 +615,6 @@ define([
             gridShowing = true;
             $("#gridMenuHolder").fadeIn();
             $("#gridMenuContainer").fadeIn();
-            $("#gridHTML").fadeIn();
         }
 
         var emptyGrid = function() {

@@ -1615,7 +1615,7 @@ img#logo {
   top: 100px;
   left: 385px;
   width: 820px;
-  height: 545px;
+  height: 520px;
   padding: 0 20px;
   overflow: hidden;
   border: 1px solid #cccccb; }
@@ -1626,7 +1626,7 @@ img#logo {
     #gridMenuHolder #gridMenuContainer ul {
       display: table; }
       #gridMenuHolder #gridMenuContainer ul.currentRow {
-        margin-bottom: 150px; }
+        margin-bottom: 130px; }
     #gridMenuHolder #gridMenuContainer li.gridItem {
       float: left;
       border: 2px solid transparent; }
@@ -1647,7 +1647,7 @@ img#logo {
   top: 365px;
   left: 418px;
   width: 785px;
-  height: 118px;
+  height: 108px;
   color: black;
   padding: 10px;
   font-size: 18px;
