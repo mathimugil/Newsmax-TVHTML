@@ -11,7 +11,8 @@ define([
         'newsmax/menus/newsmax.menu.modalmenu',
         'newsmax/newsmax.api',
         'hbs!newsmax/templates/GridMenu',
-        'mediaplayer'
+        'mediaplayer',
+        'utils'
     ],
     function(
         StageManager,
@@ -28,7 +29,8 @@ define([
         ModalMenu,
         API,
         GridMenuTemplate,
-        MediaPlayer
+        MediaPlayer,
+        Util
     ) {
 
         //'use strict';
@@ -402,7 +404,7 @@ define([
                     } else if (item.toLowerCase() === "ok") {
                         runSearch($("#searchterm").val());
                     }
-                },scene)
+                }, scene)
 
                 keyMenu.on('rightfrommenu', function() {
                     VideoGrid.focus();
@@ -470,7 +472,16 @@ define([
                     } else {
                         $('.description').empty();
                     }
+                    if(item && item.attributes && item.attributes.duration){ 
+                      var duration = parseInt(item.get('duration')) * 1000;
+                      $log("duration, ", Util.convertMstoHumanReadable(duration))
+                      $('.trt').text(Util.convertMstoHumanReadable(duration));
+                    }else{
+                      $log("no duration")
+                      $('.trt').empty();
+                    }
                     $('.title').html(item.get("title"));
+                    $('.title').ellipsis({ row: 1 });
                 };
                 mainMenu.focus();
             })

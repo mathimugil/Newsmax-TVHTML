@@ -23,11 +23,13 @@ define(['navigation','platform'], function(Navigation, Platform) {
 		},
 		mrssParser: function (data) {
 			return _($(data).find('item')).map(function(i) {
+        $log("i: ", i);
 				return {
 					title: $(i).find('title').eq(0).text(),
 					streamUrl: $(i).find('content').eq(0).attr('url'),
 					description: $(i).find('description').eq(0).text(),
-					thumbnail: imageProcessingLink + $(i).find('thumbnail').eq(0).attr('url') + imageSizeSlug
+					thumbnail: imageProcessingLink + $(i).find('thumbnail').eq(0).attr('url') + imageSizeSlug,
+          duration: $(i).find('content').eq(0).attr('duration')
 				}
 			})
 		},
@@ -65,7 +67,7 @@ define(['navigation','platform'], function(Navigation, Platform) {
           title: $(i).find('title').eq(0).text(),
           streamUrl: $(i).find('content').eq(0).attr('url'),
           description: $(i).find('description').eq(0).text(),
-          thumbnail: imageProcessingLink + $(i).find('thumbnail').eq(0).attr('url') + imageSizeSlug
+          thumbnail: imageProcessingLink + $(i).find('thumbnail').eq(0).attr('url') + imageSizeSlug,
         };
         if(_.findWhere(resultsArray, newItem) == null) resultsArray.push(newItem);
       })
