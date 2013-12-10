@@ -11,7 +11,7 @@ define(['keyhandler', 'jquery', 'underscore', 'backbone'], function(KeyHandler, 
 	'use strict';
 	var Navigation = {
 		enabled: true,
-		_eventsIHandle: ['onright', 'onleft', 'onup', 'ondown', 'onselect'],
+		_eventsIHandle: ['onright', 'onleft', 'onup', 'ondown', 'onselect','onreturn'],
 
 		enable: function() {
 			this.enabled = true;
