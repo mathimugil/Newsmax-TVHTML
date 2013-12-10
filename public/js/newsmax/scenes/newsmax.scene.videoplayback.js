@@ -59,10 +59,6 @@ define([
         
         videoPlayback.hasScrubbed = false;
 
-        MediaPlayer.on('videoup',function(){
-            $('body').css('background','transparent');
-        }, videoPlayback);
-
         $log(">>>>>> Entering Video Playback state");
         $("#videowrapper").show();
         TrickMenu.disable();

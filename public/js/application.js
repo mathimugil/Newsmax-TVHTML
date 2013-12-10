@@ -61,7 +61,7 @@ require(
     'jquery.ellipsis',
     'newsmax/newsmax.screenhider',
   ],
-  function ( domReady, TVEngine) {
+  function ( domReady, TVEngine, mediaplayer) {
     domReady(function() {
 
     window.$navigation    = require('navigation');
@@ -69,6 +69,7 @@ require(
     window.$stagemanager  = require("stagemanager");
     window.$platform      = require('platform');
     window.$tvengine      = require('tvengine');
+    window.$mediaplayer   = require('mediaplayer');
 
     //screenHider = require("newsmax/newsmax.screenhider");
 
@@ -78,21 +79,24 @@ require(
 
     var Platform = window.$platform;
     var StageManager = window.$stagemanager;
+    var MediaPlayer = window.$mediaplayer;
     
     TVEngine.on('tvengine:appready',function(){
       Platform.on('network:disconnected',function(){
           if(StageManager.scene.name == 'errormodal') return;
           StageManager.changeScene('errormodal',{ option: 'network' })
       });
+
+      MediaPlayer.on('videoup',function(){
+        $('body').css('background','transparent');
+      });
+
       //Platform.trigger("network:disconnected");
     });
 
     TVEngine.start();
-
     
     window.$globalScreenHider = window.$startScreenHider();
-
-      
 
     });
   }, function(e) {
