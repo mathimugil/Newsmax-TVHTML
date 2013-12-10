@@ -77,7 +77,7 @@ define([  'stagemanager'
                 _t.scrubInterval =
                     setInterval(function() {
                     _t.trigger("newstep");
-                }, 125);
+                }, 250);
 
             } else {
                 _t.stopStickyScrubbing();
@@ -100,7 +100,7 @@ define([  'stagemanager'
                 _t.scrubInterval =
                     setInterval(function() {
                     _t.trigger("newstep");
-                }, 125);
+                }, 250);
 
             } else {
                 _t.stopStickyScrubbing();
