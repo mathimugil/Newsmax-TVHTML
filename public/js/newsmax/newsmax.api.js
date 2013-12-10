@@ -4,7 +4,7 @@ define(['navigation','platform'], function(Navigation, Platform) {
   
 	return {
 		fetchItem: function(url, parser, options) {
-      $log("fetching: ", url);
+            $pauseScreenhider = true;
 			options = _.isFunction(parser) ? options : parser;
 			options = _.defaults(options || {},{
 				url : url,
@@ -28,7 +28,7 @@ define(['navigation','platform'], function(Navigation, Platform) {
 					streamUrl: $(i).find('content').eq(0).attr('url'),
 					description: $(i).find('description').eq(0).text(),
 					thumbnail: imageProcessingLink + $(i).find('thumbnail').eq(0).attr('url') + imageSizeSlug,
-          duration: $(i).find('content').eq(0).attr('duration')
+                    duration: $(i).find('content').eq(0).attr('duration')
 				}
 			})
 		},
