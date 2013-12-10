@@ -71,15 +71,13 @@ require(
     window.$tvengine      = require('tvengine');
     window.$mediaplayer   = require('mediaplayer');
 
-    //screenHider = require("newsmax/newsmax.screenhider");
-
     $('#return_button').click(function(){
       $keyhandler.trigger('onReturn');
     });
 
-    var Platform = window.$platform;
-    var StageManager = window.$stagemanager;
-    var MediaPlayer = window.$mediaplayer;
+    var Platform      = window.$platform;
+    var StageManager  = window.$stagemanager;
+    var MediaPlayer   = window.$mediaplayer;
     
     TVEngine.on('tvengine:appready',function(){
       Platform.on('network:disconnected',function(){
@@ -91,7 +89,6 @@ require(
         $('body').css('background','transparent');
       });
 
-      //Platform.trigger("network:disconnected");
     });
 
     TVEngine.start();

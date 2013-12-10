@@ -50,6 +50,8 @@ define([
 
         scene.handlesback = function() {
             
+            debugger;
+
             if(this.disableBack) return;
 
             cancelFetch = true;
@@ -101,12 +103,12 @@ define([
 
         var dummyMenu = new Navigation.Menu();
         var hideSubNav = false; //we use this in the case where there is no grid - i.e. Top of the Hour News
-        var wrapperVisible = true;
+        var wrapperVisible;
         //var dummyMenu = new Navigation.Menu(); //we use this for hidden controls state
 
         scene.onenterscene = function() {
             $log(">>> ENTERING MAIN SCENE!!");
-            $("#wrapper").fadeIn();
+            showWrapper();
             return MenuItemsDeferred.done(function(MenuItems) {
                 $log("menuitems", MenuItems);
                 $pauseScreenhider = false;
