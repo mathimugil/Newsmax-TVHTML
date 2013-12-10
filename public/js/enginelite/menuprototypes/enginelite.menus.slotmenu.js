@@ -132,9 +132,9 @@ define(['navigation', 'underscore'], function(Navigation, _) {
             }));
         }
         $log(" SLOT MENU RENDER AND BIND ")
-        $(this.el).children().on('mouseover', function() {
+        /*$(this.el).children().on('mouseover', function() {
             $log(" MOUSEOVER ITEM ", $(this).index());
-        })
+        })*/
         this._maxIndex = $(this.el).children().length - 1;
         this.trigger("rendered");
         return this;
