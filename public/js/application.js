@@ -58,7 +58,8 @@ require(
     'newsmax/scenes/newsmax.scene.videoplayback',
     'newsmax/scenes/newsmax.scrubber',
     'newsmax/scenes/newsmax.error-modal',
-    'jquery.ellipsis'
+    'jquery.ellipsis',
+    'newsmax/newsmax.screenhider',
   ],
   function ( domReady, TVEngine) {
     domReady(function() {
@@ -68,6 +69,8 @@ require(
     window.$stagemanager  = require("stagemanager");
     window.$platform      = require('platform');
     window.$tvengine      = require('tvengine');
+
+    screenHider = require("newsmax/newsmax.screenhider");
 
     $('#return_button').click(function(){
       $keyhandler.trigger('onReturn');
@@ -85,6 +88,9 @@ require(
     });
 
     TVEngine.start();
+
+    
+    window.$globalScreenHider = window.$startScreenHider();
 
       
 

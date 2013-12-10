@@ -46,8 +46,11 @@ define([
 
         var cancelFetch = false; //used to cancel fetches when used with back button
         var searchState = false; //if true in search state, if false, in non-search state ie. other grids
+        scene.disableBack = false;
 
         scene.handlesback = function() {
+
+            if(this.disableBack) return;
 
             cancelFetch = true;
 
@@ -366,7 +369,7 @@ define([
                 },scene);
 
                 mainMenu.on('onblur', function() {
-                    $log("MM BLUR")
+                    //$log("MM BLUR")
                     $("#mainMenu li").removeClass("sm-focused");
                 },scene)
 
