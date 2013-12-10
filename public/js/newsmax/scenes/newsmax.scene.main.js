@@ -108,7 +108,8 @@ define([
             $log(">>> ENTERING MAIN SCENE!!");
             $("#wrapper").fadeIn();
             return MenuItemsDeferred.done(function(MenuItems) {
-                $log("menuitems", MenuItems)
+                $log("menuitems", MenuItems);
+                $pauseScreenhider = false;
 
                 /* LIVE STREAM CONTROLS */
                 var initLiveStream = function() {
@@ -543,7 +544,7 @@ define([
             showLoader();
             mainMenu.focus();
             API.doSearch(term).then(function(data) {
-
+                $pauseScreenhider = false;
                 if (cancelFetch) {
                     cancelFetch = false;
                     hideLoader();
@@ -573,7 +574,6 @@ define([
         var updateGrid = function(url) {
             showLoader();
             API.fetchMRSS(url).done(function(data) {
-
                 if (cancelFetch) {
                     cancelFetch = false;
                     hideLoader();
@@ -592,6 +592,7 @@ define([
             Grid.resetIndex();
             gridRowHeight = $("ul.gridMenuPage:first").outerHeight();
             clearSelectorsForGrid();
+            $pauseScreenhider = false;
         }
 
         var showWrapper = function() {

@@ -59,6 +59,12 @@ define(['backbone', 'keyhandler', 'jquery', 'stagemanager','navigation'], functi
                 $log("ignoring this hide trigger");
                 return;
             }
+            
+            if($pauseScreenhider){
+                screenHider.touchHideTimeout();
+                $log(">>>>>>> ignoring this hide trigger, api is working");
+                return;
+            }
 
             if ($disableScreenHider) return;
             
