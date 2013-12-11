@@ -70,10 +70,6 @@ define([
                 hideGrid();
                 return false;
             }
-            
-            if (mainMenuHidden) {
-                showMainMenu();
-            }
 
             if (mainMenu.focused)
                 return true;
@@ -102,7 +98,7 @@ define([
         // var visibleMenus = scene.createState('visibleMenus', true);
         var mainState = scene.createState('mainState', true);
 
-        var Grid, mainMenu, subMenu, keyMenu, mainMenuHidden, gridRowHeight, lastFocusIndex, lastGridCollection, lastSubmenuIndex, lastSubmenuCollection, lastMainmenuIndex, gridShowing, subCollection;
+        var Grid, mainMenu, subMenu, keyMenu, gridRowHeight, lastFocusIndex, lastGridCollection, lastSubmenuIndex, lastSubmenuCollection, lastMainmenuIndex, gridShowing, subCollection;
 
         var dummyMenu = new Navigation.Menu();
         var hideSubNav = false; //we use this in the case where there is no grid - i.e. Top of the Hour News
@@ -310,7 +306,6 @@ define([
                         left: 350,
                         opacity: 1
                     });
-                    //hideMainMenu();
                     $log(" ON FOCUS TO KEY MENU ")
                     $("#searchterm").focus();
                 }, scene)
@@ -348,15 +343,9 @@ define([
                         showMainMenu();
                         Grid.focus();
                     }else{
-                        //move the grid back out
-                        showMainMenu();
                         return;
                     } 
                 }, scene);
-                
-                mainMenu.on('onleft', function(){
-                    hideMainMenu();
-                }, scene)
                 
                 dummyMenu.on('onup ondown onleft onright onreturn onselect',function(){
                     showWrapper();
@@ -614,7 +603,6 @@ define([
         }
 
         var hideMainMenu = function() {
-            mainMenuHidden = true;
             $("#mainMenu").animate({
                 left: -$("#mainMenu").outerWidth() + 50,
                 opacity: 0.3
@@ -622,7 +610,6 @@ define([
         }
         
         var showMainMenu = function() {
-            mainMenuHidden = false;
             $("#mainMenu").animate({
                 left: 0,
                 opacity: 1
