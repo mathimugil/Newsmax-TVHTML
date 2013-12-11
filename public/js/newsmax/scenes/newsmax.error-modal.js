@@ -59,9 +59,6 @@ define(['stagemanager','keyhandler','navigation', 'jquery', 'underscore', 'backb
 	}
 	scene.onleavescene = function(){
 		$log('L E A V I N G ERROR Modal Scene');
-		//$('#errorModal').css({'visibility':'hidden'});
-		//$('#networkErrorModal').css({'visibility':'hidden'});
-		//$('#smallLoader').hide();
 		$("#errormodal").fadeOut();
 		dummy.off(null,null,scene);
 	}
