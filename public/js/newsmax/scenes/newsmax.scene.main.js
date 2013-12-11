@@ -296,6 +296,7 @@ define([
                         case 'search':
                             hideGrid();
                             hideSubNav = true;
+                            cancelFetch = true;
                             keyMenu.focus();
                             break;
                     }
