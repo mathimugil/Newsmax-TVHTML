@@ -320,7 +320,6 @@ define([
                         left: 350,
                         opacity: 1
                     });
-                    //hideMainMenu();
                     $log(" ON FOCUS TO KEY MENU ")
                     $("#searchterm").focus();
                 }, scene)
@@ -360,7 +359,6 @@ define([
                     }else if($("#mainMenu li:last").hasClass("sm-focused")){
                         return;
                     }else{
-                        subMenu.focus();  
                         return;
                     } 
                 }, scene);
@@ -619,6 +617,21 @@ define([
             $("#wrapper").fadeOut();
         }
 
+
+        var hideMainMenu = function() {
+            $("#mainMenu").animate({
+                left: -$("#mainMenu").outerWidth() + 50,
+                opacity: 0.3
+            });
+        }
+        
+        var showMainMenu = function() {
+            $("#mainMenu").animate({
+                left: 0,
+                opacity: 1
+            })
+        }
+        
         var hideGrid = function() {
             gridShowing = false;
             $("#gridMenuHolder").fadeOut();
