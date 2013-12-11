@@ -5,6 +5,7 @@ define(['enginelite/enginelite.platform', 'tvengine'], function(Platform, TVEngi
   //platform.needsProxy = true;
   platform.needsProxy = true;
   platform.setMediaPlayer("videotag");
+  platform.cssFiles = ['pansonic'];
   platform.keys = function() {
     return {
       KEY_RETURN: 36,

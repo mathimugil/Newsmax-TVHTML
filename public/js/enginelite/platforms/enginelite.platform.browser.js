@@ -3,7 +3,7 @@ define(['enginelite/enginelite.platform'], function(Platform) {
   browser.needsProxy = true;
   // We want this to fail, and get added as default
   browser.setResolution(1280, 720);
-
+  browser.cssFiles = ['pansonic'];
   browser.deviceId = function() {
     var saved_did = localStorage.getItem("ade.deviceid");
     if (!saved_did) {

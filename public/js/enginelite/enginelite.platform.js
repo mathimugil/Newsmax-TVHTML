@@ -139,6 +139,7 @@ define(['jquery', 'underscore', 'backbone', 'tvengine', 'domReady'], function($,
   Platform.prototype.addPlatformCSS = function() {
     var files = _.isString(this.cssFiles) ? [this.cssFiles] : _.isArray(this.cssFiles) ? this.cssFiles : [];
     _(files).each(function(f) {
+      debugger;
       $("<link/>", {
         rel: "stylesheet",
         type: "text/css",
