@@ -1412,14 +1412,20 @@ img#logo {
   left: 0;
   top: 0; }
 
-#subMenu {
+#subMenuHolder {
   background: rgba(45, 91, 169, 0.95);
   box-shadow: 10px 0px 8px rgba(0, 0, 0, 0.25);
   position: absolute;
   top: 0px;
   left: -180px;
-  height: 720px;
-  padding-top: 50px; }
+  height: 620px;
+  overflow: hidden;
+  padding: 50px 0;
+  width: 325px; }
+  #subMenuHolder #subMenuHeightConstraint {
+    height: 585px;
+    overflow: hidden;
+    position: relative; }
 
 *:focus {
   outline: none; }
@@ -1475,6 +1481,11 @@ img#logo {
     font-size: 24px;
     border: 0;
     text-align: left; }
+
+ul#subMenu {
+  position: absolute;
+  top: 0;
+  left: 0; }
 
 #mainMenu li, #subMenu li {
   width: 275px;
@@ -1540,6 +1551,40 @@ img#logo {
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
         border: 3px solid #5186c6;
         opacity: 1; }
+  #gridMenuHolder #gridTopRowOverlay, #gridMenuHolder #gridBottomRowOverlay {
+    width: 860px;
+    height: 125px;
+    position: absolute;
+    top: 7px;
+    left: 0px;
+    background: rgba(49, 89, 161, 0.3); }
+  #gridMenuHolder #gridBottomRowOverlay {
+    top: 392px; }
+  #gridMenuHolder #rowDownButton, #gridMenuHolder #rowUpButton {
+    position: absolute;
+    top: 45px;
+    left: 375px;
+    width: 115px;
+    height: 40px;
+    font-family: FontAwesome;
+    font-size: 26px;
+    font-style: normal;
+    font-weight: normal;
+    color: #e1e1e1;
+    background-color: #666666;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+    background-color: #085caa;
+    font-size: 36px; }
+    #gridMenuHolder #rowDownButton:before, #gridMenuHolder #rowUpButton:before {
+      position: absolute;
+      top: 0px;
+      left: 42px;
+      content: "\f077"; }
+    #gridMenuHolder #rowDownButton.focused, #gridMenuHolder #rowUpButton.focused {
+      color: #e1e1e1;
+      background-color: #085caa; }
+  #gridMenuHolder #rowDownButton:before {
+    content: "\f078"; }
 
 #gridHTML {
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);

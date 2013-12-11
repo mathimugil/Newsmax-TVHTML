@@ -112,12 +112,19 @@ img#logo {
   position:absolute; left: 0; top: 0;
 }
 
-#subMenu {
+#subMenuHolder {
   @include menubg;
-  position:absolute;
+  position: absolute;
   top:0px; left: -180px;
-  height: 720px;
-  padding-top: 50px;
+  height: 620px;
+  overflow: hidden;
+  padding: 50px 0;
+  width: 325px;
+  #subMenuHeightConstraint{
+      height: 585px;
+      overflow: hidden;
+      position: relative;
+  }
 }
 
 *:focus {
@@ -168,7 +175,9 @@ img#logo {
     text-align: left;
   }
 }
-
+ul#subMenu{
+    position: absolute; top: 0; left: 0;
+}
 #mainMenu li, #subMenu li {
   width: 275px;
   text-align:right;
@@ -241,6 +250,40 @@ img#logo {
         opacity:1;
       }
     }
+  }
+  
+  #gridTopRowOverlay, #gridBottomRowOverlay{
+      display: none;
+      width: 860px;
+      height: 125px;
+      position: absolute; top: 7px; left: 0px;
+      background: rgba(49, 89, 161, 0.3);
+  }
+  #gridBottomRowOverlay{
+      top: 392px;
+  }
+  #rowDownButton, #rowUpButton{
+      position: absolute; top: 45px; left: 375px;
+      width: 115px; height: 40px;
+      @include button;
+      @include outerglow;
+      background-color: $nblue;
+      font-size: 36px;
+      
+      &:before{
+        position: absolute;
+        top: 0px; left: 42px;
+        content: "\f077";
+      }
+      
+      &.focused{
+        @include buttonhover;
+      }
+  }
+  #rowDownButton{
+      &:before{
+        content: "\f078";
+      }
   }
 }
 

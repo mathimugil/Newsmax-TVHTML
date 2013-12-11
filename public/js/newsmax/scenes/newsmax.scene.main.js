@@ -159,6 +159,7 @@ define([
                     return i.get('action') === "subcategory"
                 });
                 var mainMenuIndex = MenuItems.indexOf(firstSub);
+                
                 subCollection = new Utils.categoryCollection(firstSub.models);
 
                 if (!subMenu) {
@@ -166,7 +167,8 @@ define([
                         el: '#subMenu',
                         collection: subCollection,
                         template: MainMenuTemplate,
-                        direction: 'vertical'
+                        direction: 'vertical',
+                        visible: 10
                     });
                     subMenu.render();
                 }
@@ -282,7 +284,13 @@ define([
                             break;
                         case 'subcategory':
                             hideGrid();
+                            var arr =[];
+                            // _.each(item.get('subcategory').models,function(m, i){
+//                                 arr.push(m);
+//                                 arr.push({title: "temp" + i});
+//                             });
                             subMenu.collection.reset(item.get('subcategory').models);
+                            //subMenu.collection.reset(arr);
                             updateGrid(item.get('subcategory').at(0).get('url'));
                             subMenu.focus();
                             $("#subMenu li.sm-focused").addClass("selected");
@@ -333,18 +341,32 @@ define([
 
                 subMenu.on('onfocus', function() {
                     $("#subMenu li").eq(this._currentIndex).addClass("sm-focused");
-                    $("#subMenu").animate({
+                    $("#subMenuHolder").animate({
                         left: 50,
                         opacity: 1
                     });
                     hideMainMenu();
                 }, scene);
 
+                subMenu.on('onblur', function(){
+                    resetSubNavPosition();
+                }, scene);
+                
                 subMenu.on('selecteditem', function(item) {
                     hideGrid();
                     $("#subMenu li").removeClass("selected");
                     $("#subMenu li.sm-focused").addClass("selected");
                     updateGrid(item.get('url'));
+                }, scene);
+                
+                subMenu.on("masterup", function(){
+                    $log("let's move this thang up");
+                    moveSubNab("up");
+                }, scene);
+                
+                subMenu.on("masterdown", function(){
+                    $log("let's move this thing back down")
+                    moveSubNab("down");
                 }, scene);
 
                 //direction etc.
@@ -373,8 +395,8 @@ define([
                     showMainMenu();
                     hideGrid();
                     mainMenu.focus();
-                    $("#subMenu").animate({
-                        left: -$("#subMenu").outerWidth(),
+                    $("#subMenuHolder").animate({
+                        left: -$("#subMenuHolder").outerWidth(),
                         opacity: 0.3
                     });
                 }, scene)
@@ -472,12 +494,31 @@ define([
                     });
 
                 };
+                
                 var resetGridPosition = function() {
                     $("#gridMenuContainer").css({
                         top: "10px"
                     });
                 }
-
+                
+                var moveSubNab = function(direction) {
+                    var subMenuRowHeight = $("#subMenu li:first").outerHeight(true);
+                    var options = {};
+                    direction == "up" ? options = {
+                        "top": "-=" + subMenuRowHeight + "px"
+                    } : options = {
+                        "top": "+=" + subMenuRowHeight + "px"
+                    };
+                    $("#subMenu").animate(options, 0, function() {
+                        //animation completed
+                    });
+                }
+                
+                var resetSubNavPosition = function() {
+                    $("#subMenu").css({
+                        top: "0px"
+                    });
+                }
                 var updateHTMLforGrid = function(item) {
                     if (item && item.attributes && item.attributes.description) {
                         $('.description').html(item.get('description'));
@@ -497,6 +538,7 @@ define([
                     $('.title').html(item.get("title"));
                     $('.title').ellipsis({ row: 1 });
                 };
+                
                 mainMenu.focus();
             })
 
