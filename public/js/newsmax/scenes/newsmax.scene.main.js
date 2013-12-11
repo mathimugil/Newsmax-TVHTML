@@ -557,6 +557,7 @@ define([
             mainMenu.focus();
             API.doSearch(term).then(function(data) {
                 conf.pauseScreenhider = false;
+                $globalScreenHider.touchHideTimeout();
                 if (cancelFetch) {
                     cancelFetch = false;
                     hideLoader();
@@ -605,6 +606,7 @@ define([
             gridRowHeight = $("ul.gridMenuPage:first").outerHeight();
             clearSelectorsForGrid();
             conf.pauseScreenhider = false;
+            $globalScreenHider.touchHideTimeout();
         }
 
         var showWrapper = function() {
