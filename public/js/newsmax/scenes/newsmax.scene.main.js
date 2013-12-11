@@ -77,7 +77,6 @@ define([
 
             if (subMenu.focused) {
                 subMenu.trigger('onleft');
-                hideGrid();
                 return false;
             }
 
@@ -88,7 +87,6 @@ define([
 
             if (Grid.focused) {
                 subMenu.trigger('onleft');
-                hideGrid();
                 return false;
             }
 
@@ -104,7 +102,6 @@ define([
         var dummyMenu = new Navigation.Menu();
         var hideSubNav = false; //we use this in the case where there is no grid - i.e. Top of the Hour News
         var wrapperVisible;
-        //var dummyMenu = new Navigation.Menu(); //we use this for hidden controls state
 
         scene.onenterscene = function() {
             $log(">>> ENTERING MAIN SCENE!!");
@@ -275,15 +272,16 @@ define([
                     hideSubNav = false;
                     cancelFetch = false;
                     $log("action is: ", item.get('action'));
+                    $log("item is: ", item);
 
                     switch (item.get('action')) {
                         case 'livefeed':
                             hideWrapper();
                             lastMenuFocus = mainMenu;
                             dummyMenu.focus();
-
                             break;
                         case 'subcategory':
+                            hideGrid();
                             subMenu.collection.reset(item.get('subcategory').models);
                             updateGrid(item.get('subcategory').at(0).get('url'));
                             subMenu.focus();
@@ -292,6 +290,7 @@ define([
                         case 'videos':
                             hideSubNav = true;
                             $log("setting hideSubNav to true: ", hideSubNav);
+                            hideGrid();
                             updateGrid(item.get("url"));
                             break;
                         case 'search':
@@ -342,15 +341,13 @@ define([
                 }, scene);
 
                 subMenu.on('selecteditem', function(item) {
+                    hideGrid();
                     $("#subMenu li").removeClass("selected");
                     $("#subMenu li.sm-focused").addClass("selected");
                     updateGrid(item.get('url'));
                 }, scene);
 
-
-
                 //direction etc.
-
                 mainMenu.on('onright', function() {
                     if (hideSubNav && $("#gridMenuHolder").is(':visible')){ //top of the hour news matches this case
                         $log("focusing on grid menu")
@@ -374,6 +371,7 @@ define([
 
                 subMenu.on('onleft', function() {
                     showMainMenu();
+                    hideGrid();
                     mainMenu.focus();
                     $("#subMenu").animate({
                         left: -$("#subMenu").outerWidth(),
@@ -382,8 +380,8 @@ define([
                 }, scene)
 
                 subMenu.on('onright', function() {
-                    $("#subMenu li").removeClass("sm-focused");
-                    if ($.trim($('#gridMenuContainer').html()).length) {
+                    if ($.trim($('#gridMenuContainer').html()).length && $("#gridMenuHolder").is(':visible')) {
+                        $("#subMenu li").removeClass("sm-focused");
                         Grid.focus();
                     }
                 }, scene)
@@ -525,19 +523,13 @@ define([
             // if we're re-entering this scene, reset the state of the grid, as it forgets
             // the only way into video playback is via the grid, so no special handling is required
             if (typeof(lastFocusIndex) != "undefined") {
-                //subCollection.reset(lastGridCollection);
-                //Grid.collection = lastGridCollection;
                 Grid.collection.reset(lastGridCollection.models);
                 Grid._currentIndex = lastFocusIndex;
-                //subMenu.collection = lastSubmenuCollection;
-                //subMenu.collection.reset(lastSubmenuCollection.models);
                 subCollection.reset(lastSubmenuCollection.models);               
                 subMenu._currentIndex = lastSubmenuIndex;
                 if (gridShowing) showGrid();
                 lastMenuFocus.focus();
             }
-            //example of modal implementation
-            //renderModal("Sorry!", "Boo, Ba!");
         }
         mainState.onleavestate = function() {
             $log("%%%%%%%%%%%% leaving main state");
@@ -634,14 +626,13 @@ define([
         
         var hideGrid = function() {
             gridShowing = false;
-            $("#gridMenuHolder").fadeOut();
+            $("#gridMenuHolder").hide();
             $("#gridHTML").fadeOut();
-
         }
 
         var showGrid = function() {
             gridShowing = true;
-            $("#gridMenuHolder").fadeIn();
+            $("#gridMenuHolder").show();
             $("#gridMenuContainer").fadeIn();
         }
 
@@ -665,11 +656,7 @@ define([
         }
 
         var saveState = function() {
-            //gridShowing   = global
-
             lastMenuFocus = Navigation.currentFocus.menu;
-            //lastItemInMenu  = Navigation.currentMenu._lastItem;
-
             lastMainmenuIndex = mainMenu._currentIndex;
             lastFocusIndex = Grid._currentIndex;
             lastGridCollection = Grid.collection;
