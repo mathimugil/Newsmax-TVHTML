@@ -51,8 +51,6 @@ define([
         scene.disableBack = false;
 
         scene.handlesback = function() {
-            
-            debugger;
 
             if(this.disableBack) return;
 
@@ -101,7 +99,7 @@ define([
         // var visibleMenus = scene.createState('visibleMenus', true);
         var mainState = scene.createState('mainState', true);
 
-        var Grid, mainMenu, subMenu, keyMenu, gridRowHeight, lastFocusIndex, lastGridCollection, lastSubmenuIndex, lastSubmenuCollection, lastMainmenuIndex, gridShowing;
+        var Grid, mainMenu, subMenu, keyMenu, gridRowHeight, lastFocusIndex, lastGridCollection, lastSubmenuIndex, lastSubmenuCollection, lastMainmenuIndex, gridShowing, subCollection;
 
         var dummyMenu = new Navigation.Menu();
         var hideSubNav = false; //we use this in the case where there is no grid - i.e. Top of the Hour News
@@ -164,7 +162,7 @@ define([
                     return i.get('action') === "subcategory"
                 });
                 var mainMenuIndex = MenuItems.indexOf(firstSub);
-                var subCollection = new Utils.categoryCollection(firstSub.models);
+                subCollection = new Utils.categoryCollection(firstSub.models);
 
                 if (!subMenu) {
                     subMenu = new SlotMenu({
@@ -286,7 +284,7 @@ define([
 
                             break;
                         case 'subcategory':
-                            subCollection.reset(item.get('subcategory').models);
+                            subMenu.collection.reset(item.get('subcategory').models);
                             updateGrid(item.get('subcategory').at(0).get('url'));
                             subMenu.focus();
                             $("#subMenu li.sm-focused").addClass("selected");
@@ -529,9 +527,13 @@ define([
             // if we're re-entering this scene, reset the state of the grid, as it forgets
             // the only way into video playback is via the grid, so no special handling is required
             if (typeof(lastFocusIndex) != "undefined") {
-                Grid.collection = lastGridCollection;
+                //subCollection.reset(lastGridCollection);
+                //Grid.collection = lastGridCollection;
+                Grid.collection.reset(lastGridCollection.models);
                 Grid._currentIndex = lastFocusIndex;
-                subMenu.collection = lastSubmenuCollection;
+                //subMenu.collection = lastSubmenuCollection;
+                //subMenu.collection.reset(lastSubmenuCollection.models);
+                subCollection.reset(lastSubmenuCollection.models);               
                 subMenu._currentIndex = lastSubmenuIndex;
                 if (gridShowing) showGrid();
                 lastMenuFocus.focus();
