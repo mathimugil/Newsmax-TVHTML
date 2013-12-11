@@ -57,7 +57,6 @@ define([
             cancelFetch = true;
 
             if (!wrapperVisible) { //if wrapper is hidden
-                //mainMenu.trigger('onright');
                 return false;
             }
 
@@ -70,6 +69,10 @@ define([
             if (mainMenu.focused && hideSubNav) { //top of the hour news no submenu
                 hideGrid();
                 return false;
+            }
+            
+            if (mainMenuHidden) {
+                showMainMenu();
             }
 
             if (mainMenu.focused)
@@ -99,7 +102,7 @@ define([
         // var visibleMenus = scene.createState('visibleMenus', true);
         var mainState = scene.createState('mainState', true);
 
-        var Grid, mainMenu, subMenu, keyMenu, gridRowHeight, lastFocusIndex, lastGridCollection, lastSubmenuIndex, lastSubmenuCollection, lastMainmenuIndex, gridShowing, subCollection;
+        var Grid, mainMenu, subMenu, keyMenu, mainMenuHidden, gridRowHeight, lastFocusIndex, lastGridCollection, lastSubmenuIndex, lastSubmenuCollection, lastMainmenuIndex, gridShowing, subCollection;
 
         var dummyMenu = new Navigation.Menu();
         var hideSubNav = false; //we use this in the case where there is no grid - i.e. Top of the Hour News
@@ -302,19 +305,6 @@ define([
                     }
                 },scene);
 
-                var hideMainMenu = function() {
-                    $("#mainMenu").animate({
-                        left: -$("#mainMenu").outerWidth() + 50,
-                        opacity: 0.3
-                    });
-                }
-                var showMainMenu = function() {
-                    $("#mainMenu").animate({
-                        left: 0,
-                        opacity: 1
-                    })
-                }
-
                 keyMenu.on('onfocus', function() {
                     $("#searchMenu").animate({
                         left: 350,
@@ -354,16 +344,19 @@ define([
 
                 mainMenu.on('onright', function() {
                     if (hideSubNav && $("#gridMenuHolder").is(':visible')){ //top of the hour news matches this case
-                        $log("focusing on grid menu")
                         $("#mainMenu li").removeClass("sm-focused");
+                        showMainMenu();
                         Grid.focus();
-                    }else if($("#mainMenu li:last").hasClass("sm-focused")){
-                        return;
                     }else{
-                        subMenu.focus();  
+                        //move the grid back out
+                        showMainMenu();
                         return;
                     } 
                 }, scene);
+                
+                mainMenu.on('onleft', function(){
+                    hideMainMenu();
+                }, scene)
                 
                 dummyMenu.on('onup ondown onleft onright onreturn onselect',function(){
                     showWrapper();
@@ -377,6 +370,7 @@ define([
                 subMenu.on('onleft', function() {
                     showMainMenu();
                     mainMenu.focus();
+                    hideGrid();
                     $("#subMenu").animate({
                         left: -$("#subMenu").outerWidth(),
                         opacity: 0.3
@@ -459,7 +453,7 @@ define([
                 Grid.on('onfocus', function(){
                   $log("grid is on focus")
                   $(Grid.el).children().children().eq(Grid._currentIndex).parent().addClass("currentRow");
-                  $("#gridHTML").show();
+                  if($("#gridMenuContainer").is(":visible")) $("#gridHTML").show();
                 });
 
                 var moveGrid = function(direction) {
@@ -619,6 +613,22 @@ define([
             $("#wrapper").fadeOut();
         }
 
+        var hideMainMenu = function() {
+            mainMenuHidden = true;
+            $("#mainMenu").animate({
+                left: -$("#mainMenu").outerWidth() + 50,
+                opacity: 0.3
+            });
+        }
+        
+        var showMainMenu = function() {
+            mainMenuHidden = false;
+            $("#mainMenu").animate({
+                left: 0,
+                opacity: 1
+            })
+        }
+        
         var hideGrid = function() {
             gridShowing = false;
             $("#gridMenuHolder").fadeOut();
