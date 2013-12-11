@@ -285,12 +285,12 @@ define([
                         case 'subcategory':
                             hideGrid();
                             var arr =[];
-                            // _.each(item.get('subcategory').models,function(m, i){
-//                                 arr.push(m);
-//                                 arr.push({title: "temp" + i});
-//                             });
-                            subMenu.collection.reset(item.get('subcategory').models);
-                            //subMenu.collection.reset(arr);
+                            _.each(item.get('subcategory').models,function(m, i){
+                                arr.push(m);
+                                arr.push({title: "temp" + i});
+                            });
+                            //subMenu.collection.reset(item.get('subcategory').models);
+                            subMenu.collection.reset(arr);
                             updateGrid(item.get('subcategory').at(0).get('url'));
                             subMenu.focus();
                             $("#subMenu li.sm-focused").addClass("selected");

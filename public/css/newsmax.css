@@ -1552,6 +1552,7 @@ ul#subMenu {
         border: 3px solid #5186c6;
         opacity: 1; }
   #gridMenuHolder #gridTopRowOverlay, #gridMenuHolder #gridBottomRowOverlay {
+    display: none;
     width: 860px;
     height: 125px;
     position: absolute;
