@@ -67,6 +67,7 @@ define(['navigation','platform','config'], function(Navigation, Platform, conf) 
           streamUrl: $(i).find('content').eq(0).attr('url'),
           description: $(i).find('description').eq(0).text(),
           thumbnail: imageProcessingLink + $(i).find('thumbnail').eq(0).attr('url') + imageSizeSlug,
+          duration: $(i).find('content').eq(0).attr('duration')
         };
         if(_.findWhere(resultsArray, newItem) == null) resultsArray.push(newItem);
       })
