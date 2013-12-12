@@ -379,7 +379,9 @@ define([
                 }, scene);
 
                 subMenu.on('onblur', function(){
-                    $log("is this firing?");
+                    $log("subMenu onblur firing");
+                    $("#subMenu li").removeClass("sm-focused");
+                   
                     resetSubNav();
                 }, scene);
                 
@@ -447,7 +449,6 @@ define([
 
                 subMenu.on('onright', function() {
                     if ($.trim($('#gridMenuContainer').html()).length && $("#gridMenuHolder").is(':visible')) {
-                        $("#subMenu li").removeClass("sm-focused");
                         Grid.focus();
                     }
                 }, scene)

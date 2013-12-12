@@ -89,10 +89,12 @@ define([
         TrickMenu.focus();
         
         hideMenu.on('onfocus', function() {
+            $log('hidemenu received a onfocus');
             $('#hideTrayButton').addClass('focused');
         }, this);
         
         hideMenu.on('onblur', function() {
+            $log('hidemenu received on blur event');
             $('#hideTrayButton').removeClass('focused');
         }, this);
         hideMenu.on('onselect', function() {
@@ -116,11 +118,13 @@ define([
       $("#videowrapper").hide();
       $("#progressBar").css({ width: 0 });
       $("#timecode").empty();
+      $('#hideTrayButton').removeClass('focused');  //not sure why i am having to add this here?
       teardownKeyhandlers();
       scrubManager.deactivate();
       MediaPlayer.stop();
       hideMenu.off(null, null, this);
-      TrickMenu.off(null, null, this);  
+      TrickMenu.off(null, null, this); 
+      closeMenu.off(null,null,this); 
       MediaPlayer.off(null,null,this);
     }
 

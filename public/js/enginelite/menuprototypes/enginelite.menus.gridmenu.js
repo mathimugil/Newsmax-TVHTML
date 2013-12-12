@@ -67,7 +67,7 @@ define(['navigation','underscore', 'hbs!enginelite/menuprototypes/templates/engi
 
     events : {
       'mouseover .gridMenuPage:not(".currentRow")' : "showOverlays",
-      'mouseover #gridMenuContainer' : 'setFocus',
+      /*'mouseover #gridMenuContainer' : 'focus',*/
       'mouseover .currentRow li' : 'focusOnElement',
       'click .currentRow li' : '_onSelect', 
     },
@@ -90,15 +90,20 @@ define(['navigation','underscore', 'hbs!enginelite/menuprototypes/templates/engi
     },
 
     focusOnElement: function(event){
+      
       var idx = $(event.currentTarget).index();
       this._currentIndex = idx + $(event.currentTarget).parent().index()* this.options.cols;
-      this.setFocus();
+      if(!this.focused)
+        this.focus();
+      else
+        this.setFocus();
+      $('.gridArrowOverlay').hide();
     },
 
 
     showOverlays: function(event){
-
-      this.trigger('onfocus');
+      
+      this.focus();
       if($(event.currentTarget).hasClass('currentRow'))
         return;
 
@@ -109,6 +114,11 @@ define(['navigation','underscore', 'hbs!enginelite/menuprototypes/templates/engi
       });
 
     },
+
+    /*hideOverlays: function(){
+      $('.gridArrowOverlay').off('mouseleave');
+      $('.gridArrowOverlay').hide();
+    },*/
 
     coords: function(index) {
         index = index || this._currentIndex;
