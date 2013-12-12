@@ -605,6 +605,7 @@ define([
         }
 
         var runSearch = function(term) {
+            if (term === "") return;
             searchState = true;
             cancelFetch = false;
             showLoader();
