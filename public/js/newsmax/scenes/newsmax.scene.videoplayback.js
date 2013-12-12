@@ -115,6 +115,7 @@ define([
       clearTimeout(timeout);
       $("#videowrapper").hide();
       $("#progressBar").css({ width: 0 });
+      $("#timecode").empty();
       teardownKeyhandlers();
       scrubManager.deactivate();
       MediaPlayer.stop();
