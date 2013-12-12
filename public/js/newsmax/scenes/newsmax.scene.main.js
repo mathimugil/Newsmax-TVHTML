@@ -168,7 +168,7 @@ define([
                         collection: subCollection,
                         template: MainMenuTemplate,
                         direction: 'vertical',
-                        visible: 10
+                        visible: 9
                     });
                     subMenu.render();
                 }
@@ -294,7 +294,7 @@ define([
                             var arr =[];
                             _.each(item.get('subcategory').models,function(m, i){
                                 arr.push(m);
-                                arr.push({title: "temp" + i});
+                                arr.push({title: "temporary title long" + i});
                             });
                             //subMenu.collection.reset(item.get('subcategory').models);
                             subMenu.collection.reset(arr);
@@ -318,12 +318,14 @@ define([
                 },scene);
 
                 var hideMainMenu = function() {
+                    $("#mainMenuObscure").show();
                     $("#mainMenu").animate({
                         left: -$("#mainMenu").outerWidth() + 50,
                         opacity: 0.3
                     });
                 }
                 var showMainMenu = function() {
+                    $("#mainMenuObscure").hide();
                     $("#mainMenu").animate({
                         left: 0,
                         opacity: 1
@@ -335,7 +337,6 @@ define([
                         left: 350,
                         opacity: 1
                     });
-                    $log(" ON FOCUS TO KEY MENU ")
                     $("#searchterm").focus();
                 }, scene)
 
@@ -357,7 +358,7 @@ define([
                 }, scene);
 
                 subMenu.on('onblur', function(){
-                    resetSubNavPosition();
+                    resetSubNav();
                 }, scene);
                 
                 subMenu.on('selecteditem', function(item) {
@@ -367,20 +368,33 @@ define([
                     updateGrid(item.get('url'));
                 }, scene);
                 
+                subMenu.on("showscrollers", function(){
+                    // this is triggered by SlotTarget menu on init if there are more elements than 
+                    // the visible option passed in
+                    $("#subMenuDownTarget").show();
+                }, scene)
+                
                 subMenu.on("masterup", function(){
-                    $log("let's move this thang up");
                     moveSubNab("up");
+                    $("#subMenuUpTarget").show();
                 }, scene);
                 
                 subMenu.on("masterdown", function(){
-                    $log("let's move this thing back down")
+                    $("#subMenuDownTarget").show();
                     moveSubNab("down");
+                }, scene);
+                
+                subMenu.on("menubottom", function(){
+                    $("#subMenuDownTarget").hide();
+                }, scene);
+                
+                subMenu.on("menutop", function(){
+                    $("#subMenuUpTarget").hide();
                 }, scene);
 
                 //direction etc.
                 mainMenu.on('onright', function() {
                     if (hideSubNav && $("#gridMenuHolder").is(':visible')){ //top of the hour news matches this case
-                        $log("focusing on grid menu")
                         $("#mainMenu li").removeClass("sm-focused");
                         Grid.focus();
                     }else if($("#mainMenu li:last").hasClass("sm-focused")){
@@ -417,7 +431,6 @@ define([
                 }, scene)
 
                 keyMenu.on('leftfrommenu', function() {
-                    $log("KEY MENU LEFT FROM MENU ")
                     mainMenu.focus();
                 }, scene)
 
@@ -523,10 +536,12 @@ define([
                     });
                 }
                 
-                var resetSubNavPosition = function() {
+                var resetSubNav = function() {
                     $("#subMenu").css({
                         top: "0px"
                     });
+                    $("#subMenuUpTarget").hide();
+                    $("#subMenuDownTarget").hide();
                 }
                 var updateHTMLforGrid = function(item) {
                     if (item && item.attributes && item.attributes.description) {
@@ -554,7 +569,6 @@ define([
 
         }
         scene.tearDownMenus = function() {
-            $log("tearing down menus on main scene");
             mainMenu.off(null, null, this);
             subMenu.off(null, null, this);
             keyMenu.off(null, null, this);
@@ -562,7 +576,6 @@ define([
         }
 
         scene.onleavescene = function() {
-            $log(">>> LEAVING MAIN SCENE!!");
             saveState();
             scene.tearDownMenus();
             hideWrapper();
@@ -658,21 +671,6 @@ define([
         var hideWrapper = function() {
             wrapperVisible = false;
             $("#wrapper").fadeOut();
-        }
-
-
-        var hideMainMenu = function() {
-            $("#mainMenu").animate({
-                left: -$("#mainMenu").outerWidth() + 50,
-                opacity: 0.3
-            });
-        }
-        
-        var showMainMenu = function() {
-            $("#mainMenu").animate({
-                left: 0,
-                opacity: 1
-            })
         }
         
         var hideGrid = function() {

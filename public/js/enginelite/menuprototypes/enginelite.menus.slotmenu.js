@@ -69,7 +69,8 @@ define(['navigation', 'underscore'], function(Navigation, _) {
         _t.render();
         _t._maxIndex = _t.collection.length - 1;
       });
-      this.on('onfocus newfocus', this.setFocus, this)
+      this.on('onfocus newfocus', this.setFocus, this);
+      
     },
 
     setFocus: function (event){
@@ -82,6 +83,8 @@ define(['navigation', 'underscore'], function(Navigation, _) {
         idx = _.isNumber(event) ? event : this._currentIndex;
         $(this.el).children().removeClass('sm-focused');
         $(this.el).children().eq(this._currentIndex).addClass('sm-focused');
+        
+        
     },
 
     onSelect: function() {
@@ -106,7 +109,8 @@ define(['navigation', 'underscore'], function(Navigation, _) {
           this._slotIndex++;
           this.trigger('slotup', this._slotIndex);
         } else  {
-           this.trigger('masterup')
+           this.trigger('masterup');
+           if (this._currentIndex === this.options.visible) this.trigger('menubottom');
         }
       }
     },
@@ -119,8 +123,9 @@ define(['navigation', 'underscore'], function(Navigation, _) {
         if(this._slotIndex > 0 ) {
           this._slotIndex--;
           this.trigger('slotdown', this._slotIndex);
-        } else  {
-          this.trigger('masterdown')
+        } else {
+          this.trigger('masterdown');
+          if (this._currentIndex === 0) this.trigger('menutop');
         }
       }
     },
@@ -137,6 +142,13 @@ define(['navigation', 'underscore'], function(Navigation, _) {
         })*/
         this._maxIndex = $(this.el).children().length - 1;
         this.trigger("rendered");
+        
+        //we may have to show some scrolling arrows
+        if ($(this.el).children().size() > this.options.visible){ 
+            $log(" SLOT MENU NEEDS SCROLLERS FOR THIS COLLECTION ");
+            this.trigger("showscrollers"); 
+        }
+        
         return this;
     }
   });

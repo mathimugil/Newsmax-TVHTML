@@ -1406,26 +1406,101 @@ img#logo {
 #mainMenu {
   background: rgba(45, 91, 169, 0.95);
   box-shadow: 10px 0px 8px rgba(0, 0, 0, 0.25);
-  height: 720px;
-  padding-top: 50px;
+  height: 690px;
+  padding-top: 80px;
   position: absolute;
   left: 0;
   top: 0; }
+
+#mainMenuObscure {
+  display: none;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  width: 50px; }
 
 #subMenuHolder {
   background: rgba(45, 91, 169, 0.95);
   box-shadow: 10px 0px 8px rgba(0, 0, 0, 0.25);
   position: absolute;
   top: 0px;
-  left: -180px;
-  height: 620px;
+  left: -280px;
+  height: 690px;
   overflow: hidden;
-  padding: 50px 0;
+  padding-top: 80px;
   width: 325px; }
   #subMenuHolder #subMenuHeightConstraint {
-    height: 585px;
+    height: 540px;
     overflow: hidden;
     position: relative; }
+
+#subMenuBackTarget {
+  position: absolute;
+  top: 5px;
+  left: -15px;
+  width: 60px;
+  height: 130px; }
+  #subMenuBackTarget:hover div {
+    color: #66a1d6 !important; }
+  #subMenuBackTarget #menuLeftButton {
+    position: absolute;
+    top: 40px;
+    left: 20px;
+    font-family: FontAwesome;
+    font-size: 26px;
+    font-style: normal;
+    font-weight: normal;
+    color: #e1e1e1;
+    background-color: #666666;
+    font-size: 36px;
+    background: none !important; }
+    #subMenuBackTarget #menuLeftButton:before {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      content: "\f053"; }
+
+#subMenuUpTarget, #subMenuDownTarget {
+  display: none;
+  position: absolute;
+  top: 0px;
+  left: 50px;
+  width: 225px;
+  height: 80px; }
+  #subMenuUpTarget:hover div, #subMenuDownTarget:hover div {
+    color: #66a1d6 !important; }
+
+#subMenuDownTarget {
+  top: 637px; }
+
+#menuUpButton, #menuDownButton {
+  position: absolute;
+  top: 40px;
+  left: 105px;
+  width: 115px;
+  height: 40px;
+  font-family: FontAwesome;
+  font-size: 26px;
+  font-style: normal;
+  font-weight: normal;
+  color: #e1e1e1;
+  background-color: #666666;
+  font-size: 36px;
+  background: none !important; }
+  #menuUpButton:before, #menuDownButton:before {
+    position: absolute;
+    top: 0px;
+    left: -10px;
+    content: "\f077"; }
+  #menuUpButton.focused, #menuDownButton.focused {
+    color: #e1e1e1;
+    background-color: #085caa; }
+
+#menuDownButton {
+  top: 0px; }
+  #menuDownButton:before {
+    content: "\f078"; }
 
 *:focus {
   outline: none; }

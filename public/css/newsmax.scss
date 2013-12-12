@@ -107,24 +107,89 @@ img#logo {
 
 #mainMenu {
   @include menubg;
-  height: 720px; 
-  padding-top: 50px; 
+  height: 690px; 
+  padding-top: 80px; 
   position:absolute; left: 0; top: 0;
+}
+
+#mainMenuObscure{
+    display: none;
+    position: absolute;
+    top: 0px; left: 0px;
+    height: 100%;
+    width: 50px;
 }
 
 #subMenuHolder {
   @include menubg;
   position: absolute;
-  top:0px; left: -180px;
-  height: 620px;
+  top:0px; left: -280px;
+  height: 690px;
   overflow: hidden;
-  padding: 50px 0;
+  padding-top: 80px;
   width: 325px;
+  
   #subMenuHeightConstraint{
-      height: 585px;
+      height: 540px;
       overflow: hidden;
       position: relative;
   }
+  
+}
+#subMenuBackTarget{
+    position: absolute; top: 5px; left: -15px;
+    width: 60px; height: 130px;
+    &:hover div{ color: $menuTextBlue !important; };
+    
+    #menuLeftButton{
+        position: absolute;
+        top: 40px; left: 20px;
+        @include button;
+        font-size: 36px;
+        background: none !important;
+        
+        &:before{
+            position: absolute;
+            top: 0px; left: 0px;
+            content: "\f053";
+        };
+    }
+}
+#subMenuUpTarget, #subMenuDownTarget {
+    display: none;
+    position: absolute; 
+    top: 0px; left: 50px;
+    width: 225px; 
+    height: 80px;
+    &:hover div{
+        color: $menuTextBlue !important;
+    };
+}
+#subMenuDownTarget{
+    top: 637px;
+}
+#menuUpButton, #menuDownButton{
+    position: absolute; top: 40px; left: 105px;
+    width: 115px; height: 40px;
+    @include button;
+    font-size: 36px;
+    background: none !important;
+  
+    &:before{
+      position: absolute;
+      top: 0px; left: -10px;
+      content: "\f077";
+    }
+  
+    &.focused{
+      @include buttonhover;
+    }
+}
+#menuDownButton{
+    top: 0px;
+    &:before{
+      content: "\f078";
+    }
 }
 
 *:focus {
@@ -203,6 +268,7 @@ ul#subMenu{
     border-bottom: 8px solid $highlight;
   }
 }
+
 #searchTermBox{
   display: none;
   position: absolute; top: 63px; left: 385px;
