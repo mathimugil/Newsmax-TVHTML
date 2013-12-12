@@ -1536,7 +1536,8 @@ ul#subMenu {
     top: 10px;
     display: block; }
     #gridMenuHolder #gridMenuContainer ul {
-      display: table; }
+      display: table;
+      width: 100%; }
       #gridMenuHolder #gridMenuContainer ul.currentRow {
         margin-bottom: 130px; }
     #gridMenuHolder #gridMenuContainer li.gridItem {

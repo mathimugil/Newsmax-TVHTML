@@ -264,6 +264,13 @@ define([
                         collection: videoCollection,
                         template: GridMenuTemplate
                     });
+
+                    $('#rowUpButton').click(function(){
+                        Grid.trigger('onup');
+                    });
+                    $('#rowDownButton').click(function(){
+                        Grid.trigger('ondown');
+                    });
                 }
 
                 mainMenu.on('selectedindex', function(index) {
@@ -453,6 +460,7 @@ define([
                 }
 
                 Grid.on('newfocus', function(item) {
+                    positionArrow();
                     updateHTMLforGrid(item);
                 }, scene);
 
@@ -464,8 +472,8 @@ define([
                 }, scene);
 
                 // we need to control the info box arrow position as we move left and right
-                Grid.on('onright', positionArrow, scene);
-                Grid.on('onleft', positionArrow, scene);
+                //Grid.on('onright', positionArrow, scene);
+                //Grid.on('onleft', positionArrow, scene);
                 
                 // we hide the space and the info box; we also clear the info box
                 Grid.on('onblur', function(){
