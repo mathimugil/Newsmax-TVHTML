@@ -1887,10 +1887,10 @@ ul#subMenu {
   #playBackTray #timecode {
     font: 19px;
     color: black;
-    font-weight: bold;
     position: absolute;
-    bottom: 95px;
-    left: 1196px; }
+    bottom: 99px;
+    left: 1190px;
+    font-family: Helvetica, Arial, sans-serif; }
   #playBackTray #trickPlayContainer {
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
     position: absolute;
