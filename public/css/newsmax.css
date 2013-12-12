@@ -1440,7 +1440,8 @@ img#logo {
   top: 5px;
   left: -15px;
   width: 60px;
-  height: 130px; }
+  height: 130px;
+  display: none; }
   #subMenuBackTarget:hover div {
     color: #66a1d6 !important; }
   #subMenuBackTarget #menuLeftButton {

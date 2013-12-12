@@ -74,16 +74,17 @@ define(['navigation', 'underscore'], function(Navigation, _) {
     },
 
     setFocus: function (event){
-        $log(" Event ",event);
-
+ 
         if(_.isObject(event)) {
+          var diff = this._currentIndex - $(event.currentTarget).index();
+          this._slotIndex = this._slotIndex - diff;
+
           this.focus();
           this._currentIndex = $(event.currentTarget).index();
         }
         idx = _.isNumber(event) ? event : this._currentIndex;
         $(this.el).children().removeClass('sm-focused');
         $(this.el).children().eq(this._currentIndex).addClass('sm-focused');
-        
         
     },
 
@@ -110,7 +111,7 @@ define(['navigation', 'underscore'], function(Navigation, _) {
           this.trigger('slotup', this._slotIndex);
         } else  {
            this.trigger('masterup');
-           if (this._currentIndex === this.options.visible) this.trigger('menubottom');
+           if (this._currentIndex === this._maxIndex) this.trigger('menubottom');
         }
       }
     },

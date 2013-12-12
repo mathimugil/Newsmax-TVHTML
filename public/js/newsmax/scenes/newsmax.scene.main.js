@@ -13,7 +13,8 @@ define([
         'hbs!newsmax/templates/GridMenu',
         'mediaplayer',
         'utils',
-        'config'
+        'config',
+        'platform'
     ],
     function(
         StageManager,
@@ -32,7 +33,8 @@ define([
         GridMenuTemplate,
         MediaPlayer,
         Util,
-        conf
+        conf,
+        Platform
     ) {
 
         //'use strict';
@@ -171,6 +173,25 @@ define([
                         visible: 9
                     });
                     subMenu.render();
+
+                    if(Platform.name === 'lg'){
+                        window.onmouseon = function() {
+                            $('#subMenuBackTarget').show();
+                        };
+                        window.onmouseoff = function() {
+                            $('#subMenuBackTarget').hide();
+                        };
+                    } 
+
+                    $('#subMenuBackTarget').on('click',function(){
+                        subMenu.trigger('onleft');
+                    });
+                    $('#subMenuUpTarget').on('click',function(){
+                        subMenu.trigger('onup');
+                    });
+                    $("#subMenuDownTarget").on('click',function(){
+                        subMenu.trigger('ondown');
+                    })
                 }
 
                 var videoCollection = Utils.createCollection()
@@ -358,6 +379,7 @@ define([
                 }, scene);
 
                 subMenu.on('onblur', function(){
+                    $log("is this firing?");
                     resetSubNav();
                 }, scene);
                 
