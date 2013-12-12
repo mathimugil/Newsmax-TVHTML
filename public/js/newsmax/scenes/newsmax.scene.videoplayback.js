@@ -282,7 +282,7 @@ define([
                 return;
             }
 
-            if(!MediaPlayer.playing()) return;
+            //if(!MediaPlayer.playing()) return;  <-- doesn't allow rew from paused state
 
             scrubManager.onLeft();
         }, videoPlayback);
@@ -290,13 +290,13 @@ define([
         KeyHandler.on("onFF", function() {
             if(videoPlayback.currentState!=='controlsup') videoPlayback.changeState('controlsup');
             TrickMenu.setFocusTo('onFF');
-
+            //debugger;
             if (scrubManager._scrubbing) {
                 scrubManager.stopStickyScrubbing();
                 return;
             }
 
-            if(!MediaPlayer.playing()) return;
+            //if(!MediaPlayer.playing()) return; // <-- doesn't allow ff from paused state
 
             scrubManager.onRight();
         }, videoPlayback);
