@@ -1,6 +1,6 @@
 define({
     globalMute         : false, //only for videotag
-    globalTimeout      : 4000,
+    globalTimeout      : 15000,
     disableScreenHider : false,
     pauseScreenhider   : false
 })
