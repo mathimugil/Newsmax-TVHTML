@@ -104,6 +104,7 @@ define([
         var dummyMenu = new Navigation.Menu();
         var hideSubNav = false; //we use this in the case where there is no grid - i.e. Top of the Hour News
         var wrapperVisible;
+        var fetchCounter = 0;
 
         scene.onenterscene = function() {
             $log(">>> ENTERING MAIN SCENE!!");
@@ -312,13 +313,13 @@ define([
                             break;
                         case 'subcategory':
                             hideGrid();
-                            var arr =[];
-                            _.each(item.get('subcategory').models,function(m, i){
+                            //var arr =[];
+                            /*_.each(item.get('subcategory').models,function(m, i){
                                 arr.push(m);
                                 arr.push({title: "temporary title long" + i});
-                            });
-                            //subMenu.collection.reset(item.get('subcategory').models);
-                            subMenu.collection.reset(arr);
+                            });*/
+                            subMenu.collection.reset(item.get('subcategory').models);
+                            //subMenu.collection.reset(arr);
                             updateGrid(item.get('subcategory').at(0).get('url'));
                             subMenu.focus();
                             $("#subMenu li.sm-focused").addClass("selected");
@@ -664,7 +665,11 @@ define([
 
         var updateGrid = function(url) {
             showLoader();
+
+            fetchCounter++;
             API.fetchMRSS(url).done(function(data) {
+
+                fetchCounter--;
                 if (cancelFetch) {
                     setCancelFetch(false);
                     return;
@@ -738,8 +743,19 @@ define([
         
         var setCancelFetch = function(bool){
             $log(">>>>>>>> SETTING CANCELFETCH TO", bool);
-            hideLoader();
-            cancelFetch = bool;
+          
+            if(bool){
+                hideLoader();
+                $log('cancelFetch F A L S E');
+                cancelFetch = true;                    
+            }
+            else{
+                if(fetchCounter==0){
+                    cancelFetch = false;
+                    $log("cancelFetch T R U E ");                    
+                }
+
+            }
         }
         return scene;
     });

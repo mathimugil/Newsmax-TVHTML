@@ -17,7 +17,6 @@ define(['backbone', 'keyhandler', 'jquery', 'stagemanager', 'navigation', 'confi
         this.touchHideTimeout();
         
         KeyHandler.on('onUp onDown onLeft onRight onSelect onReturn', function() {
-            $log('keyhandler detected a movement');
             this.touchHideTimeout();
         }, this);
     };
