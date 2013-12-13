@@ -381,8 +381,6 @@ define([
                 subMenu.on('onblur', function(){
                     $log("subMenu onblur firing");
                     $("#subMenu li").removeClass("sm-focused");
-                   
-                    resetSubNav();
                 }, scene);
                 
                 subMenu.on('selecteditem', function(item) {
@@ -438,6 +436,7 @@ define([
                 },scene)
 
                 subMenu.on('onleft', function() {
+                    resetSubNav();
                     showMainMenu();
                     hideGrid();
                     mainMenu.focus();
