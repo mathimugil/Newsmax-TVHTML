@@ -17,33 +17,38 @@
     </div>
   </div>
   
-  <div id="gridMenuHolder">
-    <div id="gridMenuContainer" data-state="landing subcat search"></div>
+  <div id="searchTermBox">
+   <span class="label"></span><span class="term"></span>
   </div>
-  <div id="gridHTML">
-    <div id="gridArrow" class="left"><img src="images/grid-arrow.png"></div>
-    <span class="title"></span>
-    <span class="description"></span>
-  </div>
-  
   <div id="searchMenu">
       <div id="searchTermWrap"><input type="text" id="searchterm"></input></div>
       <div id="keyboard"></div>
   </div>
+  <div id="gridMenuHolder">
+    <div id="gridMenuContainer" data-state="landing subcat search"></div>
+    <div id="gridTopRowOverlay" class="gridArrowOverlay"><div id="rowUpButton">&nbsp;</div></div>
+    <div id="gridBottomRowOverlay" class="gridArrowOverlay"><div id="rowDownButton">&nbsp;</div></div>
+  </div>
+  <div id="gridHTML">
+    <div id="gridArrow" class="left"><img src="images/grid-arrow.png"></div>
+    <div class="title"></div>
+    <div class="trt"></div>
+    <span class="description"></span>
+  </div>
   
-  <ul id="subMenu">
-  </ul>
+  <div id="subMenuHolder">
+    <div id="subMenuHeightConstraint">
+      <ul id="subMenu"></ul>
+    </div>
+    <div id="subMenuBackTarget"><div id="menuLeftButton">&nbsp;</div></div>
+    <div id="subMenuUpTarget"><div id="menuUpButton">&nbsp;</div></div>
+    <div id="subMenuDownTarget"><div id="menuDownButton">&nbsp;</div></div>
+  </div>
+  
+  
   <ul id="mainMenu">
   </ul>
-
-  <div id="circularG">
-    <div id="circularG_1" class="circularG"></div>
-    <div id="circularG_2" class="circularG"></div>
-    <div id="circularG_3" class="circularG"></div>
-    <div id="circularG_4" class="circularG"></div>
-    <div id="circularG_5" class="circularG"></div>
-    <div id="circularG_6" class="circularG"></div>
-    <div id="circularG_7" class="circularG"></div>
-    <div id="circularG_8" class="circularG"></div>
-  </div>
+  
+  <div id="mainMenuObscure"></div>
+  
 </div>

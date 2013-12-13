@@ -10,7 +10,8 @@ define([
     'utils', 
     'newsmax/scenes/newsmax.scrubber', 
     'newsmax/menus/newsmax.menus.trickplay', 
-    'newsmax/menus/newsmax.menus.backmenu'
+    'newsmax/menus/newsmax.menus.backmenu',
+    'config'
     ],
     function(
         StageManager,
@@ -24,7 +25,8 @@ define([
         Util,
         scrubManager,
         TrickMenu, 
-        BackMenu
+        BackMenu,
+        conf
         ) {
 
     var videoPlayback,
@@ -36,7 +38,7 @@ define([
     videoPlayback = new StageManager.Scene({
         defaultScene: false,
         name: "videoPlayback",
-        target: "#wrapper",
+        target: "#videowrapper",
         view: "views/newsmax.videoplayback.html"
     });
 
@@ -56,7 +58,11 @@ define([
     }
 
     videoPlayback.onenterscene = function() {
+        
+        videoPlayback.hasScrubbed = false;
 
+        $log(">>>>>> Entering Video Playback state");
+        $("#videowrapper").show();
         TrickMenu.disable();
         showLoader();
         
@@ -68,8 +74,7 @@ define([
         $('#vdescription').html(video.attributes.description);
         $('#vdescription').ellipsis({ row: 2 });
         initVideoPlayback();
-
-        //initKeyhandlers();
+        initKeyhandlers();
         bindMediaEventHandler();
 
         TrickMenu.setElement("#trickPlayContainer");
@@ -84,10 +89,12 @@ define([
         TrickMenu.focus();
         
         hideMenu.on('onfocus', function() {
+            $log('hidemenu received a onfocus');
             $('#hideTrayButton').addClass('focused');
         }, this);
         
         hideMenu.on('onblur', function() {
+            $log('hidemenu received on blur event');
             $('#hideTrayButton').removeClass('focused');
         }, this);
         hideMenu.on('onselect', function() {
@@ -104,18 +111,26 @@ define([
     }
 
     videoPlayback.onleavescene = function() {
+      $log(">>>>>> Leaving Video Playback state");
+      MediaPlayer.off("videoup",null,videoPlayback);
+      $("body").css('background','transparent');
+      clearTimeout(timeout);
+      $("#videowrapper").hide();
+      $("#progressBar").css({ width: 0 });
+      $("#timecode").empty();
+      $('#hideTrayButton').removeClass('focused');  //not sure why i am having to add this here?
       teardownKeyhandlers();
       scrubManager.deactivate();
       MediaPlayer.stop();
       hideMenu.off(null, null, this);
-      TrickMenu.off(null, null, this);  
+      TrickMenu.off(null, null, this); 
+      closeMenu.off(null,null,this); 
       MediaPlayer.off(null,null,this);
     }
 
     controlsUp.onenterstate = function() {
-        
+        $("#videowrapper").fadeIn();
         $log(" CONTORLSUP onenterstate");
-        
         TrickMenu.on('onup', function() {
             hideMenu.focus();
         }, this);
@@ -146,7 +161,7 @@ define([
 
     controlsDown.onenterstate = function() {
         disableBack = true;
-        $('#wrapper').hide();
+        $('#videowrapper').fadeOut();
         $log('E N T E R I N G controlsDown state');
 
         dummy.on('onright onleft onup ondown onselect',function(e,l){
@@ -163,43 +178,43 @@ define([
     controlsDown.onleavestate = function() {
         dummy.off(null,null,this);
         KeyHandler.off(null,null,this);
-        $('#wrapper').show();
+        $('#videowrapper').show();
         disableBack = false;
     }
 
     var touchTimeout = function(){
         clearTimeout(timeout);
         timeout = setTimeout(function(){
+            if(conf.disableScreenHider) return;
             if(MediaPlayer.playing()){
                 if($disableHiding) return;
                 videoPlayback.changeState('controlsdown');
             }   
             else
                 touchTimeout();
-        }, 15000);
+        }, conf.globalTimeout);
     }
 
     function timeUpdateHandler(currentTime) {
-
         var duration;
-
         duration = MediaPlayer.duration();
-
         if (_.isNumber(duration)) {
             videoProgressInMS = currentTime;
+            if(currentTime==0){
+                $("#errorField").append($("<div>mediaplayer firing 0</div>"))
+            }
             videoPlayback.updateTimeDisplay(currentTime, duration);
         } else {
             return;
         }
-
     }
 
+    
     videoPlayback.updateTimeDisplay = function(currentTime, duration) {
-
+        if(currentTime==0 && videoPlayback.hasScrubbed)
+            return;
         var current, total, progress, progress_width;
-
         total = Util.convertMstoHumanReadable(duration);
-
         if (currentTime > duration) {
             current = total;
             progress = 1;
@@ -207,10 +222,7 @@ define([
             current = Util.convertMstoHumanReadable(currentTime);
             progress = (currentTime / duration);
         }
-
         progress_width = Math.ceil(progress * 1129);
-
-
         $("#timecode").text(current);
         $("#progressBar").css({ width: progress_width });
         $('#scrubDirection').css({ left: (progress_width - 33) });
@@ -247,6 +259,7 @@ define([
 
             if (scrubManager._scrubbing) {
                 scrubManager.stopStickyScrubbing("pausebutton");
+                MediaPlayer.pause();
                 return;
             }
 
@@ -273,7 +286,7 @@ define([
                 return;
             }
 
-            if(!MediaPlayer.playing()) return;
+            //if(!MediaPlayer.playing()) return;  <-- doesn't allow rew from paused state
 
             scrubManager.onLeft();
         }, videoPlayback);
@@ -281,13 +294,13 @@ define([
         KeyHandler.on("onFF", function() {
             if(videoPlayback.currentState!=='controlsup') videoPlayback.changeState('controlsup');
             TrickMenu.setFocusTo('onFF');
-
+            //debugger;
             if (scrubManager._scrubbing) {
                 scrubManager.stopStickyScrubbing();
                 return;
             }
 
-            if(!MediaPlayer.playing()) return;
+            //if(!MediaPlayer.playing()) return; // <-- doesn't allow ff from paused state
 
             scrubManager.onRight();
         }, videoPlayback);
@@ -300,6 +313,12 @@ define([
         MediaPlayer.on('all', mediaEventHandler, videoPlayback);
 
         scrubManager.on('scrubTimeupdate', function(updatetime) {
+            //$log("scrubTimeupdate updating time: ", updatetime);
+            videoPlayback.hasScrubbed = true;
+            /*if(updatetime==0){
+                $("#errorField").append($("<div>scrubber firing 0</div>"))                
+            }*/
+
             videoPlayback.updateTimeDisplay(updatetime, MediaPlayer.duration());
         }, videoPlayback);
        

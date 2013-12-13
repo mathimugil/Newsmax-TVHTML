@@ -1334,6 +1334,48 @@
 body {
   font-family: HelveticaNeueLight, Helvetica, Arial, sans-serif; }
 
+#errormodal {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 720px;
+  width: 1280px;
+  z-index: 1000;
+  background-color: rgba(225, 225, 225, 0.8);
+  font-family: Helvetica, Arial, sans-serif; }
+  #errormodal #errorInner {
+    background-color: #085caa;
+    position: absolute;
+    top: 170px;
+    left: 300px;
+    color: #e8e8e7;
+    width: 650px;
+    padding: 30px 50px;
+    box-shadow: 7px 7px 5px rgba(0, 0, 0, 0.75); }
+    #errormodal #errorInner h1 {
+      padding-left: 70px;
+      font-weight: bold;
+      height: 50px;
+      margin-bottom: 15px;
+      line-height: 2.5em;
+      background: url(../images/alert.png) no-repeat top left; }
+    #errormodal #errorInner span {
+      margin-left: 70px; }
+    #errormodal #errorInner #buttonBar {
+      clear: both;
+      width: 100%;
+      padding-top: 20px; }
+      #errormodal #errorInner #buttonBar .errorButton {
+        background-color: #e8e8e7;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+        color: black;
+        display: block;
+        width: 100px;
+        text-align: center;
+        padding: 5px 15px;
+        margin: 0px auto; }
+
 img#logo {
   position: absolute;
   z-index: 99999;
@@ -1364,28 +1406,111 @@ img#logo {
 #mainMenu {
   background: rgba(45, 91, 169, 0.95);
   box-shadow: 10px 0px 8px rgba(0, 0, 0, 0.25);
-  height: 720px;
-  padding-top: 50px;
+  height: 690px;
+  padding-top: 80px;
   position: absolute;
   left: 0;
   top: 0; }
 
-#subMenu {
+#mainMenuObscure {
+  display: none;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  width: 50px; }
+
+#subMenuHolder {
   background: rgba(45, 91, 169, 0.95);
   box-shadow: 10px 0px 8px rgba(0, 0, 0, 0.25);
   position: absolute;
   top: 0px;
-  left: -180px;
-  height: 720px;
-  padding-top: 50px; }
+  left: -280px;
+  height: 690px;
+  overflow: hidden;
+  padding-top: 80px;
+  width: 325px; }
+  #subMenuHolder #subMenuHeightConstraint {
+    height: 526px;
+    overflow: hidden;
+    position: relative; }
+
+#subMenuBackTarget {
+  position: absolute;
+  top: 5px;
+  left: -15px;
+  width: 60px;
+  height: 130px;
+  display: none; }
+  #subMenuBackTarget:hover div {
+    color: #66a1d6 !important; }
+  #subMenuBackTarget #menuLeftButton {
+    position: absolute;
+    top: 40px;
+    left: 20px;
+    font-family: FontAwesome;
+    font-size: 26px;
+    font-style: normal;
+    font-weight: normal;
+    color: #e1e1e1;
+    background-color: #666666;
+    font-size: 36px;
+    background: none !important; }
+    #subMenuBackTarget #menuLeftButton:before {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      content: "\f053"; }
+
+#subMenuUpTarget, #subMenuDownTarget {
+  display: none;
+  position: absolute;
+  top: 0px;
+  left: 50px;
+  width: 225px;
+  height: 80px; }
+  #subMenuUpTarget:hover div, #subMenuDownTarget:hover div {
+    color: #66a1d6 !important; }
+
+#subMenuDownTarget {
+  top: 637px; }
+
+#menuUpButton, #menuDownButton {
+  position: absolute;
+  top: 40px;
+  left: 105px;
+  width: 115px;
+  height: 40px;
+  font-family: FontAwesome;
+  font-size: 26px;
+  font-style: normal;
+  font-weight: normal;
+  color: #e1e1e1;
+  background-color: #666666;
+  font-size: 36px;
+  background: none !important; }
+  #menuUpButton:before, #menuDownButton:before {
+    position: absolute;
+    top: 0px;
+    left: -10px;
+    content: "\f077"; }
+  #menuUpButton.focused, #menuDownButton.focused {
+    color: #e1e1e1;
+    background-color: #085caa; }
+
+#menuDownButton {
+  top: 0px; }
+  #menuDownButton:before {
+    content: "\f078"; }
 
 *:focus {
   outline: none; }
 
 #searchMenu {
   position: absolute;
+  top: 50px;
   width: 483px;
-  height: 442px;
+  height: 435px;
   opacity: 0;
   text-transform: uppercase;
   font-weight: bold;
@@ -1398,9 +1523,9 @@ img#logo {
     position: absolute;
     left: 25px; }
   #searchMenu td {
-    height: 45px;
-    line-height: 40px;
-    width: 57px;
+    height: 35px;
+    line-height: 35px;
+    width: 50px;
     text-align: center;
     padding-top: 5px; }
     #searchMenu td.focused {
@@ -1411,10 +1536,12 @@ img#logo {
     background-color: #666666;
     color: #e1e1e1;
     border: 5px solid transparent; }
+    #searchMenu tr.bottom-keyboard-buttons td.focused {
+      background-color: #085caa; }
   #searchMenu #searchTermWrap {
     border-bottom: 2px solid black;
-    margin-bottom: 25px;
-    height: 60px; }
+    margin-bottom: 5px;
+    height: 50px; }
   #searchMenu #searchterm {
     font-family: Helvetica, Arial, sans-serif;
     width: 90%;
@@ -1431,8 +1558,13 @@ img#logo {
     border: 0;
     text-align: left; }
 
+ul#subMenu {
+  position: absolute;
+  top: 0;
+  left: 0; }
+
 #mainMenu li, #subMenu li {
-  width: 240px;
+  width: 275px;
   text-align: right;
   padding: 15px 20px 0px 30px;
   color: #66a1d6;
@@ -1440,31 +1572,50 @@ img#logo {
   border-bottom: 8px solid transparent;
   font-weight: normal;
   font-size: 26px; }
-  #mainMenu li.sm-focused, #mainMenu li.selected, #mainMenu li.selected.sm-focused, #subMenu li.sm-focused, #subMenu li.selected, #subMenu li.selected.sm-focused {
+  #mainMenu li.sm-focused, #subMenu li.sm-focused {
     border-bottom: 8px solid #5186c6;
-    color: #e1e1e1;
     font: Helvetica;
     font-weight: bold; }
   #mainMenu li.selected, #subMenu li.selected {
-    border-bottom: 8px solid transparent; }
+    border-bottom: 8px solid transparent;
+    color: #e1e1e1;
+    font: Helvetica;
+    font-weight: bold; }
+  #mainMenu li.selected.sm-focused, #subMenu li.selected.sm-focused {
+    border-bottom: 8px solid #5186c6; }
+
+#searchTermBox {
+  display: none;
+  position: absolute;
+  top: 63px;
+  left: 385px;
+  width: 580px;
+  height: 18px;
+  color: black;
+  text-transform: uppercase;
+  background: rgba(205, 205, 205, 0.9);
+  padding: 10px; }
 
 #gridMenuHolder {
   background: -webkit-linear-gradient(top, rgba(239, 239, 239, 0.9) 0%, rgba(204, 204, 203, 0.9) 81%, rgba(154, 155, 159, 0.9) 100%);
   display: none;
   position: absolute;
   top: 100px;
-  left: 360px;
-  width: 850px;
-  height: 545px;
-  padding: 20px;
+  left: 385px;
+  width: 820px;
+  height: 520px;
+  padding: 0 20px;
   overflow: hidden;
   border: 1px solid #cccccb; }
   #gridMenuHolder #gridMenuContainer {
-    position: absolute; }
+    position: absolute;
+    top: 10px;
+    display: block; }
     #gridMenuHolder #gridMenuContainer ul {
-      display: table; }
+      display: table;
+      width: 100%; }
       #gridMenuHolder #gridMenuContainer ul.currentRow {
-        margin-bottom: 150px; }
+        margin-bottom: 130px; }
     #gridMenuHolder #gridMenuContainer li.gridItem {
       float: left;
       border: 2px solid transparent; }
@@ -1477,15 +1628,50 @@ img#logo {
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
         border: 3px solid #5186c6;
         opacity: 1; }
+  #gridMenuHolder #gridTopRowOverlay, #gridMenuHolder #gridBottomRowOverlay {
+    display: none;
+    width: 860px;
+    height: 125px;
+    position: absolute;
+    top: 7px;
+    left: 0px;
+    background: rgba(49, 89, 161, 0.3); }
+  #gridMenuHolder #gridBottomRowOverlay {
+    top: 392px; }
+  #gridMenuHolder #rowDownButton, #gridMenuHolder #rowUpButton {
+    position: absolute;
+    top: 45px;
+    left: 375px;
+    width: 115px;
+    height: 40px;
+    font-family: FontAwesome;
+    font-size: 26px;
+    font-style: normal;
+    font-weight: normal;
+    color: #e1e1e1;
+    background-color: #666666;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+    background-color: #085caa;
+    font-size: 36px; }
+    #gridMenuHolder #rowDownButton:before, #gridMenuHolder #rowUpButton:before {
+      position: absolute;
+      top: 0px;
+      left: 42px;
+      content: "\f077"; }
+    #gridMenuHolder #rowDownButton.focused, #gridMenuHolder #rowUpButton.focused {
+      color: #e1e1e1;
+      background-color: #085caa; }
+  #gridMenuHolder #rowDownButton:before {
+    content: "\f078"; }
 
 #gridHTML {
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
   display: none;
   position: absolute;
-  top: 353px;
-  left: 390px;
+  top: 365px;
+  left: 418px;
   width: 785px;
-  height: 118px;
+  height: 108px;
   color: black;
   padding: 10px;
   font-size: 18px;
@@ -1506,14 +1692,15 @@ img#logo {
     display: block;
     margin-bottom: 10px;
     line-height: 1.2em; }
-    #gridHTML span.title {
-      font-weight: bold; }
-
-#vignette {
-  background: url(../images/combo-vignette.png) top left no-repeat;
-  position: absolute;
-  width: 1280px;
-  height: 720px; }
+  #gridHTML .title {
+    font-weight: bold;
+    width: 90%; }
+  #gridHTML .trt {
+    position: absolute;
+    top: 10px;
+    right: 8px;
+    width: 10%;
+    text-align: right; }
 
 .backButton {
   position: absolute;
@@ -1583,7 +1770,7 @@ img#logo {
       position: absolute;
       top: 0px;
       left: 0px;
-      width: 400px;
+      width: 0px;
       height: 10px;
       background: #2F5CA9; }
   #playBackTray #vinfo {
@@ -1602,10 +1789,10 @@ img#logo {
   #playBackTray #timecode {
     font: 19px;
     color: black;
-    font-weight: bold;
     position: absolute;
-    bottom: 95px;
-    left: 1196px; }
+    bottom: 99px;
+    left: 1190px;
+    font-family: Helvetica, Arial, sans-serif; }
   #playBackTray #trickPlayContainer {
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
     position: absolute;
@@ -1802,6 +1989,12 @@ img#logo {
   100% {
     transform: scale(0.3);
     background-color: #af2827; } }
+
+#vignette {
+  background: url(../images/vignette.png) top left no-repeat;
+  position: absolute;
+  width: 1280px;
+  height: 720px; }
 
 #circularG {
   position: relative;

@@ -65,6 +65,13 @@ define(['navigation','underscore', 'hbs!enginelite/menuprototypes/templates/engi
     },
 
 
+    events : {
+      'mouseover .gridMenuPage:not(".currentRow")' : "showOverlays",
+      /*'mouseover #gridMenuContainer' : 'focus',*/
+      'mouseover .currentRow li' : 'focusOnElement',
+      'click .currentRow li' : '_onSelect', 
+    },
+
     initialize: function() {
       Navigation.Menu.prototype.initialize.call(this, arguments);
       this.options = _.defaults(this.options, this._defaults);
@@ -82,6 +89,36 @@ define(['navigation','underscore', 'hbs!enginelite/menuprototypes/templates/engi
       });
     },
 
+    focusOnElement: function(event){
+      
+      var idx = $(event.currentTarget).index();
+      this._currentIndex = idx + $(event.currentTarget).parent().index()* this.options.cols;
+      if(!this.focused)
+        this.focus();
+      else
+        this.setFocus();
+      $('.gridArrowOverlay').hide();
+    },
+
+
+    showOverlays: function(event){
+      
+      this.focus();
+      if($(event.currentTarget).hasClass('currentRow'))
+        return;
+
+      $('.gridArrowOverlay').show();
+      $('.gridArrowOverlay').on('mouseleave',function(){
+        $('.gridArrowOverlay').off('mouseleave');
+        $('.gridArrowOverlay').hide();
+      });
+
+    },
+
+    /*hideOverlays: function(){
+      $('.gridArrowOverlay').off('mouseleave');
+      $('.gridArrowOverlay').hide();
+    },*/
 
     coords: function(index) {
         index = index || this._currentIndex;

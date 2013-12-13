@@ -57,21 +57,44 @@ require(
     'newsmax/scenes/newsmax.scene.main',
     'newsmax/scenes/newsmax.scene.videoplayback',
     'newsmax/scenes/newsmax.scrubber',
-    'jquery.ellipsis'
+    'newsmax/scenes/newsmax.error-modal',
+    'jquery.ellipsis',
+    'newsmax/newsmax.screenhider',
   ],
-  function ( domReady, TVEngine) {
+  function ( domReady, TVEngine, mediaplayer) {
     domReady(function() {
 
     window.$navigation    = require('navigation');
     window.$keyhandler    = require("keyhandler");
     window.$stagemanager  = require("stagemanager");
     window.$platform      = require('platform');
+    window.$tvengine      = require('tvengine');
+    window.$mediaplayer   = require('mediaplayer');
 
     $('#return_button').click(function(){
       $keyhandler.trigger('onReturn');
     });
 
-      TVEngine.start();
+    var Platform      = window.$platform;
+    var StageManager  = window.$stagemanager;
+    var MediaPlayer   = window.$mediaplayer;
+    
+    TVEngine.on('tvengine:appready',function(){
+      Platform.on('network:disconnected',function(){
+          if(StageManager.scene.name == 'errormodal') return;
+          StageManager.changeScene('errormodal',{ option: 'network' })
+      });
+
+      MediaPlayer.on('videoup',function(){
+        $('body').css('background','transparent');
+      });
+
+    });
+
+    TVEngine.start();
+    
+    window.$globalScreenHider = window.$startScreenHider();
+
     });
   }, function(e) {
     window.console.log(" HERE? ERROR", e,  e.stack);

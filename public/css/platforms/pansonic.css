@@ -1,0 +1,10 @@
+#searchMenu td {
+height: 35px;
+line-height: 28px;
+width: 50px;
+text-align: center;
+padding-top: 5px;
+}
+#searchMenu .bottom-keyboard-buttons td{
+	line-height:23px;
+}

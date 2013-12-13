@@ -41,17 +41,17 @@ define(['navigation', 'hbs!newsmax/templates/KeyBoard','underscore'], function(N
             return _.isString(item.attr('data-value')) ? item.attr('data-value') : item.text();
         },
         setFocus: function() {
-            // $log(" SET FOCUS ", this.options, this.coords())
+           
             $(this.el).find("td").removeClass("focused")
             $(this.el).find("tr").eq(this._coords.row).find('td').eq(this._coords.col).addClass("focused");
 
             //TODO: remove later
 
-
             this.trigger('newfocus', {
                 coords: this._coords,
                 value: $(this.el).find("tr").eq(this._coords.row).find('td').eq(this._coords.col)
             });
+            $log(" SEARCH FOCUS: row " + this._coords.row + ", col: ", this._coords.col)
 
             if (this._oldIndex !== this._currentIndex && this._focused) {
                 this.trigger('newfocus', {
@@ -67,7 +67,6 @@ define(['navigation', 'hbs!newsmax/templates/KeyBoard','underscore'], function(N
             return ($(this.el).find("tr").eq(this._coords.row).find('td').length !== idx);
         },
         _columnUp: function() {
-            $log(" COLUMN UP !");
             if (this._testColUp()) {
                this._coords.col++;
                this.setFocus();
@@ -90,7 +89,26 @@ define(['navigation', 'hbs!newsmax/templates/KeyBoard','underscore'], function(N
         _rowUp: function() {
             if(this._coords.row > 0 ) {
                 if(this._coords.row == $(this.el).find("tr").length - 1) {
-                    this._coords.col = this._coords.col * 2;
+                  //this design has some colspans in the last row. we have to deal with these differently
+                  if ($(this.el).find("tr").eq(this._coords.row).hasClass("bottom-keyboard-buttons")){
+                    switch (this._coords.col){
+                      case 0: //clear
+                        this._coords.col = 0; //move to 4
+                        break; 
+                      case 1: //del
+                        this._coords.col = 2; //move to 6
+                        break;
+                      case 2: //space
+                        this._coords.col = 3; //move to 7
+                        break;
+                      case 3: //ok
+                        this._coords.col = 5; //move to 9
+                        break;
+                    }
+                  }else{
+                    this._coords.col = this._coords.col;
+                  }
+                    
                 }
                 this._coords.row--;
                 this.setFocus();
@@ -101,6 +119,10 @@ define(['navigation', 'hbs!newsmax/templates/KeyBoard','underscore'], function(N
             if (this._testRowDown()) {
                 this._coords.row++;
                 if(this._coords.row == $(this.el).find("tr").length - 1) {
+                  // we have to handle the last item in the row above the buttons differently
+                  if (this._coords.col == 5 && this._coords.col == 5){
+                    this._coords.col = 3;
+                  } else {
                     switch(this._coords.col){
                         case 0: case 1:
                             this._coords.col = 0; break;
@@ -109,6 +131,7 @@ define(['navigation', 'hbs!newsmax/templates/KeyBoard','underscore'], function(N
                         default:
                             this._coords.col = 2;
                     }
+                  }
                 }
                 this.setFocus();
             }

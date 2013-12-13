@@ -35,6 +35,7 @@ define(['jquery', 'underscore', 'backbone', 'tvengine', 'domReady'], function($,
 
       $log("<< PLATFORM IS: (" + this.name + ") >>")
       var _t = this;
+      this.startNetworkCheck();
       this.addPlatformCSS();
 
 
@@ -63,6 +64,31 @@ define(['jquery', 'underscore', 'backbone', 'tvengine', 'domReady'], function($,
     // Might want to set this to something different
     this.needsProxy = true;
     _.extend(this, Backbone.Events);
+  }
+
+  Platform.prototype.stopNetworkCheck = function() {
+    clearTimeout(this.__networkCheckTimeout);
+  }
+
+  Platform.prototype.startNetworkCheck = function () {
+    var _t = this;
+    return; //debugging this
+    clearTimeout(this.__networkCheckTimeout);
+
+    this.passedNetworkTest= false;
+
+    $.get('stubs/newsmax.json?'+new Date().getTime())
+    .done(function() {
+      _t.trigger('network:connected');
+      _t.passedNetworkTest= true;
+    })
+    
+    _t.__networkCheckTimeout = setTimeout(function(){
+      if(_t.passedNetworkTest == false){
+          _t.trigger('network:disconnected');
+      }
+      _t.startNetworkCheck();
+    },4000);
   }
 
   Platform.prototype.deviceId = function() {

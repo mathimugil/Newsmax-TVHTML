@@ -39,6 +39,12 @@ define(['navigation', 'underscore'], function(Navigation, _) {
     },
     _currentIndex: 0,
     _slotIndex: 0,
+    _selectedIndex: 0,
+
+    events : {
+      "click .button" : "onSelect",
+      "mouseover .button" : "setFocus"
+    },
 
     initialize: function() {
       Navigation.Menu.prototype.initialize.apply(this, arguments);
@@ -52,27 +58,45 @@ define(['navigation', 'underscore'], function(Navigation, _) {
         this.on('onup', this._decrementIndex, this);
       }
 
-      this.on('onselect', function() {
-
-        $log(" SLOT MENU ON SELECT ")
-        this.trigger('selectedindex', this._currentIndex);
-        this.trigger('selecteditem', this.collection.at(this._currentIndex));
-      }, this);
+      this.on('onselect', this.onSelect, this);
 
       var _t = this;
 
       this.listenTo(this.collection, 'reset add remove', function () {
         _t._slotIndex = 0;
         _t._currentIndex = 0;
+        _t._selectedIndex = 0;
         _t.render();
         _t._maxIndex = _t.collection.length - 1;
       });
-      this.on('onfocus newfocus', function(idx) {
-        idx = _.isNumber(idx) ? idx : this._currentIndex;
-        $(this.el).children().removeClass('sm-focused');
-        $(this.el).children().eq(idx).addClass('sm-focused');
-      }, this)
+      this.on('onfocus newfocus', this.setFocus, this);
+      
+    },
 
+    setFocus: function (event){
+ 
+        if(_.isObject(event)) {
+          var diff = this._currentIndex - $(event.currentTarget).index();
+          this._slotIndex = this._slotIndex - diff;
+
+          this.focus();
+          this._currentIndex = $(event.currentTarget).index();
+        }
+        idx = _.isNumber(event) ? event : this._currentIndex;
+        $(this.el).children().removeClass('sm-focused');
+        $(this.el).children().eq(this._currentIndex).addClass('sm-focused');
+        
+    },
+
+    onSelect: function() {
+
+        $log(" SLOT MENU ON SELECT ")
+        this.trigger('selectedindex', this._currentIndex);
+        this.trigger('selecteditem', this.collection.at(this._currentIndex));
+        this._selectedIndex = this._currentIndex;
+        
+        $(this.el).children().removeClass('selected');
+        $(this.el).children().eq(this._currentIndex).addClass('selected');
 
     },
 
@@ -86,7 +110,8 @@ define(['navigation', 'underscore'], function(Navigation, _) {
           this._slotIndex++;
           this.trigger('slotup', this._slotIndex);
         } else  {
-           this.trigger('masterup')
+           this.trigger('masterup');
+           if (this._currentIndex === this._maxIndex) this.trigger('menubottom');
         }
       }
     },
@@ -99,8 +124,9 @@ define(['navigation', 'underscore'], function(Navigation, _) {
         if(this._slotIndex > 0 ) {
           this._slotIndex--;
           this.trigger('slotdown', this._slotIndex);
-        } else  {
-          this.trigger('masterdown')
+        } else {
+          this.trigger('masterdown');
+          if (this._currentIndex === 0) this.trigger('menutop');
         }
       }
     },
@@ -112,10 +138,18 @@ define(['navigation', 'underscore'], function(Navigation, _) {
             }));
         }
         $log(" SLOT MENU RENDER AND BIND ")
-        $(this.el).children().on('mouseover', function() {
-            // $log(" MOUSEOVER ITEM ", $(this).index());
-        })
+        /*$(this.el).children().on('mouseover', function() {
+            $log(" MOUSEOVER ITEM ", $(this).index());
+        })*/
         this._maxIndex = $(this.el).children().length - 1;
+        this.trigger("rendered");
+        
+        //we may have to show some scrolling arrows
+        if ($(this.el).children().size() > this.options.visible){ 
+            $log(" SLOT MENU NEEDS SCROLLERS FOR THIS COLLECTION ");
+            this.trigger("showscrollers"); 
+        }
+        
         return this;
     }
   });

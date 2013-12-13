@@ -9,6 +9,7 @@ define(['jquery', 'underscore', 'backbone', 'tvengine', 'platform', 'keyhandler'
         name: "MediaPlayer",
         currentVideoItem: null,
         _nextItemToPlay: null,
+        _timeUpdatesDisabled: false,
 
         _init: function() {
             this.currentVideoItem = new PlaylistItem(); // Just a generic Model we can bind to.
@@ -28,6 +29,14 @@ define(['jquery', 'underscore', 'backbone', 'tvengine', 'platform', 'keyhandler'
         deactive: function() {
             this._active = false;
             KeyHandler.off("all", this._keyhandler, this);
+        },
+
+        disableTimeUpdates: function() {
+            this._timeUpdatesDisabled = true;
+        },
+
+        enableTimeUpdates: function() {
+            this._timeUpdatesDisabled = false;
         },
 
         _keyhandler: function(event) {
