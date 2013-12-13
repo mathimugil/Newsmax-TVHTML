@@ -11,7 +11,8 @@ define([
     'newsmax/scenes/newsmax.scrubber', 
     'newsmax/menus/newsmax.menus.trickplay', 
     'newsmax/menus/newsmax.menus.backmenu',
-    'config'
+    'config',
+    'newsmax/menus/newsmax.menu.clickablemenu'
     ],
     function(
         StageManager,
@@ -26,11 +27,12 @@ define([
         scrubManager,
         TrickMenu, 
         BackMenu,
-        conf
+        conf,
+        ClickableMenu
         ) {
 
     var videoPlayback,
-        videoProgressInMS, hideMenu = new Navigation.Menu();
+        videoProgressInMS;
 
     /*if($storage.getItem('firstRun'))var tmpDefault=false;
     else var tmpDefault=true;*/
@@ -44,9 +46,9 @@ define([
 
     var controlsUp      = videoPlayback.createState('controlsup', true);
     var controlsDown    = videoPlayback.createState('controlsdown', false);
-    var backMenu        = new BackMenu();
+    var backMenu, hideMenu;
     var dummy           = new Navigation.Menu();
-    var closeMenu       = new Navigation.Menu();
+    var closeMenu       = new Navigation.Menu();    //todo: delete this one
     var disableBack     = false;
     var timeout;
     var $disableHiding  = false;
@@ -59,6 +61,18 @@ define([
 
     videoPlayback.onenterscene = function() {
         
+        if(!backMenu){
+            backMenu = new BackMenu({
+                el: ".backButton"
+            });
+        }
+
+        if(!hideMenu){
+            hideMenu = new ClickableMenu({
+                el:'#hideTrayButton'
+            });
+        }
+
         videoPlayback.hasScrubbed = false;
 
         $log(">>>>>> Entering Video Playback state");
@@ -150,6 +164,17 @@ define([
             touchTimeout();
         }, this);
 
+         if(Platform.name == 'lg'){
+            
+            setInterval(function(){             //TODO: Is this too aggressive for LG?
+                var status = window.NetCastGetMouseOnOff();
+                if(status=='on'){
+                    touchTimeout();
+                }
+            },1000);  
+
+        }
+
     }
     controlsUp.onleavestate = function() {
         backMenu.off(null,null, this);
@@ -172,7 +197,13 @@ define([
 
         dummy.focus();
 
-        KeyHandler.on('onReturn',function(){ dummy.trigger('onselect'); },this);      
+        KeyHandler.on('onReturn',function(){ dummy.trigger('onselect'); },this);
+
+        if(Platform.name === 'lg'){
+            window.onmouseon = function() {
+                dummy.trigger('onselect');
+            };
+        }       
     }
 
     controlsDown.onleavestate = function() {

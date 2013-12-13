@@ -101,8 +101,6 @@ define(['navigation', 'underscore'], function(Navigation, _) {
     },
 
     _incrementIndex: function() {
-        $log(" INCREMENT INDEX ", this._currentIndex)
-        $log(" slot menu is: ", this)
       if(this._currentIndex < this._maxIndex) {
         this._currentIndex++;
         this.trigger('newfocus', this._currentIndex);

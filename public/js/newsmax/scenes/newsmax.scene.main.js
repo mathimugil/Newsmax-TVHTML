@@ -104,6 +104,7 @@ define([
         var dummyMenu = new Navigation.Menu();
         var hideSubNav = false; //we use this in the case where there is no grid - i.e. Top of the Hour News
         var wrapperVisible;
+        var fetchCounter = 0;
 
         scene.onenterscene = function() {
             $log(">>> ENTERING MAIN SCENE!!");
@@ -174,15 +175,6 @@ define([
                     });
                     subMenu.render();
 
-                    if(Platform.name === 'lg'){
-                        window.onmouseon = function() {
-                            $('#subMenuBackTarget').show();
-                        };
-                        window.onmouseoff = function() {
-                            $('#subMenuBackTarget').hide();
-                        };
-                    } 
-
                     $('#subMenuBackTarget').on('click',function(){
                         subMenu.trigger('onleft');
                     });
@@ -193,6 +185,17 @@ define([
                         subMenu.trigger('ondown');
                     })
                 }
+
+                if(Platform.name === 'lg'){
+                    $("#errorField").append($('<div>settingup mouseon handler in main scene</div>'))
+                    window.onmouseon = function() {
+                        $("#errorField").append($('<div>mouseon detected in the main scene</div>'))
+                        $('#subMenuBackTarget').show();
+                    };
+                    window.onmouseoff = function() {
+                        $('#subMenuBackTarget').hide();
+                    };
+                } 
 
                 var videoCollection = Utils.createCollection()
                 var VideoGrid = GridMenu.extend({
@@ -301,31 +304,27 @@ define([
                     var item = MenuItems.at(index);
                     hideSubNav = false;
                     setCancelFetch(false);
-                    $log("action is: ", item.get('action'));
-                    $log("item is: ", item);
+                    // $log("action is: ", item.get('action'));
+//                     $log("item is: ", item);
 
                     switch (item.get('action')) {
                         case 'livefeed':
                             hideWrapper();
                             lastMenuFocus = mainMenu;
                             dummyMenu.focus();
+                            if($('#gridMenuHolder').is(':visible')) hideGrid(); //just in case
+                            setCancelFetch(true);
                             break;
                         case 'subcategory':
                             hideGrid();
-                            var arr =[];
-                            _.each(item.get('subcategory').models,function(m, i){
-                                arr.push(m);
-                                arr.push({title: "temporary title long" + i});
-                            });
-                            //subMenu.collection.reset(item.get('subcategory').models);
-                            subMenu.collection.reset(arr);
+                            subMenu.collection.reset(item.get('subcategory').models);
                             updateGrid(item.get('subcategory').at(0).get('url'));
                             subMenu.focus();
                             $("#subMenu li.sm-focused").addClass("selected");
                             break;
                         case 'videos':
                             hideSubNav = true;
-                            $log("setting hideSubNav to true: ", hideSubNav);
+                            //$log("setting hideSubNav to true: ", hideSubNav);
                             hideGrid();
                             updateGrid(item.get("url"));
                             break;
@@ -379,7 +378,7 @@ define([
                 }, scene);
 
                 subMenu.on('onblur', function(){
-                    $log("subMenu onblur firing");
+                    //$log("subMenu onblur firing");
                     $("#subMenu li").removeClass("sm-focused");
                 }, scene);
                 
@@ -520,7 +519,7 @@ define([
                 
                 // we need to show and make space for the info box
                 Grid.on('onfocus', function(){
-                  $log("grid is on focus")
+                  //$log("grid is on focus")
                   $(Grid.el).children().children().eq(Grid._currentIndex).parent().addClass("currentRow");
                   $("#gridHTML").show();
                 });
@@ -664,7 +663,11 @@ define([
 
         var updateGrid = function(url) {
             showLoader();
+
+            fetchCounter++;
             API.fetchMRSS(url).done(function(data) {
+
+                fetchCounter--;
                 if (cancelFetch) {
                     setCancelFetch(false);
                     return;
@@ -737,9 +740,21 @@ define([
         }
         
         var setCancelFetch = function(bool){
-            $log(">>>>>>>> SETTING CANCELFETCH TO", bool);
-            hideLoader();
-            cancelFetch = bool;
+            //$log(">>>>>>>> SETTING CANCELFETCH TO", bool);
+          
+            if(bool){
+                hideLoader();
+                //$log('cancelFetch F A L S E');
+                cancelFetch = true;
+                conf.pauseScreenhider = false;                 
+            }
+            else{
+                if(fetchCounter==0){
+                    cancelFetch = false;
+                    //$log("cancelFetch T R U E ");                    
+                }
+
+            }
         }
         return scene;
     });

@@ -3,6 +3,12 @@
 */
 define(['navigation', 'stagemanager'], function(Navigation, StageManager) {
 	var backMenu = Navigation.Menu.extend({
+		events: {
+			/*'mouseover .gridMenuPage:not(".currentRow")' : "showOverlays",
+			/*'mouseover #gridMenuContainer' : 'focus',*/
+			'mouseover': 'focus',
+			'click': '_onSelect',
+		},
 		initialize: function() {
 			Navigation.Menu.prototype.initialize.call(this);
 			this.on('onselect', function() {
@@ -15,7 +21,14 @@ define(['navigation', 'stagemanager'], function(Navigation, StageManager) {
 			this.on('onfocus', function() {
 				$('.backButton').addClass('focused');
 			}, this);
+		},
+		_onSelect:function(){
+			this.trigger('onselect');
+		},
+		_onFocus:function(){
+			debugger;
 		}
+
 	});
 
 	return backMenu;

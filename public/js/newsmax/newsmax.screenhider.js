@@ -1,4 +1,4 @@
-define(['backbone', 'keyhandler', 'jquery', 'stagemanager', 'navigation', 'config'], function(Backbone, KeyHandler, $, StageManager, Navigation, conf) {
+define(['backbone', 'keyhandler', 'jquery', 'stagemanager', 'navigation', 'config', 'platform'], function(Backbone, KeyHandler, $, StageManager, Navigation, conf, Platform) {
 
     
     window.ScreenHider = function() {
@@ -17,7 +17,6 @@ define(['backbone', 'keyhandler', 'jquery', 'stagemanager', 'navigation', 'confi
         this.touchHideTimeout();
         
         KeyHandler.on('onUp onDown onLeft onRight onSelect onReturn', function() {
-            $log('keyhandler detected a movement');
             this.touchHideTimeout();
         }, this);
     };
@@ -45,6 +44,18 @@ define(['backbone', 'keyhandler', 'jquery', 'stagemanager', 'navigation', 'confi
         screenHider.on('showscreen',function(){
           menu.trigger('something');                //should wake up interface, if hidden
         });
+
+        if(Platform.name == 'lg'){
+            
+            setInterval(function(){             //TODO: Is this too aggressive for LG?
+                var status = window.NetCastGetMouseOnOff();
+                //$("#errorField").append($('<div>status = ' + status + '</div>'))
+                if(status=='on'){
+                    screenHider.touchHideTimeout();
+                }
+            },1000);  
+
+        }
 
         screenHider.on('hidescreen', function() {
             var self = this;

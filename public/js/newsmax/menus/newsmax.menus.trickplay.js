@@ -1,6 +1,26 @@
 define(['navigation', 'enginelite/menuprototypes/enginelite.menus.listmenu', 'hbs!newsmax/templates/trickplay', 'jquery', 'underscore', 'backbone', 'handlebars', 'keyhandler'], function(Navigation, ListMenu, trickPlayTemplate, $, _, Backbone, Handlebars, KeyHandler) {
 
-	var menu = ListMenu.extend({});
+	var menu = ListMenu.extend({
+        events : {
+          'mouseover .trickPlayButton' : 'focusOnElement',
+          'click .trickPlayButton' : 'clickOnElement', 
+        },
+        focusOnElement:function(event){
+
+            var idx = $(event.currentTarget).index()
+            this._currentIndex = idx;
+
+            if(!this.focused)
+                this.focus();
+            else
+                this.setFocus();
+
+        },
+        clickOnElement:function(event){
+            var idx = $(event.currentTarget).index();
+            this.trigger('selectedindex',idx);
+        },
+    });
 
     var VideoMenu = new menu({});
 
