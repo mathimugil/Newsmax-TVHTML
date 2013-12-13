@@ -175,15 +175,6 @@ define([
                     });
                     subMenu.render();
 
-                    if(Platform.name === 'lg'){
-                        window.onmouseon = function() {
-                            $('#subMenuBackTarget').show();
-                        };
-                        window.onmouseoff = function() {
-                            $('#subMenuBackTarget').hide();
-                        };
-                    } 
-
                     $('#subMenuBackTarget').on('click',function(){
                         subMenu.trigger('onleft');
                     });
@@ -194,6 +185,17 @@ define([
                         subMenu.trigger('ondown');
                     })
                 }
+
+                if(Platform.name === 'lg'){
+                    $("#errorField").append($('<div>settingup mouseon handler in main scene</div>'))
+                    window.onmouseon = function() {
+                        $("#errorField").append($('<div>mouseon detected in the main scene</div>'))
+                        $('#subMenuBackTarget').show();
+                    };
+                    window.onmouseoff = function() {
+                        $('#subMenuBackTarget').hide();
+                    };
+                } 
 
                 var videoCollection = Utils.createCollection()
                 var VideoGrid = GridMenu.extend({
@@ -742,17 +744,17 @@ define([
         }
         
         var setCancelFetch = function(bool){
-            $log(">>>>>>>> SETTING CANCELFETCH TO", bool);
+            //$log(">>>>>>>> SETTING CANCELFETCH TO", bool);
           
             if(bool){
                 hideLoader();
-                $log('cancelFetch F A L S E');
+                //$log('cancelFetch F A L S E');
                 cancelFetch = true;                    
             }
             else{
                 if(fetchCounter==0){
                     cancelFetch = false;
-                    $log("cancelFetch T R U E ");                    
+                    //$log("cancelFetch T R U E ");                    
                 }
 
             }
