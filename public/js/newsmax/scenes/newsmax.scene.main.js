@@ -304,31 +304,27 @@ define([
                     var item = MenuItems.at(index);
                     hideSubNav = false;
                     setCancelFetch(false);
-                    $log("action is: ", item.get('action'));
-                    $log("item is: ", item);
+                    // $log("action is: ", item.get('action'));
+//                     $log("item is: ", item);
 
                     switch (item.get('action')) {
                         case 'livefeed':
                             hideWrapper();
                             lastMenuFocus = mainMenu;
                             dummyMenu.focus();
+                            if($('#gridMenuHolder').is(':visible')) hideGrid(); //just in case
+                            setCancelFetch(true);
                             break;
                         case 'subcategory':
                             hideGrid();
-                            //var arr =[];
-                            /*_.each(item.get('subcategory').models,function(m, i){
-                                arr.push(m);
-                                arr.push({title: "temporary title long" + i});
-                            });*/
                             subMenu.collection.reset(item.get('subcategory').models);
-                            //subMenu.collection.reset(arr);
                             updateGrid(item.get('subcategory').at(0).get('url'));
                             subMenu.focus();
                             $("#subMenu li.sm-focused").addClass("selected");
                             break;
                         case 'videos':
                             hideSubNav = true;
-                            $log("setting hideSubNav to true: ", hideSubNav);
+                            //$log("setting hideSubNav to true: ", hideSubNav);
                             hideGrid();
                             updateGrid(item.get("url"));
                             break;
@@ -382,7 +378,7 @@ define([
                 }, scene);
 
                 subMenu.on('onblur', function(){
-                    $log("subMenu onblur firing");
+                    //$log("subMenu onblur firing");
                     $("#subMenu li").removeClass("sm-focused");
                 }, scene);
                 
@@ -523,7 +519,7 @@ define([
                 
                 // we need to show and make space for the info box
                 Grid.on('onfocus', function(){
-                  $log("grid is on focus")
+                  //$log("grid is on focus")
                   $(Grid.el).children().children().eq(Grid._currentIndex).parent().addClass("currentRow");
                   $("#gridHTML").show();
                 });
@@ -749,7 +745,8 @@ define([
             if(bool){
                 hideLoader();
                 //$log('cancelFetch F A L S E');
-                cancelFetch = true;                    
+                cancelFetch = true;
+                conf.pauseScreenhider = false;                 
             }
             else{
                 if(fetchCounter==0){
