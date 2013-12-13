@@ -56,7 +56,7 @@ define([
 
             if(this.disableBack) return;
 
-            cancelFetch = true;
+            setCancelFetch(true);
 
             if (!wrapperVisible) { //if wrapper is hidden
                 //mainMenu.trigger('onright');
@@ -300,7 +300,7 @@ define([
                     mainMenuIndex = index;
                     var item = MenuItems.at(index);
                     hideSubNav = false;
-                    cancelFetch = false;
+                    setCancelFetch(false);
                     $log("action is: ", item.get('action'));
                     $log("item is: ", item);
 
@@ -332,7 +332,7 @@ define([
                         case 'search':
                             hideGrid();
                             hideSubNav = true;
-                            cancelFetch = true;
+                            setCancelFetch(true);
                             keyMenu.focus();
                             break;
                     }
@@ -436,6 +436,7 @@ define([
                 },scene)
 
                 subMenu.on('onleft', function() {
+                    setCancelFetch(true);
                     resetSubNav();
                     showMainMenu();
                     hideGrid();
@@ -630,15 +631,14 @@ define([
             term = $.trim(term);
             if (term === "") return;
             searchState = true;
-            cancelFetch = false;
+            setCancelFetch(false);
             showLoader();
             mainMenu.focus();
             API.doSearch(term).then(function(data) {
                 conf.pauseScreenhider = false;
                 $globalScreenHider.touchHideTimeout();
                 if (cancelFetch) {
-                    cancelFetch = false;
-                    hideLoader();
+                    setCancelFetch(false);
                     return;
                 }
 
@@ -666,8 +666,7 @@ define([
             showLoader();
             API.fetchMRSS(url).done(function(data) {
                 if (cancelFetch) {
-                    cancelFetch = false;
-                    hideLoader();
+                    setCancelFetch(false);
                     return;
                 }
 
@@ -736,6 +735,11 @@ define([
             lastSubmenuCollection = subMenu.collection;
             lastSubmenuIndex = subMenu._currentIndex;
         }
-
+        
+        var setCancelFetch = function(bool){
+            $log(">>>>>>>> SETTING CANCELFETCH TO", bool);
+            hideLoader();
+            cancelFetch = bool;
+        }
         return scene;
     });
