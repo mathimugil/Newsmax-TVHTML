@@ -53,7 +53,7 @@ define(['backbone', 'keyhandler', 'jquery', 'stagemanager', 'navigation', 'confi
                 if(status=='on'){
                     screenHider.touchHideTimeout();
                 }
-            },1000);
+            },4000);
 
         }
 

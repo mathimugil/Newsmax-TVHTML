@@ -153,7 +153,7 @@ define([
         } else {
             MediaPlayer.once('timeupdate',function(){
                 touchTimeout();
-            },this);
+            },this); 
         }
         KeyHandler.on('onRight onLeft onUp onDown onSelect', function() {
             touchTimeout();
