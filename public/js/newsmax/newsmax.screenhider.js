@@ -47,13 +47,13 @@ define(['backbone', 'keyhandler', 'jquery', 'stagemanager', 'navigation', 'confi
 
         if(Platform.name == 'lg'){
             
-            setInterval(function(){             //TODO: Is this too aggressive for LG?
+            setInterval(function(){             //TODO: could be improved with a dip and switch.
                 var status = window.NetCastGetMouseOnOff();
                 //$("#errorField").append($('<div>status = ' + status + '</div>'))
                 if(status=='on'){
                     screenHider.touchHideTimeout();
                 }
-            },1000);  
+            },1000);
 
         }
 

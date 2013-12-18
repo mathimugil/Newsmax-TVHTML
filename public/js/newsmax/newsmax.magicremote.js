@@ -1,9 +1,9 @@
 define(['backbone', 'keyhandler', 'jquery', 'stagemanager', 'navigation', 'config', 'platform'], function(Backbone, KeyHandler, $, StageManager, Navigation, conf, Platform) {
 
-    //how to use it?
+    //how to use it: onenterscene...
     //(window.NetCastGetMouseOnOff() == 'on') ? obj.detectMouseOff(dummyMenu) : obj.detectMouseOn(dummyMenu);
 
-    //Becareful if you have a global hidetimeout less then 4000 it will cycle between the two.
+    //Becareful if you have a global hidetimeout less then 4000ms it will cycle between the two.
     //Example use: controlsDown.onenterstate()...
     var magicRemote ={
         interval:null
