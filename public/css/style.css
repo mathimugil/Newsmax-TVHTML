@@ -1780,13 +1780,13 @@ ul#subMenu {
     position: absolute;
     top: -26px; }
     #gridHTML #gridArrow.left {
-      left: 124px; }
+      left: 70px; }
     #gridHTML #gridArrow.middle-left {
-      left: 312px; }
+      left: 275px; }
     #gridHTML #gridArrow.middle-right {
-      left: 433px; }
+      left: 480px; }
     #gridHTML #gridArrow.right {
-      left: 635px; }
+      left: 685px; }
   #gridHTML span {
     display: block;
     margin-bottom: 10px;
