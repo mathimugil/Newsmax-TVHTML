@@ -164,6 +164,7 @@ define([
             this.oldMouseoff = window.onmouseoff;
             window.onmouseoff = function(){
                 touchTimeout();
+                //this.oldMouseoff();   //TODO: fire the old mouseoff event
             }
 
         }
