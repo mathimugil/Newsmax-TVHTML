@@ -14,7 +14,8 @@ define([
         'mediaplayer',
         'utils',
         'config',
-        'platform'
+        'platform',
+        'newsmax/newsmax.magicremote'
     ],
     function(
         StageManager,
@@ -34,7 +35,8 @@ define([
         MediaPlayer,
         Util,
         conf,
-        Platform
+        Platform,
+        magicRemote
     ) {
 
         //'use strict';
@@ -187,7 +189,7 @@ define([
                 }
 
                 if(Platform.name === 'lg'){
-                    $("#errorField").append($('<div>settingup mouseon handler in main scene</div>'))
+                    //$('#subMenuBackTarget').show();
                     window.onmouseon = function() {
                         $("#errorField").append($('<div>mouseon detected in the main scene</div>'))
                         $('#subMenuBackTarget').show();
@@ -295,23 +297,24 @@ define([
                     $('#rowDownButton').click(function(){
                         Grid.trigger('ondown');
                     });
+
                 }
 
+
                 mainMenu.on('selectedindex', function(index) {
-                    //make sure search term box is hidden
                     $("#searchTermBox").hide();
                     mainMenuIndex = index;
                     var item = MenuItems.at(index);
                     hideSubNav = false;
                     setCancelFetch(false);
-                    $log("action is: ", item.get('action'));
-                    $log("item is: ", item);
 
                     switch (item.get('action')) {
                         case 'livefeed':
                             hideWrapper();
                             lastMenuFocus = mainMenu;
                             dummyMenu.focus();
+                            if(Platform.name === 'lg')
+                                (window.NetCastGetMouseOnOff() == 'on') ? magicRemote.detectMouseOff(dummyMenu) : magicRemote.detectMouseOn(dummyMenu);
                             break;
                         case 'subcategory':
                             hideGrid();

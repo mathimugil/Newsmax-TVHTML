@@ -12,7 +12,8 @@ define([
     'newsmax/menus/newsmax.menus.trickplay', 
     'newsmax/menus/newsmax.menus.backmenu',
     'config',
-    'newsmax/menus/newsmax.menu.clickablemenu'
+    'newsmax/menus/newsmax.menu.clickablemenu',
+    'newsmax/newsmax.magicremote'
     ],
     function(
         StageManager,
@@ -28,14 +29,12 @@ define([
         TrickMenu, 
         BackMenu,
         conf,
-        ClickableMenu
+        ClickableMenu,
+        magicRemote
         ) {
 
     var videoPlayback,
         videoProgressInMS;
-
-    /*if($storage.getItem('firstRun'))var tmpDefault=false;
-    else var tmpDefault=true;*/
    
     videoPlayback = new StageManager.Scene({
         defaultScene: false,
@@ -75,7 +74,6 @@ define([
 
         videoPlayback.hasScrubbed = false;
 
-        $log(">>>>>> Entering Video Playback state");
         $("#videowrapper").show();
         TrickMenu.disable();
         showLoader();
@@ -103,12 +101,10 @@ define([
         TrickMenu.focus();
         
         hideMenu.on('onfocus', function() {
-            $log('hidemenu received a onfocus');
             $('#hideTrayButton').addClass('focused');
         }, this);
         
         hideMenu.on('onblur', function() {
-            $log('hidemenu received on blur event');
             $('#hideTrayButton').removeClass('focused');
         }, this);
         hideMenu.on('onselect', function() {
@@ -125,7 +121,6 @@ define([
     }
 
     videoPlayback.onleavescene = function() {
-      $log(">>>>>> Leaving Video Playback state");
       MediaPlayer.off("videoup",null,videoPlayback);
       $("body").css('background','transparent');
       clearTimeout(timeout);
@@ -144,7 +139,7 @@ define([
 
     controlsUp.onenterstate = function() {
         $("#videowrapper").fadeIn();
-        $log(" CONTORLSUP onenterstate");
+
         TrickMenu.on('onup', function() {
             hideMenu.focus();
         }, this);
@@ -164,19 +159,19 @@ define([
             touchTimeout();
         }, this);
 
-         if(Platform.name == 'lg'){
+        if(Platform.name == 'lg'){
             
-            setInterval(function(){             //TODO: Is this too aggressive for LG?
-                var status = window.NetCastGetMouseOnOff();
-                if(status=='on'){
-                    touchTimeout();
-                }
-            },1000);  
+            this.oldMouseoff = window.onmouseoff;
+            window.onmouseoff = function(){
+                touchTimeout();
+            }
 
         }
 
     }
     controlsUp.onleavestate = function() {
+        window.onmouseoff = this.oldMouseoff;
+        this.interval = null;
         backMenu.off(null,null, this);
         hideMenu.off(null, null, this);
         TrickMenu.off(null, null, this);
@@ -187,7 +182,6 @@ define([
     controlsDown.onenterstate = function() {
         disableBack = true;
         $('#videowrapper').fadeOut();
-        $log('E N T E R I N G controlsDown state');
 
         dummy.on('onright onleft onup ondown onselect',function(e,l){
             if(!lastState) videoPlayback.changeState('controlsup');
@@ -199,11 +193,8 @@ define([
 
         KeyHandler.on('onReturn',function(){ dummy.trigger('onselect'); },this);
 
-        if(Platform.name === 'lg'){
-            window.onmouseon = function() {
-                dummy.trigger('onselect');
-            };
-        }       
+        if(Platform.name === 'lg')
+            (window.NetCastGetMouseOnOff() == 'on') ? magicRemote.detectMouseOff(dummy) : magicRemote.detectMouseOn(dummy);
     }
 
     controlsDown.onleavestate = function() {
@@ -217,8 +208,13 @@ define([
         clearTimeout(timeout);
         timeout = setTimeout(function(){
             if(conf.disableScreenHider) return;
+
+            if(Platform.name == 'lg' && (window.NetCastGetMouseOnOff() == 'on')){
+                    touchTimeout();
+                    return;
+            }
+
             if(MediaPlayer.playing()){
-                if($disableHiding) return;
                 videoPlayback.changeState('controlsdown');
             }   
             else
@@ -231,9 +227,9 @@ define([
         duration = MediaPlayer.duration();
         if (_.isNumber(duration)) {
             videoProgressInMS = currentTime;
-            if(currentTime==0){
+            /*if(currentTime==0){
                 $("#errorField").append($("<div>mediaplayer firing 0</div>"))
-            }
+            }*/
             videoPlayback.updateTimeDisplay(currentTime, duration);
         } else {
             return;
@@ -260,7 +256,6 @@ define([
     }
 
     function initVideoPlayback() {
-      // debugger;
         var playlist =  video.getPlaylist();
         MediaPlayer.setPlaylist(playlist);
         MediaPlayer.play();
@@ -383,7 +378,7 @@ define([
                 StageManager.StageHistory.back();
                 break;
             case 'videoerror':
-                $log('There was an error in videoplayback scene - make sure you are using safari for hls streams');
+                //$log('There was an error in videoplayback scene - make sure you are using safari for hls streams');
                 StageManager.StageHistory.back();
                 //TODO: set error flag to check while exiting the scene
         }

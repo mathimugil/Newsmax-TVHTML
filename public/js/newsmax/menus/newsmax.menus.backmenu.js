@@ -28,7 +28,7 @@ define(['navigation', 'stagemanager'], function(Navigation, StageManager) {
 		_onFocus:function(){
 			debugger;
 		}
-
+ 
 	});
 
 	return backMenu;

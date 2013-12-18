@@ -67,7 +67,6 @@ define(['backbone', 'keyhandler', 'jquery', 'stagemanager', 'navigation', 'confi
 
             if($("#wrapper").is(':hidden')){
                 screenHider.touchHideTimeout();
-                $log("ignoring this hide trigger");
                 return;
             }
             
@@ -77,17 +76,25 @@ define(['backbone', 'keyhandler', 'jquery', 'stagemanager', 'navigation', 'confi
                 return;
             }
 
+            if(window.NetCastGetMouseOnOff() == 'on'){
+                screenHider.touchHideTimeout();
+                $log('ignoring this hide screen because LG mouse is on');
+                return;
+            }
+
             if (conf.disableScreenHider) return;
+
             
+
             StageManager.getScene('main').disableBack = true;   //could be in the homeScene, lets disable the backbutton there
 
             lastMenu = Navigation.currentFocus.menu;
 
-            $log("hiding screen -screenhider");
             $('#wrapper').fadeOut();
             
             menu.focus();
             menu.on('all', function() {
+                window.onmouseon = oldMouseon;
                 showScreen();
             });
 
@@ -98,21 +105,20 @@ define(['backbone', 'keyhandler', 'jquery', 'stagemanager', 'navigation', 'confi
 
 
             showScreen = function() {
-                //clearInterval(focusInterval);
-                $log('showScreen');
                 $('#wrapper').fadeIn();
                 menu.off();
                 lastMenu.focus();
-                window.onmouseon = null;
+                window.onmouseon = oldMouseon;
                 screenHider.touchHideTimeout();
                 StageManager.getScene('main').disableBack = false;
             }
             
             //TODO: test this on the LG
-            var mouseon_handler = function() {
+            var oldMouseon = window.onmouseon;
+            window.onmouseon = function() {
                 showScreen();
+                oldMouseon();
             };
-            window.onmouseon = mouseon_handler;
 
         }, this);
 

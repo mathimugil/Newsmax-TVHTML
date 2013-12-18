@@ -83,6 +83,7 @@ define(['navigation','underscore', 'hbs!enginelite/menuprototypes/templates/engi
       this.on('onup', this._rowUp, this)
       this.on('ondown', this._rowDown, this)
       this.on('onselect', this._onSelect, this);
+      this.on('pageup pagedown', this.showOrHideOverlays, this);
       this.on('onplay', function(){
         if(!this.options._onPlay) return;
         this._onSelect()
@@ -107,18 +108,46 @@ define(['navigation','underscore', 'hbs!enginelite/menuprototypes/templates/engi
       if($(event.currentTarget).hasClass('currentRow'))
         return;
 
-      $('.gridArrowOverlay').show();
+      if(this.showBottomOverlay())
+        $('#gridBottomRowOverlay').show();
+      if(this.showTopOverlay())
+        $('#gridTopRowOverlay').show(); 
+
       $('.gridArrowOverlay').on('mouseleave',function(){
         $('.gridArrowOverlay').off('mouseleave');
         $('.gridArrowOverlay').hide();
-      });
+      }); 
 
     },
 
-    /*hideOverlays: function(){
-      $('.gridArrowOverlay').off('mouseleave');
-      $('.gridArrowOverlay').hide();
-    },*/
+    showOrHideOverlays: function(){
+      if(this.showTopOverlay())
+        $('#gridTopRowOverlay').show();
+      else
+        $('#gridTopRowOverlay').hide();
+
+      if(this.showBottomOverlay())
+        $("#gridBottomRowOverlay").show();
+      else
+        $("#gridBottomRowOverlay").hide(); 
+    },
+
+    showBottomOverlay: function(){
+    
+      var mod = this.collection.length % this.options.cols;
+      var lastRowStartingIndex = this.collection.length - this.options.cols + mod;  //TODO: double check this
+      if(this._currentIndex >= lastRowStartingIndex)
+        return false
+      else 
+        return true
+    },
+
+    showTopOverlay: function(){
+      if(this._currentIndex < this.options.cols)
+        return false;
+      else 
+        return true;
+    },
 
     coords: function(index) {
         index = index || this._currentIndex;
@@ -146,7 +175,6 @@ define(['navigation','underscore', 'hbs!enginelite/menuprototypes/templates/engi
     _oldFocus:null,
 
     setFocus: function() {
-      console.log("this.currentindex:", this._currentIndex);
       this.trigger('blurfocus', this.collection.at(this._oldFocus));
       $(this.options.el).children().children().removeClass("focused")
       $(this.options.el).children().children().eq(this._currentIndex).addClass("focused");
