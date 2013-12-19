@@ -1453,7 +1453,7 @@ img#logo {
     font-style: normal;
     font-weight: normal;
     color: #e1e1e1;
-    background-color: #999999;
+    background-color: #666666;
     font-size: 36px;
     background: none !important; }
     #subMenuBackTarget #menuLeftButton:before {
@@ -1486,7 +1486,7 @@ img#logo {
   font-style: normal;
   font-weight: normal;
   color: #e1e1e1;
-  background-color: #999999;
+  background-color: #666666;
   font-size: 36px;
   background: none !important; }
   #menuUpButton:before, #menuDownButton:before {
@@ -1496,7 +1496,7 @@ img#logo {
     content: "\f077"; }
   #menuUpButton.focused, #menuDownButton.focused {
     color: #e1e1e1;
-    background-color: #c22826; }
+    background-color: #c22826 !important; }
 
 #menuDownButton {
   top: 0px; }
@@ -1533,7 +1533,7 @@ img#logo {
       color: #e1e1e1; }
   #searchMenu tr.bottom-keyboard-buttons td {
     text-transform: lowercase;
-    background-color: #999999;
+    background-color: #666666;
     color: #e1e1e1;
     border: 5px solid transparent; }
     #searchMenu tr.bottom-keyboard-buttons td.focused {
@@ -1656,7 +1656,7 @@ ul#subMenu {
     font-style: normal;
     font-weight: normal;
     color: #e1e1e1;
-    background-color: #999999;
+    background-color: #666666;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
     background-color: #085caa;
     font-size: 36px; }
@@ -1667,7 +1667,7 @@ ul#subMenu {
       content: "\f077"; }
     #gridMenuHolder #rowDownButton.focused, #gridMenuHolder #rowUpButton.focused {
       color: #e1e1e1;
-      background-color: #c22826; }
+      background-color: #c22826 !important; }
   #gridMenuHolder #rowDownButton:before {
     content: "\f078"; }
 
@@ -1720,7 +1720,7 @@ ul#subMenu {
   font-style: normal;
   font-weight: normal;
   color: #e1e1e1;
-  background-color: #999999;
+  background-color: #666666;
   font-size: 36px; }
   .backButton:before {
     position: absolute;
@@ -1729,7 +1729,7 @@ ul#subMenu {
     content: "\f053"; }
   .backButton.focused {
     color: #e1e1e1;
-    background-color: #c22826; }
+    background-color: #c22826 !important; }
 
 #hideTrayButton {
   position: absolute;
@@ -1742,7 +1742,7 @@ ul#subMenu {
   font-style: normal;
   font-weight: normal;
   color: #e1e1e1;
-  background-color: #999999;
+  background-color: #666666;
   font-size: 36px; }
   #hideTrayButton:before {
     position: absolute;
@@ -1751,7 +1751,7 @@ ul#subMenu {
     content: "\f078"; }
   #hideTrayButton.focused {
     color: #e1e1e1;
-    background-color: #c22826; }
+    background-color: #c22826 !important; }
 
 #playBackTray {
   background: -webkit-linear-gradient(top, rgba(239, 239, 239, 0.9) 0%, rgba(204, 204, 203, 0.9) 81%, rgba(154, 155, 159, 0.9) 100%);
@@ -1819,7 +1819,7 @@ ul#subMenu {
       font-style: normal;
       font-weight: normal;
       color: #e1e1e1;
-      background-color: #999999; }
+      background-color: #666666; }
       #playBackTray #trickPlayContainer .trickPlayButton:before {
         position: absolute;
         top: 15px;
@@ -1838,9 +1838,9 @@ ul#subMenu {
         content: "\f04e"; }
       #playBackTray #trickPlayContainer .trickPlayButton.focused {
         color: #e1e1e1;
-        background-color: #c22826; }
+        background-color: #c22826 !important; }
       #playBackTray #trickPlayContainer .trickPlayButton.selected {
-        background-color: #085caa; }
+        background-color: #999; }
 
 #videoInfo {
   position: absolute;

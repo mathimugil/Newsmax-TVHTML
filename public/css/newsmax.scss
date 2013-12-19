@@ -17,10 +17,10 @@ src: url(../fonts/HelveticaNeueLight.ttf);
 }
 @mixin buttonhover {
   color: $tvwhite;
-  background-color: $red;
+  background-color: $red !important;
 }
 @mixin buttonselected {
-  background-color: $nblue;
+  background-color: #999;
 }
 @mixin menubg {
   background: rgba(45,91,169, 0.95);
