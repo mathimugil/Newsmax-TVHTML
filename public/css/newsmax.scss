@@ -244,28 +244,28 @@ ul#subMenu{
     position: absolute; top: 0; left: 0;
 }
 #mainMenu li, #subMenu li {
-  width: 275px;
+  width: 270px;
   text-align:right;
   padding: 15px 20px 0px 30px; 
   color: $tvwhite;
   margin-bottom: 5px;
-  border-bottom: 8px solid transparent;
+  border: 2px solid transparent;
   font-weight: normal;
-  font-size: 26px;
+  font-size: 25px;
   
   &.sm-focused {
-    border-bottom: 8px solid $highlight;
+    border: 2px solid $tvwhite;
     font: Helvetica;
-    font-weight: bold;
   }
   &.selected {
-    border-bottom: 8px solid transparent;
+    border-bottom: 2px solid transparent;
     color:$tvwhite;
     font: Helvetica;
-    font-weight: bold;
+    color: $tvwhite;
+    background: $red;
   }
   &.selected.sm-focused{
-    border-bottom: 8px solid $highlight;
+    border: 2px solid $tvwhite;
   }
 }
 
@@ -313,7 +313,7 @@ ul#subMenu{
       }
       &.focused img {
         @include outerglow;
-        border: 3px solid $red;
+        border: 3px solid $tvwhite;
         opacity:1;
       }
     }

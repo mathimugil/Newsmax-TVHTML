@@ -128,10 +128,9 @@ define([
                     MediaPlayer.once('timeupdate', function() {
                         $("#loadingVideoIndicator").fadeOut();
                         $("img#logo").fadeIn();
-                        //touchTimeout();
                     }, this);
 
-                    MediaPlayer.play();
+                    //MediaPlayer.play();
                     $("#loadingVideoIndicator").fadeOut();
                     $("img#logo").fadeIn();
                 }
