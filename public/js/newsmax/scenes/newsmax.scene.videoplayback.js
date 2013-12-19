@@ -129,6 +129,7 @@ define([
       $("#progressBar").css({ width: 0 });
       $("#timecode").empty();
       $('#duration').empty();
+      $(".trickPlayButton").removeClass("selected").removeClass("focused");
       $('#hideTrayButton').removeClass('focused');  //not sure why i am having to add this here?
       teardownKeyhandlers();
       scrubManager.deactivate();
@@ -262,6 +263,7 @@ define([
         var playlist =  video.getPlaylist();
         MediaPlayer.setPlaylist(playlist);
         MediaPlayer.play();
+        $(".trickPlayButton.play").addClass("selected");
     }
 
     function initKeyhandlers() {

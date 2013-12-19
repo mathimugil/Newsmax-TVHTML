@@ -25,7 +25,9 @@ define(['navigation', 'enginelite/menuprototypes/enginelite.menus.listmenu', 'hb
     var VideoMenu = new menu({});
 
     VideoMenu.on('selectedindex',function(index){
-        
+      console.log("SELECTED INDEX")
+      this.$el.children().removeClass('selected');
+      this.$el.children().eq(index).addClass('selected');
         switch(index.toString()){
             case "0":
                 //stop

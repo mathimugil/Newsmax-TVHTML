@@ -17,6 +17,9 @@ src: url(../fonts/HelveticaNeueLight.ttf);
 }
 @mixin buttonhover {
   color: $tvwhite;
+  background-color: $red;
+}
+@mixin buttonselected {
   background-color: $nblue;
 }
 @mixin menubg {
@@ -246,7 +249,7 @@ ul#subMenu{
 #mainMenu li, #subMenu li {
   width: 274px;
   text-align:right;
-  padding: 17px 20px 2px 30px; 
+  padding: 13px 20px 7px 30px; 
   color: $tvwhite;
   margin-bottom: 5px;
   font-weight: normal;
@@ -531,6 +534,9 @@ ul#subMenu{
       }
       &.focused{
         @include buttonhover;
+      }
+      &.selected{
+        @include buttonselected;
       }
     }
   }
