@@ -130,9 +130,9 @@ define([
                         $("img#logo").fadeIn();
                     }, this);
 
-                    //MediaPlayer.play();
-                    $("#loadingVideoIndicator").fadeOut();
-                    $("img#logo").fadeIn();
+                    MediaPlayer.play();
+                    // $("#loadingVideoIndicator").fadeOut();
+//                     $("img#logo").fadeIn();
                 }
                 initLiveStream();
 

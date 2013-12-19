@@ -1564,25 +1564,32 @@ ul#subMenu {
   left: 0; }
 
 #mainMenu li, #subMenu li {
-  width: 270px;
+  width: 274px;
   text-align: right;
-  padding: 15px 20px 0px 30px;
+  padding: 17px 20px 2px 30px;
   color: #e1e1e1;
   margin-bottom: 5px;
-  border: 2px solid transparent;
   font-weight: normal;
-  font-size: 25px; }
+  font-size: 25px;
+  position: relative; }
   #mainMenu li.sm-focused, #subMenu li.sm-focused {
-    border: 2px solid #e1e1e1;
+    background: #c22826;
+    color: #e1e1e1;
     font: Helvetica; }
   #mainMenu li.selected, #subMenu li.selected {
     border-bottom: 2px solid transparent;
     color: #e1e1e1;
     font: Helvetica;
-    color: #e1e1e1;
-    background: #c22826; }
-  #mainMenu li.selected.sm-focused, #subMenu li.selected.sm-focused {
-    border: 2px solid #e1e1e1; }
+    font-weight: bold; }
+    #mainMenu li.selected:before, #subMenu li.selected:before {
+      font-family: FontAwesome;
+      font-size: 26px;
+      font-style: normal;
+      font-weight: normal;
+      position: absolute;
+      top: 15px;
+      left: 10px;
+      content: "\f054"; }
 
 #searchTermBox {
   display: none;
@@ -1626,7 +1633,7 @@ ul#subMenu {
         opacity: 0.7; }
       #gridMenuHolder #gridMenuContainer li.gridItem.focused img {
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
-        border: 3px solid #e1e1e1;
+        border: 3px solid #c22826;
         opacity: 1; }
   #gridMenuHolder #gridTopRowOverlay, #gridMenuHolder #gridBottomRowOverlay {
     display: none;
@@ -1762,7 +1769,7 @@ ul#subMenu {
       position: absolute;
       top: 0px;
       left: 0px;
-      width: 1129px;
+      width: 1029px;
       height: 10px;
       background-color: #e1e2e3;
       box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25); }
@@ -1787,11 +1794,11 @@ ul#subMenu {
       clear: both;
       display: block; }
   #playBackTray #timecode {
-    font: 19px;
+    font-size: 18px;
     color: black;
     position: absolute;
     bottom: 99px;
-    left: 1190px;
+    left: 1090px;
     font-family: Helvetica, Arial, sans-serif; }
   #playBackTray #trickPlayContainer {
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);

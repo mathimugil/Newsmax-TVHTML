@@ -45,7 +45,7 @@ define([
 
     var controlsUp      = videoPlayback.createState('controlsup', true);
     var controlsDown    = videoPlayback.createState('controlsdown', false);
-    var backMenu, hideMenu;
+    var backMenu, hideMenu, progressBarTrueWidth;
     var dummy           = new Navigation.Menu();
     var closeMenu       = new Navigation.Menu();    //todo: delete this one
     var disableBack     = false;
@@ -75,6 +75,7 @@ define([
         videoPlayback.hasScrubbed = false;
 
         $("#videowrapper").show();
+        progressBarTrueWidth = $("#progressBarBack").outerWidth();
         TrickMenu.disable();
         showLoader();
         
@@ -127,6 +128,7 @@ define([
       $("#videowrapper").hide();
       $("#progressBar").css({ width: 0 });
       $("#timecode").empty();
+      $('#duration').empty();
       $('#hideTrayButton').removeClass('focused');  //not sure why i am having to add this here?
       teardownKeyhandlers();
       scrubManager.deactivate();
@@ -250,8 +252,8 @@ define([
             current = Util.convertMstoHumanReadable(currentTime);
             progress = (currentTime / duration);
         }
-        progress_width = Math.ceil(progress * 1129);
-        $("#timecode").text(current);
+        progress_width = Math.ceil(progress * progressBarTrueWidth);
+        $("#timecode").text(current + " / " + total);
         $("#progressBar").css({ width: progress_width });
         $('#scrubDirection').css({ left: (progress_width - 33) });
     }
