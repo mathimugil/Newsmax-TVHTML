@@ -1376,11 +1376,11 @@ body {
         padding: 5px 15px;
         margin: 0px auto; }
 
-img#logo {
+div#logo {
   position: absolute;
   z-index: 99999;
   top: 32px;
-  right: 32px;
+  left: 65px;
   width: 238px;
   height: 40px;
   display: none; }
@@ -1404,10 +1404,11 @@ img#logo {
     left: 535px; }
 
 #mainMenu {
-  background: rgba(45, 91, 169, 0.95);
+  /*background: rgba(45,91,169, 0.95);*/
+  background: url(../images/menu-bg.png) no-repeat center top;
   box-shadow: 10px 0px 8px rgba(0, 0, 0, 0.25);
   height: 690px;
-  padding-top: 80px;
+  padding-top: 100px;
   position: absolute;
   left: 0;
   top: 0; }
@@ -1421,14 +1422,15 @@ img#logo {
   width: 50px; }
 
 #subMenuHolder {
-  background: rgba(45, 91, 169, 0.95);
+  /*background: rgba(45,91,169, 0.95);*/
+  background: url(../images/menu-bg.png) no-repeat center top;
   box-shadow: 10px 0px 8px rgba(0, 0, 0, 0.25);
   position: absolute;
   top: 0px;
   left: -280px;
   height: 690px;
   overflow: hidden;
-  padding-top: 80px;
+  padding-top: 100px;
   width: 325px; }
   #subMenuHolder #subMenuHeightConstraint {
     height: 526px;
@@ -1564,7 +1566,7 @@ ul#subMenu {
   left: 0; }
 
 #mainMenu li, #subMenu li {
-  width: 274px;
+  width: 279px;
   text-align: right;
   padding: 13px 20px 7px 30px;
   color: #e1e1e1;
@@ -1604,14 +1606,14 @@ ul#subMenu {
   padding: 10px; }
 
 #gridMenuHolder {
-  background: -webkit-linear-gradient(top, rgba(239, 239, 239, 0.9) 0%, rgba(204, 204, 203, 0.9) 81%, rgba(154, 155, 159, 0.9) 100%);
   display: none;
   position: absolute;
+  background: url(../images/map.jpg) no-repeat top center;
   top: 100px;
   left: 385px;
   width: 820px;
   height: 520px;
-  padding: 0 20px;
+  padding: 0 10px;
   overflow: hidden;
   border: 1px solid #cccccb; }
   #gridMenuHolder #gridMenuContainer {
@@ -1625,15 +1627,17 @@ ul#subMenu {
         margin-bottom: 130px; }
     #gridMenuHolder #gridMenuContainer li.gridItem {
       float: left;
-      border: 2px solid transparent; }
+      border: 2px solid transparent;
+      margin-bottom: 5px;
+      margin-right: 3px; }
       #gridMenuHolder #gridMenuContainer li.gridItem img {
         width: 197px;
         height: 110px;
-        border: 3px solid #58595b;
+        border: 1px solid #58595b;
         opacity: 0.7; }
       #gridMenuHolder #gridMenuContainer li.gridItem.focused img {
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
-        border: 3px solid #c22826;
+        border: 1px solid #c22826;
         opacity: 1; }
   #gridMenuHolder #gridTopRowOverlay, #gridMenuHolder #gridBottomRowOverlay {
     display: none;
@@ -1676,7 +1680,7 @@ ul#subMenu {
   display: none;
   position: absolute;
   top: 365px;
-  left: 418px;
+  left: 405px;
   width: 785px;
   height: 108px;
   color: black;

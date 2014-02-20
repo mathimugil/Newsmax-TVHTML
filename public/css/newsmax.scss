@@ -23,7 +23,8 @@ src: url(../fonts/HelveticaNeueLight.ttf);
   background-color: #999;
 }
 @mixin menubg {
-  background: rgba(45,91,169, 0.95);
+  /*background: rgba(45,91,169, 0.95);*/
+  background: url(../images/menu-bg.png) no-repeat center top;
   box-shadow: 10px 0px 8px rgba(00,00,00,0.25);
 }
 @mixin outerglow {
@@ -84,11 +85,11 @@ body{
   }
 }
 
-img#logo {
+div#logo {
   position: absolute;
   z-index: 99999;
   top: 32px;
-  right: 32px;
+  left: 65px;
   width: 238px; height: 40px;
   display: none;
 }
@@ -111,7 +112,7 @@ img#logo {
 #mainMenu {
   @include menubg;
   height: 690px; 
-  padding-top: 80px; 
+  padding-top: 100px; 
   position:absolute; left: 0; top: 0;
 }
 
@@ -129,7 +130,7 @@ img#logo {
   top:0px; left: -280px;
   height: 690px;
   overflow: hidden;
-  padding-top: 80px;
+  padding-top: 100px;
   width: 325px;
   
   #subMenuHeightConstraint{
@@ -247,7 +248,7 @@ ul#subMenu{
     position: absolute; top: 0; left: 0;
 }
 #mainMenu li, #subMenu li {
-  width: 274px;
+  width: 279px;
   text-align:right;
   padding: 13px 20px 7px 30px; 
   color: $tvwhite;
@@ -289,12 +290,13 @@ ul#subMenu{
   
 }
 #gridMenuHolder{
-  @include silvergradient;
+  // @include silvergradient;
   display: none;
   position: absolute;
+  background: url(../images/map.jpg) no-repeat top center;
   top: 100px; left: 385px;
   width: 820px; height: 520px;
-  padding: 0 20px;
+  padding: 0 10px;
   overflow: hidden;
   border: 1px solid #cccccb;
   
@@ -309,20 +311,23 @@ ul#subMenu{
         margin-bottom: 130px;
       }
       width:100%;
+
     }
     li.gridItem {
       float: left;
       border: 2px solid transparent;
+      margin-bottom: 5px;
+      margin-right: 3px;
     
       img {
         width: 197px;
         height: 110px;
-        border: 3px solid #58595b;
+        border: 1px solid #58595b;
         opacity:0.7;
       }
       &.focused img {
         @include outerglow;
-        border: 3px solid $red;
+        border: 1px solid $red;
         opacity:1;
       }
     }
@@ -367,7 +372,7 @@ ul#subMenu{
   @include outerglow;
   display: none;
   position: absolute;
-  top: 365px; left: 418px;
+  top: 365px; left: 405px;
   width: 785px; height: 108px;
   color: $dark;
   padding: 10px;

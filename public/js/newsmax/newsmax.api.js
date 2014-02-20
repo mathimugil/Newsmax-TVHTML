@@ -10,10 +10,10 @@ define(['navigation','platform','config'], function(Navigation, Platform, conf) 
 				url : url,
 				skipProxy: !Platform.needsProxy
 				// skipProxy: true,
-				// xhrFields: {
-				//   				withCredentials: true
-				// 			},
-				// 			crossDomain: true
+//         xhrFields: {
+//                   withCredentials: true
+//               },
+//               crossDomain: true
 			})
 
 			return $.ajax(options).then(function(data) {

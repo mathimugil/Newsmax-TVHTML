@@ -127,12 +127,10 @@ define([
 
                     MediaPlayer.once('timeupdate', function() {
                         $("#loadingVideoIndicator").fadeOut();
-                        $("img#logo").fadeIn();
+                        $("#logo").fadeIn();
                     }, this);
 
                     MediaPlayer.play();
-                    // $("#loadingVideoIndicator").fadeOut();
-//                     $("img#logo").fadeIn();
                 }
                 initLiveStream();
 
@@ -212,15 +210,18 @@ define([
                     },
                     resetIndex: function() {
                         resetGridPosition();
+                        this._currentIndex = 0;
+
+                        
                         /* we have to do a little fanciness. If there are less than two full rows of
                          * items, we have to set the index differently
                          */
-                        if (this.collection.models.length >= (this.options.cols * this.options.rows * 2)) {
-                            this._currentIndex = this.options.cols; //we want the first item in the 2nd row
-                        } else {
-                            moveGrid("down");
-                            this._currentIndex = 0;
-                        }
+                        // if (this.collection.models.length >= (this.options.cols * this.options.rows * 2)) {
+                        //     this._currentIndex = this.options.cols; //we want the first item in the 2nd row
+                        // } else {
+                        //     moveGrid("down");
+                        //     this._currentIndex = 0;
+                        // }
 
                     },
                     pageDown: function() {
@@ -545,7 +546,7 @@ define([
                 
                 var resetGridPosition = function() {
                     $("#gridMenuContainer").css({
-                        top: "10px"
+                        top: "138px" //10px if we start on second row
                     });
                 }
                 
