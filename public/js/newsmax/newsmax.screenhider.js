@@ -98,10 +98,10 @@ define(['backbone', 'keyhandler', 'jquery', 'stagemanager', 'navigation', 'confi
                 showScreen();
             });
 
-            /*focusInterval = setInterval(function(){
+            focusInterval = setInterval(function(){
                 if(TVEngine.Navigation.currentMenu.name != 'ade:dummymenu') 
                     TVEngine.Navigation.getMenu("ade:dummymenu").focus();
-            },500);*/
+            }, 500);
 
 
             showScreen = function() {

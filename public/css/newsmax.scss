@@ -85,14 +85,6 @@ body{
   }
 }
 
-div#logo {
-  position: absolute;
-  z-index: 99999;
-  top: 32px;
-  left: 65px;
-  width: 238px; height: 40px;
-  display: none;
-}
 
 #loadingVideoIndicator{
   position:absolute;
@@ -114,6 +106,7 @@ div#logo {
   height: 690px; 
   padding-top: 100px; 
   position:absolute; left: 0; top: 0;
+  width: 325px;
 }
 
 #mainMenuObscure{
@@ -139,6 +132,15 @@ div#logo {
       position: relative;
   }
   
+}
+
+#logo {
+  position: absolute;
+  z-index: 99999;
+  top: 32px;
+  left: 975px;
+  width: 238px; height: 40px;
+  display: none;
 }
 #subMenuBackTarget{
     position: absolute; top: 5px; left: -15px;
@@ -278,6 +280,7 @@ ul#subMenu{
     }
   }
 }
+#mainMenu li{ width: 276px; } 
 
 #searchTermBox{
   display: none;

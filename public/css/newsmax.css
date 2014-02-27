@@ -1376,15 +1376,6 @@ body {
         padding: 5px 15px;
         margin: 0px auto; }
 
-div#logo {
-  position: absolute;
-  z-index: 99999;
-  top: 32px;
-  left: 65px;
-  width: 238px;
-  height: 40px;
-  display: none; }
-
 #loadingVideoIndicator {
   position: absolute;
   top: 0px;
@@ -1411,7 +1402,8 @@ div#logo {
   padding-top: 100px;
   position: absolute;
   left: 0;
-  top: 0; }
+  top: 0;
+  width: 325px; }
 
 #mainMenuObscure {
   display: none;
@@ -1436,6 +1428,15 @@ div#logo {
     height: 526px;
     overflow: hidden;
     position: relative; }
+
+#logo {
+  position: absolute;
+  z-index: 99999;
+  top: 32px;
+  left: 975px;
+  width: 238px;
+  height: 40px;
+  display: none; }
 
 #subMenuBackTarget {
   position: absolute;
@@ -1592,6 +1593,9 @@ ul#subMenu {
       top: 15px;
       left: 10px;
       content: "\f054"; }
+
+#mainMenu li {
+  width: 276px; }
 
 #searchTermBox {
   display: none;
