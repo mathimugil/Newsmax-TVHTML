@@ -420,7 +420,7 @@ define([
 
                 //direction etc.
                 mainMenu.on('onright', function() {
-                    if (hideSubNav && $("#gridMenuHolder").is(':visible')) { //top of the hour news matches this case
+                    if (hideSubNav && $("#gridMenuHolder").is(':visible') && Grid.collection.length > 0) { //top of the hour news matches this case
                         $("#mainMenu li").removeClass("sm-focused");
                         Grid.focus();
                     } else if ($("#mainMenu li:last").hasClass("sm-focused")) {
@@ -588,7 +588,7 @@ define([
                         $log("no duration")
                         $('.trt').empty();
                     }
-                    $('.title').html(item.get("title") + "this makes it longer");
+                    $('.title').html(item.get("title"));
                     $('.title').ellipsis({
                         row: 1
                     });
@@ -722,6 +722,7 @@ define([
 
         var emptyGrid = function() {
             $("#gridMenuContainer").empty();
+            Grid.collection.reset();
         }
 
         var showLoader = function() {
