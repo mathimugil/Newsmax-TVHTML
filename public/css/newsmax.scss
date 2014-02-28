@@ -400,17 +400,20 @@ ul#subMenu{
     }
   }
   span{ 
-    display: block; 
+    overflow: hidden;
+    display: inline-block;
+    text-overflow: ellipsis;
     margin-bottom: 10px;
     line-height: 1.2em;
+    height: 88px; width: 780px;
   }
   .title{
     font-weight: bold;
     width: 720px;
-    overflow:hidden;
-    display:inline-block; 
-    white-space:nowrap;
-    text-overflow:ellipsis;
+    overflow: hidden;
+    display: inline-block; 
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
   .trt{
     position: absolute;

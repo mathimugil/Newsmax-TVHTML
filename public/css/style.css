@@ -1803,9 +1803,13 @@ ul#subMenu {
     #gridHTML #gridArrow.right {
       left: 685px; }
   #gridHTML span {
-    display: block;
+    overflow: hidden;
+    display: inline-block;
+    text-overflow: ellipsis;
     margin-bottom: 10px;
-    line-height: 1.2em; }
+    line-height: 1.2em;
+    height: 88px;
+    width: 780px; }
   #gridHTML .title {
     font-weight: bold;
     width: 720px;
