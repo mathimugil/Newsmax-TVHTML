@@ -1808,7 +1808,11 @@ ul#subMenu {
     line-height: 1.2em; }
   #gridHTML .title {
     font-weight: bold;
-    width: 90%; }
+    width: 720px;
+    overflow: hidden;
+    display: inline-block;
+    white-space: nowrap;
+    text-overflow: ellipsis; }
   #gridHTML .trt {
     position: absolute;
     top: 10px;

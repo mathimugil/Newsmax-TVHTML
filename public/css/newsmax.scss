@@ -406,7 +406,11 @@ ul#subMenu{
   }
   .title{
     font-weight: bold;
-    width: 90%;
+    width: 720px;
+    overflow:hidden;
+    display:inline-block; 
+    white-space:nowrap;
+    text-overflow:ellipsis;
   }
   .trt{
     position: absolute;
