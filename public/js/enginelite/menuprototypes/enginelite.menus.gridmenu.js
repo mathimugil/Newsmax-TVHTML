@@ -83,7 +83,7 @@ define(['navigation','underscore', 'hbs!enginelite/menuprototypes/templates/engi
       this.on('onup', this._rowUp, this)
       this.on('ondown', this._rowDown, this)
       this.on('onselect', this._onSelect, this);
-      this.on('pageup pagedown', this.showOrHideOverlays, this);
+      //this.on('pageup pagedown', this.showOrHideOverlays, this); <-- we only want this on mouse events
       this.on('onplay', function(){
         if(!this.options._onPlay) return;
         this._onSelect()
@@ -103,7 +103,6 @@ define(['navigation','underscore', 'hbs!enginelite/menuprototypes/templates/engi
 
 
     showOverlays: function(event){
-      
       this.focus();
       if($(event.currentTarget).hasClass('currentRow'))
         return;
