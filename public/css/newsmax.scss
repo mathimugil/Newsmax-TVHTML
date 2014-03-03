@@ -363,11 +363,16 @@ ul#subMenu{
       &.focused{
         @include buttonhover;
       }
+
+      &:hover {
+        color: $menuTextBlue !important;
+      };
   }
   #rowDownButton{
       &:before{
         content: "\f078";
       }
+
   }
 }
 
