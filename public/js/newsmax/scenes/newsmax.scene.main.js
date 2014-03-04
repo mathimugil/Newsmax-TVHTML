@@ -528,6 +528,7 @@ define([
                 Grid.on('onfocus', function() {
                     //$log("grid is on focus")
                     $(Grid.el).children().children().eq(Grid._currentIndex).parent().addClass("currentRow");
+                    updateHTMLforGrid(Grid.collection.at(Grid._currentIndex));
                     $("#gridHTML").show();
                 });
 
@@ -573,10 +574,13 @@ define([
                     $("#subMenuDownTarget").hide();
                 }
                 var updateHTMLforGrid = function(item) {
+                    $log("updateHTMLforGrid");
+                    $("#gridHTML").show();
                     if (item && item.attributes && item.attributes.description) {
+                        $log("RUNNING ELLIPSIS");
                         $('.description').html(item.get('description'));
                         $('.description').ellipsis({
-                            row: 4
+                            row: 3
                         });
                     } else {
                         $('.description').empty();

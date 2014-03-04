@@ -105,6 +105,7 @@ define([
             } 
         },context);
 
+        TrickMenu.setFocusTo("onStop");
         TrickMenu.focus();
         
         hideMenu.on('onfocus', function() {
@@ -137,7 +138,8 @@ define([
       $("#progressBar").css({ width: 0 });
       $("#timecode").empty();
       $('#duration').empty();
-      $(".trickPlayButton").removeClass("selected").removeClass("focused");
+      $('#scrubDirection').hide();
+      $(".trickPlayButton").removeClass("selected focused");
       $('#hideTrayButton').removeClass('focused');  //not sure why i am having to add this here?
       teardownKeyhandlers();
       scrubManager.deactivate();
