@@ -52,6 +52,7 @@ define([
     var timeout;
     var $disableHiding  = false;
     var video, trackInterval, lastState;
+    var videoInitialized;
 
     videoPlayback.handlesback = function(){
         if(disableBack == true) return false;
@@ -92,12 +93,17 @@ define([
 
         TrickMenu.setElement("#trickPlayContainer");
  
-        MediaPlayer.once('timeupdate',function(){
-            TrickMenu.enable();
-            initKeyhandlers();
-            $("#loadingVideoIndicator").fadeOut();
-            touchTimeout();
-        },this);
+        var context ={}
+        MediaPlayer.on('timeupdate',function(time){
+            if(time > 0){
+                videoInitialized = true;
+                hideLoader();
+                TrickMenu.enable();
+                initKeyhandlers();
+                touchTimeout();
+                MediaPlayer.off(null,null,context);  
+            } 
+        },context);
 
         TrickMenu.focus();
         
@@ -119,6 +125,8 @@ define([
         hideMenu.on('onup',function(){
             if($('.backButton:visible').length!==0){  backMenu.focus();}    
         },this);
+
+        videoInitialized = false;
     }
 
     videoPlayback.onleavescene = function() {
@@ -367,11 +375,12 @@ define([
                     timeUpdateHandler(param);
                 break;
             case 'play':
+                //hideLoader();
                 break;
             case 'playlist:newplaylistitem':
                 break;
             case 'bufferingend':
-                hideLoader();
+                if(videoInitialized) hideLoader(); // This is to address an LG bug where buffering ends well before play starts
                 break;
             case 'bufferingstart':
                 showLoader();

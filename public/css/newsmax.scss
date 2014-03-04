@@ -321,6 +321,7 @@ ul#subMenu{
       border: 2px solid transparent;
       margin-bottom: 5px;
       margin-right: 3px;
+      position: relative;
     
       img {
         width: 197px;
@@ -332,6 +333,20 @@ ul#subMenu{
         @include outerglow;
         border: 1px solid $red;
         opacity:1;
+      }
+      .title-clip{
+        background: rgba(00,00,00,0.7);
+        color: white;
+        font-size: 16px;
+        position: absolute;
+        bottom: 9px;
+        left: 1px;
+        width: 185px; 
+        padding: 10px 5px 5px 7px;
+        overflow: hidden;
+        display: inline-block;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
   }
@@ -413,7 +428,7 @@ ul#subMenu{
     height: 88px; width: 780px;
   }
   .title{
-    font-weight: bold;
+    font-weight: bold !important;
     width: 720px;
     overflow: hidden;
     display: inline-block; 
