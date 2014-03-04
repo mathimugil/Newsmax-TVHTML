@@ -283,6 +283,8 @@ define([
         KeyHandler.on("onPlay", function() {
             if(videoPlayback.currentState!=='controlsup') videoPlayback.changeState('controlsup');
             TrickMenu.setFocusTo('onPlay');
+            $(".trickPlayButton").removeClass("selected");
+            $(".trickPlayButton.play").addClass("selected");
 
             if (scrubManager._scrubbing) {
                 scrubManager.stopStickyScrubbing();
@@ -297,6 +299,8 @@ define([
         KeyHandler.on("onPause", function() {
             if(videoPlayback.currentState!=='controlsup') videoPlayback.changeState('controlsup');
             TrickMenu.setFocusTo('onPause');
+            $(".trickPlayButton").removeClass("selected");
+            $(".trickPlayButton.pause").addClass("selected");
 
             if (scrubManager._scrubbing) {
                 scrubManager.stopStickyScrubbing("pausebutton");
@@ -310,6 +314,8 @@ define([
         KeyHandler.on("onStop", function() {
             if(videoPlayback.currentState!=='controlsup') videoPlayback.changeState('controlsup');
             TrickMenu.setFocusTo('onStop');
+            $(".trickPlayButton").removeClass("selected");
+            $(".trickPlayButton.stop").addClass("selected");
 
             if (scrubManager._scrubbing) {
                 scrubManager.stopStickyScrubbing();
@@ -321,6 +327,8 @@ define([
         KeyHandler.on("onRW", function() {
             if(videoPlayback.currentState!=='controlsup') videoPlayback.changeState('controlsup');
             TrickMenu.setFocusTo('onRW');
+            $(".trickPlayButton").removeClass("selected");
+            $(".trickPlayButton.rewind").addClass("selected");
 
             if (scrubManager._scrubbing) {
                 scrubManager.stopStickyScrubbing();
@@ -335,6 +343,8 @@ define([
         KeyHandler.on("onFF", function() {
             if(videoPlayback.currentState!=='controlsup') videoPlayback.changeState('controlsup');
             TrickMenu.setFocusTo('onFF');
+            $(".trickPlayButton").removeClass("selected");
+            $(".trickPlayButton.fastforward").addClass("selected");
             //debugger;
             if (scrubManager._scrubbing) {
                 scrubManager.stopStickyScrubbing();

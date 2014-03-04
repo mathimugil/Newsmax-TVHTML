@@ -1656,7 +1656,8 @@ ul#subMenu {
         overflow: hidden;
         display: inline-block;
         text-overflow: ellipsis;
-        white-space: nowrap; }
+        white-space: nowrap;
+        line-height: 1.3em; }
   #gridMenuHolder #gridTopRowOverlay, #gridMenuHolder #gridBottomRowOverlay {
     display: none;
     width: 860px;
