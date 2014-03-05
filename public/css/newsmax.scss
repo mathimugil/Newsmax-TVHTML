@@ -144,7 +144,7 @@ body{
 }
 #subMenuBackTarget{
     position: absolute; top: 5px; left: -15px;
-    width: 60px; height: 130px; display:none;
+    width: 60px; height: 90px; display:none;
     &:hover div{ color: $menuTextBlue !important; };
     
     #menuLeftButton{
