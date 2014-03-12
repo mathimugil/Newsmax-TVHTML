@@ -39,7 +39,8 @@ define(['navigation','platform','config'], function(Navigation, Platform, conf) 
 			});
 		},
 		fetchMainConfig: function () {
-			return this.fetchItem('http://cdn.nmax.tv/NewsmaxVideoServices/api/Configuration?DC=iPhone&SN=3535252235252', this.parseMainConfig, {
+			var SN = Platform.deviceId();
+			return this.fetchItem('http://cdn.nmax.tv/NewsmaxVideoServices/api/Configuration?DC=iPhone&SN=' + SN, this.parseMainConfig, {
 				proxypath:'proxy.cdn'
 			})
 		},
