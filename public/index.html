@@ -2,7 +2,6 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <meta name="gtv-autozoom" content="off" />
   <title> NewsMax App!</title>
   <meta name="description" content="A Different Engine"/>
   <meta name="author" content="A Different Engine LLC" />
@@ -19,38 +18,27 @@
       document.write('<script type="text/javascript" language="javascript" src="$MANAGER_WIDGET/Common/Util/Language.js"></scri'+'pt>');
     }
   </script>
-  
+
   <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css" />
-   <!-- endbuild -->
+<!-- endbuild -->
+
   <!-- build:js js/app.min.js -->
+    <script src="js/lib/require-2.1.8.js" data-main="js/application"></script>
+<!-- endbuild -->
 
-  <script type="text/javascript">
-    // This is stupid, I can just let them fail but I don't like the errors.
-    if( navigator.userAgent.search(/Maple/) > -1) {
-      document.write('<script type="text/javascript" language="javascript" src="$MANAGER_WIDGET/Common/API/TVKeyValue.js"></scri'+'pt>');
-      document.write('<script type="text/javascript" language="javascript" src="$MANAGER_WIDGET/Common/API/Plugin.js"></scri'+'pt>');
-      document.write('<script type="text/javascript" language="javascript" src="$MANAGER_WIDGET/Common/API/Widget.js"></scri'+'pt>');
-      document.write('<script type="text/javascript" language="javascript" src="$MANAGER_WIDGET/Common/Plugin/Define.js"></scri'+'pt>');
-      document.write('<script type="text/javascript" language="javascript" src="$MANAGER_WIDGET/Common/Util/Include.js"></scri'+'pt>');
-      document.write('<script type="text/javascript" language="javascript" src="$MANAGER_WIDGET/Common/Util/Language.js"></scri'+'pt>');
-    }
-  </script>
 
-  <script src="js/lib/require-2.1.8.js" data-main="js/application"></script>
-  <!-- endbuild -->
 
 </head>
 <body>
 
-  <object id="pluginAudio" border=0 classid="clsid:SAMSUNG-INFOLINK-AUDIO"></object>
-  <object id="pluginObjectTVMW" border=0 classid="clsid:SAMSUNG-INFOLINK-TVMW"></object>
+  <object id="pluginAudio" border=0 classid="clsid:SAMSUNG-INFOLINK-AUDIO" data-platform="samsung" style="visibility:hidden; position:absolute; width: 0; height: 0; opacity: 0;"></object>
+  <object id="pluginObjectTVMW" border=0 classid="clsid:SAMSUNG-INFOLINK-TVMW" data-platform="samsung" style="visibility:hidden; position:absolute; width: 0; height: 0; opacity: 0;"></object>
   <object id="pluginObjectNNavi" border=0 classid="clsid:SAMSUNG-INFOLINK-NNAVI" style='  opacity:0.0;background-color:#000000;width:0px;height:0px;'></object>
   <object id="pluginWindow" classid="clsid:SAMSUNG-INFOLINK-WINDOW" style="visibility:hidden; position:absolute; width: 0; height: 0; opacity: 0;"></object>
-  <object id="pluginObjectNetwork" border="0" classid="clsid:SAMSUNG-INFOLINK-NETWORK"></object>
+  <object id="pluginObjectNetwork" border="0" classid="clsid:SAMSUNG-INFOLINK-NETWORK"  data-platform="samsung"></object>
   <object id='pluginObjectTV' border=0 classid='clsid:SAMSUNG-INFOLINK-TV'  style='opacity:0.0;background-color:#000000;width:0px;height:0px;'></object>
   <object id="pluginPlayer" border=0 classid="clsid:SAMSUNG-INFOLINK-PLAYER"  style="visibility:hidden; position:absolute; width: 0; height: 0; opacity: 0;"></object>
-  
+<object type='application/x-netcast-info' id='lg-device' data-platform="lg"></object>
   <div id="innerBody">
     <div id="videotag" style="position: absolute; top: 0; left: 0; width: 1280px; height: 720px"></div>
     <div id="videowrapper" style="position: absolute; top: 0; left: 0;"></div>

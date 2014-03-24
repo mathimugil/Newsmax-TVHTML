@@ -35,7 +35,7 @@ define(['navigation', 'underscore'], function(Navigation, _) {
     },
 
     initialize: function() {
-      $log(" IST MENU ARGS", arguments, this.options);
+      $log("LIST MENU ARGS", arguments, this.options);
       Navigation.Menu.prototype.initialize.call(this, arguments);
       this.options = _.defaults(this.options, this.defaults);
 
@@ -60,7 +60,7 @@ define(['navigation', 'underscore'], function(Navigation, _) {
       }, this);
 
       this.on('onblur', this._onBlur, this);
-
+      $log("END LIST MENU INIT");
       if (this.collection) {
         this.listenTo(this.collection, 'reset add remove', function() {
           _t._currentIndex = 0;
@@ -68,7 +68,6 @@ define(['navigation', 'underscore'], function(Navigation, _) {
           _t._maxIndex = _t.collection.length - 1;
         });
       } else {
-        $log('in collection else loop')
         _t._currentIndex = 0;
       }
 

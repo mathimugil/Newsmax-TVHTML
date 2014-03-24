@@ -3,17 +3,46 @@
 
 var LIVERELOAD_PORT = 35729;
 var lrSnippet = require('connect-livereload')({
-    port: LIVERELOAD_PORT, excludeList : ['.zip']
+    port: LIVERELOAD_PORT,
+    excludeList: ['.zip']
 });
 var mountFolder = function(connect, dir) {
     return connect.static(require('path').resolve(dir));
 };
 
+
+
 var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
+
+
 
 module.exports = function(grunt) {
 
     require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
+
+
+
+    var loadProxies = function() {
+        var requirejs = require('requirejs');
+        requirejs.config({
+            baseUrl: __dirname,
+            nodeRequire: require
+        })
+        var proxyConfig = requirejs('public/js/proxyconfig');
+        var proxies = proxyConfig.proxies || [];
+        return proxies.map(function(p) {
+            var rw = {};
+            rw['^/' + p.path] = '';
+            return {
+                context: '/' + p.path,
+                host: p.domain,
+                port: 80,
+                https: false,
+                changeOrigin: true,
+                rewrite: rw
+            }
+        });
+    }
 
     var yeomanConfig = {
         app: 'public',
@@ -66,8 +95,8 @@ module.exports = function(grunt) {
         clean: {
             dist: ['<%= yeoman.tmp %>', '<%= yeoman.dist %>/*'],
             tmp: ['<%= yeoman.tmp %>'],
-            post_build_cleanup: ['<%= yeoman.dist %>/_widgetlist.xml','<%= yeoman.dist %>/js/lib/vendor'],
-            samsung: ['<%= yeoman.dist %>/widgetlist.xml','<%= yeoman.dist %>/Widget']
+            post_build_cleanup: ['<%= yeoman.dist %>/_widgetlist.xml', '<%= yeoman.dist %>/js/lib/vendor'],
+            samsung: ['<%= yeoman.dist %>/widgetlist.xml', '<%= yeoman.dist %>/Widget']
         },
         bower: {
             target: {
@@ -137,40 +166,8 @@ module.exports = function(grunt) {
                     },
                     keepalive: true
                 }
-            }
-                ,
-            proxies: [
-                {
-                    context: '/proxy.cdn',
-                    host: 'cdn.nmax.tv',
-                    port: 80,
-                    https: false,
-                    changeOrigin: true,
-                    rewrite: {
-                        '^/proxy.cdn': ''
-                    }
-                },
-                {
-                    context: '/proxy.api',
-                    host: 'www.nmax.tv',
-                    port: 80,
-                    https: false,
-                    changeOrigin: true,
-                    rewrite: {
-                        '^/proxy.api': ''
-                    }
-                },
-                {
-                    context: '/proxy.ooo',
-                    host: 'cdn-api.ooyala.com',
-                    port: 80,
-                    https: false,
-                    changeOrigin: true,
-                    rewrite: {
-                        '^/proxy.ooo': ''
-                    }
-                }
-            ]
+            },
+            proxies: loadProxies() // Want to share this config between this and the client app.
         },
         sass: {
             main: {
@@ -192,19 +189,18 @@ module.exports = function(grunt) {
         },
         forever: {
             options: {
-                index: 'server.js', logDir: 'logs'
+                index: 'server.js',
+                logDir: 'logs'
             }
         },
         copy: {
             tmpbuild: {
-                files: [
-                    {
-                        expand: true,
-                        cwd: '<%= yeoman.app %>/',
-                        src: ['**'],
-                        dest: '<%= yeoman.tmp %>'
-                    }
-                ]
+                files: [{
+                    expand: true,
+                    cwd: '<%= yeoman.app %>/',
+                    src: ['**'],
+                    dest: '<%= yeoman.tmp %>'
+                }]
             }
         },
         compress: {
@@ -237,13 +233,16 @@ module.exports = function(grunt) {
             }
         }
     });
-    grunt.registerTask('build:samsung', ['clean:samsung','compress:samsung', 'template:widgetlist'])
-    grunt.registerTask('build', ['bower', 'sass', 'clean:dist', 'requirejs', 'imagemin', 'cssmin', 'clean:post_build_cleanup','build:samsung']);
+    grunt.registerTask('build:samsung', ['clean:samsung', 'compress:samsung', 'template:widgetlist'])
+    grunt.registerTask('build', ['bower', 'sass', 'clean:dist', 'requirejs', 'imagemin', 'cssmin', 'clean:post_build_cleanup', 'build:samsung']);
     grunt.registerTask('server:dev', ['bower', 'sass', 'configureProxies', 'connect:livereload', 'open', 'watch']);
     grunt.registerTask('server', ['build', 'configureProxies', 'connect:buildserver', 'open']);
-    grunt.registerTask('server:restart',['configureProxies', 'connect:buildserver', 'open']);
+    grunt.registerTask('server:restart', ['configureProxies', 'connect:buildserver', 'open']);
     grunt.registerTask('default', ['bower', 'sass']);
-    grunt.registerTask('proserve', ['build','forever:start'])
+    grunt.registerTask('proserve', ['build', 'forever:start'])
+    grunt.registerTask('testproxyconfig', function() {
+        console.log(loadProxies());
+    })
 };
 var ipaddress = function() {
     var os = require('os');

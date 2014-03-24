@@ -1,19 +1,14 @@
 define(['navigation','platform','config'], function(Navigation, Platform, conf) {
   var imageProcessingLink = "http://www.nmax.tv/NewsmaxVideoServices/api/Image?uri=";
   var imageSizeSlug = "&height=110&width=197";
-  
+
 	return {
 		fetchItem: function(url, parser, options) {
             conf.pauseScreenhider = true;
 			options = _.isFunction(parser) ? options : parser;
 			options = _.defaults(options || {},{
 				url : url,
-				skipProxy: !Platform.needsProxy
-				// skipProxy: true,
-//         xhrFields: {
-//                   withCredentials: true
-//               },
-//               crossDomain: true
+				skipProxy: (document.location.href.indexOf("nmax") > 0 || !Platform.needsProxy)
 			})
 
 			return $.ajax(options).then(function(data) {
@@ -60,10 +55,10 @@ define(['navigation','platform','config'], function(Navigation, Platform, conf) 
     searchParser: function(data){
       $xmlDoc = $.parseXML( data.MRSS_Feed );
       $xml = $( $xmlDoc );
-      
+
       var resultsArray = [];
       _($($xml).find('item')).map(function(i) {
-        var newItem = { 
+        var newItem = {
           title: $(i).find('title').eq(0).text(),
           streamUrl: $(i).find('content').eq(0).attr('url'),
           description: $(i).find('description').eq(0).text(),

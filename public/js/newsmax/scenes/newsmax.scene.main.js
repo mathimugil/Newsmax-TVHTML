@@ -395,7 +395,7 @@ define([
                 }, scene);
 
                 subMenu.on("showscrollers", function() {
-                    // this is triggered by SlotTarget menu on init if there are more elements than 
+                    // this is triggered by SlotTarget menu on init if there are more elements than
                     // the visible option passed in
                     $("#subMenuDownTarget").show();
                 }, scene)
@@ -764,7 +764,7 @@ define([
             } else {
                 if (fetchCounter == 0) {
                     cancelFetch = false;
-                    //$log("cancelFetch T R U E ");                    
+                    //$log("cancelFetch T R U E ");
                 }
 
             }

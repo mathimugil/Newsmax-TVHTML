@@ -2,12 +2,6 @@
 define(['enginelite/enginelite.platform', 'jquery', 'underscore','backbone', 'domReady', 'tvengine'], function(Platform,$, _, Backbone, domReady, TVEngine)  {
   var platform = new Platform('lg');
   platform.setResolution(1280, 720);
-  domReady(function() {
-    $("<object />", {
-      type: "application/x-netcast-info",
-      id: "lg-device"
-    }).appendTo("head");
-  });
   platform.needsProxy = true;
   platform.keys = function() {
     return {
@@ -104,12 +98,15 @@ define(['enginelite/enginelite.platform', 'jquery', 'underscore','backbone', 'do
   _.extend(platform.adPlayer, Backbone.Events);
 
   platform.deviceId = function() {
-    var device = document.getElementById('device');
-    return device.serialNumber;
+    try {
+        var device = document.getElementById('lg-device');
+        return device.serialNumber;
+    } catch(e) {
+        window.console.log(" Error with device id");
+    }
   }
 
   platform.deviceType = function() {
-
     return device.manufacturer + "  - " + device.modelName;
   }
 

@@ -1,6 +1,6 @@
 define(['backbone', 'keyhandler', 'jquery', 'stagemanager', 'navigation', 'config', 'platform'], function(Backbone, KeyHandler, $, StageManager, Navigation, conf, Platform) {
 
-    
+
     window.ScreenHider = function() {
         this.timeout = null;
         this._timeoutLength = 70000;
@@ -15,7 +15,7 @@ define(['backbone', 'keyhandler', 'jquery', 'stagemanager', 'navigation', 'confi
         if (this._timeoutLength < 500) $error(" Screen Hide timeout is less then 500ms, is this right?");
         KeyHandler.off(null, null, this);
         this.touchHideTimeout();
-        
+
         KeyHandler.on('onUp onDown onLeft onRight onSelect onReturn', function() {
             this.touchHideTimeout();
         }, this);
@@ -34,7 +34,7 @@ define(['backbone', 'keyhandler', 'jquery', 'stagemanager', 'navigation', 'confi
         clearTimeout(this.timeout);
     };
 
-    window.$startScreenHider = function() {
+     window.$startScreenHider = function() {
         var screenHider, lastMenu, showScreen;
 
         screenHider = new ScreenHider();
@@ -46,7 +46,7 @@ define(['backbone', 'keyhandler', 'jquery', 'stagemanager', 'navigation', 'confi
         });
 
         if(Platform.name == 'lg'){
-            
+
             setInterval(function(){             //TODO: could be improved with a dip and switch.
                 var status = window.NetCastGetMouseOnOff();
                 //$("#errorField").append($('<div>status = ' + status + '</div>'))
@@ -59,7 +59,7 @@ define(['backbone', 'keyhandler', 'jquery', 'stagemanager', 'navigation', 'confi
 
         screenHider.on('hidescreen', function() {
             var self = this;
-            
+
             if(StageManager.scene.name!='main'){
                 screenHider.touchHideTimeout();
                 return;
@@ -69,14 +69,14 @@ define(['backbone', 'keyhandler', 'jquery', 'stagemanager', 'navigation', 'confi
                 screenHider.touchHideTimeout();
                 return;
             }
-            
+
             if(conf.pauseScreenhider){
                 screenHider.touchHideTimeout();
                 $log(">>>>>>> ignoring this hide trigger, api is working");
                 return;
             }
 
-            if(window.NetCastGetMouseOnOff() == 'on'){
+            if(window.NetCastGetMouseOnOff && window.NetCastGetMouseOnOff() == 'on'){
                 screenHider.touchHideTimeout();
                 $log('ignoring this hide screen because LG mouse is on');
                 return;
@@ -84,24 +84,24 @@ define(['backbone', 'keyhandler', 'jquery', 'stagemanager', 'navigation', 'confi
 
             if (conf.disableScreenHider) return;
 
-            
+
 
             StageManager.getScene('main').disableBack = true;   //could be in the homeScene, lets disable the backbutton there
 
             lastMenu = Navigation.currentFocus.menu;
 
             $('#wrapper').fadeOut();
-            
+
             menu.focus();
             menu.on('all', function() {
                 window.onmouseon = oldMouseon;
                 showScreen();
             });
 
-            focusInterval = setInterval(function(){
-                if(TVEngine.Navigation.currentMenu.name != 'ade:dummymenu') 
-                    TVEngine.Navigation.getMenu("ade:dummymenu").focus();
-            }, 500);
+            // focusInterval = setInterval(function(){
+            //     if(Navigation.currentMenu.name != 'ade:dummymenu')
+            //         Navigation.getMenu("ade:dummymenu").focus();
+            // }, 500);
 
 
             showScreen = function() {
@@ -112,7 +112,7 @@ define(['backbone', 'keyhandler', 'jquery', 'stagemanager', 'navigation', 'confi
                 screenHider.touchHideTimeout();
                 StageManager.getScene('main').disableBack = false;
             }
-            
+
             //TODO: test this on the LG
             var oldMouseon = window.onmouseon;
             window.onmouseon = function() {
