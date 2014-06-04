@@ -2,7 +2,7 @@
 
 ##Newsmax TVHTML App
 
-###Running Locally
+###Running Locally on OS X or Ubuntu
 Newsmax HTML App expects to run locally on [node.js] (http://www.nodejs.org) and [grunt] (http://gruntjs.com/). Install node by homebrew (or similar) from the app directory:
 
   -- brew install node
@@ -16,6 +16,35 @@ Install Grunt globally with npm:
   -- npm install -g grunt -cli
   
 To start up your server, run `grunt server:dev`
+
+###Running Locally on Windows
+Newsmax can be run on Windows but with a few different steps.
+
+1. You need to host the contents of the "public" directory on a webserver (Apache or IIS should work)
+
+Right now the app will not work because it can't make Cross Domain AJAX calls. To enable this you need to edit line 11 in public/newsmax/newsmax.api.js
+
+Change:
+
+```
+skipProxy: (document.location.href.indexOf("nmax") > 0 || !Platform.needsProxy)
+```
+
+to 
+```
+skipProxy: true
+```
+
+Now you need to run Chrome with web security disabled.  To do this you need to launch Chrome with the --disable-web-security argument;
+
+1. Create A Shortcut to Chrome on your desktop.
+1. Right Click the Shortcut and select "Properties"
+2. Edit the "target path" (adjust path too chrome.exe if needed)
+```
+"C:\Program Files\Google\Chrome\Application\chrome.exe" --args --disable-web-security
+```
+
+Run Chrome and view the hosted application and it should work.
 
 ###MediaPlayer Events
 
