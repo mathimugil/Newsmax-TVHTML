@@ -271,6 +271,7 @@ define([
 
     function initVideoPlayback() {
         var playlist =  video.getPlaylist();
+        playlist.playlistItems[0].attributes.title = video.attributes.title;
         MediaPlayer.setPlaylist(playlist);
         MediaPlayer.play();
         $(".trickPlayButton.play").addClass("selected");
