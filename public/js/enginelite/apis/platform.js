@@ -11,7 +11,8 @@ define(['underscore'],function(_) {
             { test:/LG Browser/, file: 'enginelite/platforms/enginelite.platform.lg', name: "LG"},
             { test:/Viera/,     file: 'enginelite/platforms/enginelite.platform.panasonic', name: "Panasonic"},
             { test:/Maple/, file: 'enginelite/platforms/enginelite.platform.samsungmodern', name: "Samsung"},
-            { test:/AQUOS/, file: 'enginelite/platforms/enginelite.platform.sharp', name: "Sharp"}
+            { test:/AQUOS/, file: 'enginelite/platforms/enginelite.platform.sharp', name: "Sharp"},
+            { test:/Opera TV Store/, file: 'enginelite/platforms/enginelite.platform.opera', name: "Opera"}
         ]);
 
         var test = tests.find(function(t) {
