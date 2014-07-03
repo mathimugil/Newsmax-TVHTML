@@ -17,6 +17,10 @@ Install Grunt globally with npm:
   
 To start up your server, run `grunt server:dev`
 
+
+tornote:
+ -- I had to use these instructions to get grunt up and working right https://gist.github.com/rachelbaker/5437969
+
 ###Running Locally on Windows
 Newsmax can be run on Windows but with a few different steps.
 
