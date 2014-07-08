@@ -35,7 +35,7 @@ define(['navigation','platform','config'], function(Navigation, Platform, conf) 
 		},
 		fetchMainConfig: function () {
 			var SN = Platform.deviceId();
-			return this.fetchItem('http://cdn.nmax.tv/NewsmaxVideoServices/api/Configuration?DC=iPhone&SN=' + SN, this.parseMainConfig, {
+			return this.fetchItem('http://cdn.nmax.tv/NewsmaxVideoServices/api/Configuration?DC=SmartTV&SN=' + SN, this.parseMainConfig, {
 				proxypath:'proxy.cdn'
 			})
 		},
@@ -65,7 +65,7 @@ define(['navigation','platform','config'], function(Navigation, Platform, conf) 
           thumbnail: imageProcessingLink + $(i).find('thumbnail').eq(0).attr('url') + imageSizeSlug,
           duration: $(i).find('content').eq(0).attr('duration')
         };
-        if(_.findWhere(resultsArray, newItem) == null) resultsArray.push(newItem);
+        if(_.findWhere(resultsArray, newItem) == null && newItem.streamUrl && newItem.streamUrl !== "") resultsArray.push(newItem);
       })
       return resultsArray;
     }

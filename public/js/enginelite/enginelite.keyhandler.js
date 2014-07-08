@@ -52,7 +52,7 @@ define(['tvengine','platform','jquery','underscore','backbone'], function(TVEngi
 			for (var key in $KEYS) keyMap[$KEYS[key]] = key;
 
 			$(document).bind("keydown", function(event) {
-				if (event.keyCode == 457) document.location.reload(true)
+				// if (event.keyCode == 457) document.location.reload(true)
 				var action = keyActions[keyMap[event.keyCode]];
 
 				if (typeof action != 'undefined') {
@@ -75,22 +75,7 @@ define(['tvengine','platform','jquery','underscore','backbone'], function(TVEngi
 			})
 
 			var currentHash = "back."+new Date().getTime();
-			window.location.hash = currentHash;
 
-
-			$(window).on('hashchange', function () {
-				if(window.location.hash.indexOf(currentHash) === -1){
-					KeyHandler._captureBack = false;
-					KeyHandler.trigger('onReturn');
-					if(KeyHandler._captureBack) {
-						window.location.hash = currentHash;
-					} else {
-						$log(" Going back in time ....");
-						$(this).off('hashchange');
-						window.history.go(-2); // Have to skip over the initial blank slate;
-					}
-				}
-			});
 
 	}
 	return KeyHandler;

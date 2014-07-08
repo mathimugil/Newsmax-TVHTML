@@ -2,9 +2,9 @@ define({
     domainsToSkipProxisOn: [
         'nmax.com'
     ],
-    proxies: [
+        proxies: [
         {
-            path: 'proxy.ooo', domain: 'cdn-api.ooyala.com'
+            path: 'proxy.ooo', domain: 'cdn.nmax.tv'
         },
         {
             path: 'proxy.api', domain: 'www.nmax.tv'

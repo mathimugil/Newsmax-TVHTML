@@ -10,8 +10,14 @@ define([  'stagemanager'
           , 'newsmax/menus/newsmax.menus.trickplay'], function(StageManager, Navigation, Platform, $, _, Backbone, MediaPlayer, KeyHandler, Util, TrickMenu) {
 
 
+    var showLoader = function(){
+      $("#circularG").fadeIn();
+    }
 
-	var scrubManager = {};
+    var hideLoader = function(){
+      $("#circularG").fadeOut();
+    }
+	var scrubManager = {}, jumpingVideo = false;
 
 	_.extend(scrubManager, Backbone.Events);
 
@@ -31,11 +37,12 @@ define([  'stagemanager'
         scrubInterval:null,
         lockScrubbing:false,
         count:0,
+        _jumpingVideo: false,
         stopStickyScrubbing: function(pausebutton) {
             this._stopScrubState();
             var _t = this;
             //var _pausebutton = pausebutton || false
-            
+
             // if (_pausebutton !== false) {
             //     var self = this;
             //     var seconds, curTime, translated;
@@ -55,45 +62,63 @@ define([  'stagemanager'
             // }
 
             if (!_t._scrubbing) return;
-           
+
             _t.shouldScrub = true;
             _t.lockScrubbing = true;
 
             clearTimeout(_t.scrubInterval);
             _t.trigger('stepset');
         },
-        onRight:function(){
+        _rateControlInEffect: false,
+        onRight:function() {
+            // Rate Limit the button pressers.
+            if(this._rateControlInEffect) return;
+            this._rateControlInEffect = true;
+            setTimeout(function() {
+                this._rateControlInEffect = false;
+            }.bind(this), 500)
+
             var _t = this;
 
             clearTimeout(this.saveTimeout);
             clearTimeout(this._stopScrubbingTimeout);
+            if(this._jumpingVideo) {
+                this._showFFOverlay();
+                return;
+            }
 
             this._delta = 1;
-
-               
             if (_t.shouldScrub) {
                 _t.shouldScrub = false;
-
                 _t.scrubInterval =
                     setInterval(function() {
                     _t.trigger("newstep");
                 }, 250);
-
             } else {
                 _t.stopStickyScrubbing();
             }
-           
+
         },
         onLeft:function(){
+            if(this._rateControlInEffect) return;
+            this._rateControlInEffect = true;
+            setTimeout(function() {
+                this._rateControlInEffect = false;
+            }.bind(this), 500)
+
             var _t = this;
 
             clearTimeout(this.saveTimeout);
             clearTimeout(this._stopScrubbingTimeout);
+            if(this._jumpingVideo) {
+                this._showRWOverlay();
+                return;
+            }
 
             this._delta = -1;
 
-            
-                
+
+
             if (_t.shouldScrub) {
                 _t.shouldScrub = false;
 
@@ -123,21 +148,34 @@ define([  'stagemanager'
             $('#scrubDirection').show();
             $('#progressBar').addClass('scrubbing');
 
+            $('#scrubDirection').show();
             $('#scrubDirection').removeClass('ff').removeClass('rw');
             if(this._delta == -1){
+                this._showRWOverlay();
                 $("#scrubDirection").addClass('rw');
             }
             else if(this._delta == 1){
-                $('#scrubDirection').addClass('ff');                
+                this._showFFOverlay();
+                $('#scrubDirection').addClass('ff');
             }
         },
+        _showRWOverlay: function() {
+            $("#rw-overlay").css({ top: 0});
+        },
+        _showFFOverlay: function() {
+            $("#ff-overlay").css({ top: 0});
+        },
         _stopScrubState: function(){
-            $('#scrubDirection').hide();
+            MediaPlayer.once('timeupdate', function() {
+                $(".dir-overlay").css({top: -720})
+                $('#scrubDirection').hide();
+            })
+
             $('#progressBar').removeClass('scrubbing');
         },
         _startScrubbing: function(){
             var updateStepDivisor;
-            
+
             this._scrubbing = true;
             this._startScrubState();
 
@@ -160,7 +198,7 @@ define([  'stagemanager'
             var self;
             self = this;
             this._stopScrubbingTimeout = setTimeout(function(){
-                
+
                 self._scrubbing = false;    //trying to put this here.
 
                 MediaPlayer.once('timeupdate', function(/*time*/) {
@@ -175,6 +213,7 @@ define([  'stagemanager'
         _newStep: function(/*step*/){
             //used when not in jump mode
             var d, updatedProgressTime, step;
+            this._startScrubState();
 
             if(this.lockScrubbing) //never seem to hit this
                 return;
@@ -185,49 +224,64 @@ define([  'stagemanager'
 
             this.step += (this.stepsize * this._delta);
             step = this.step;
-            
+
             updatedProgressTime = this._startTime;
             updatedProgressTime += step;
-            
+
             d = this._duration;
-            
-            if(updatedProgressTime > d)
-                updatedProgressTime = d;
-            if(updatedProgressTime < 0)
-                updatedProgressTime = 0;
+
+            var stop = false;
+
+            console.log("UPDATED PROGRESS TIME ", updatedProgressTime)
+            if(updatedProgressTime > d) {
+                stop = true;
+                updatedProgressTime = d - 3000;
+            }
+            if(updatedProgressTime <= 0) {
+                updatedProgressTime = 2000;
+                stop = true;
+            }
+
 
             // $('#videoDebug').append(d+"<br>")
             //    $('#videoDebug2').append(MediaPlayer.duration()+"<br>")
             $log('newstep called for updatedProgressTime = ', updatedProgressTime);
-         	
+
             //scene.updateTimeDisplay(updatedProgressTime, d);		///hook this up to the scene
 
             this._currentScrubTime  = updatedProgressTime;
             this.trigger('scrubTimeupdate',updatedProgressTime);
-
-            if(updatedProgressTime === 0)            // for the beginning
+            if(stop) {
                 this.stopStickyScrubbing();
-            if(updatedProgressTime == d)          // for the end
-                this.stopStickyScrubbing();  
+            }
+
         },
         _stepSet: function(){
+            if(this._jumpingVideo) return;
             $log('step set called for time = ' , this._currentScrubTime);
             var seconds, curTime, translated;
             curTime     = this._currentScrubTime;
             translated  = Util.convertMstoHumanReadable(curTime);
             seconds     = translated.totalSeconds;
-           
+
             MediaPlayer.disableTimeUpdates();
-            
+
             if(Platform.name == "panasonic")
                 MediaPlayer.play();                 //pansonic bug
-            
+
+            showLoader();
+            this._jumpingVideo = true;
+            $(".dir-overlay").css({top: -720})
             MediaPlayer.jumpToTime(seconds);
-            
+            MediaPlayer.once('timeupdate', function() {
+                this._jumpingVideo = false;
+                hideLoader();
+            }, this)
+
             setTimeout(function(){
                 MediaPlayer.enableTimeUpdates();
             },1000);
-            
+
             if(!MediaPlayer.playing()){
                 MediaPlayer.play();
             }
@@ -235,23 +289,23 @@ define([  'stagemanager'
             this._stopScrubbing();
         },
         _jump: function(){
-            
+
             var seconds, curTime, translated;
-            
+
             this._newStep();
-            
+
             curTime     = this._currentScrubTime;
             translated  = Util.convertMstoHumanReadable(curTime);
             seconds     = translated.totalSeconds;
 
             MediaPlayer.jumpToTime(seconds);
             if(!MediaPlayer.playing()){
-                MediaPlayer.play();                
+                MediaPlayer.play();
             }
 
             this._stopScrubbing();
 
-            
+
         },
         activate: function(){
             var self;
@@ -265,7 +319,7 @@ define([  'stagemanager'
             this.step           = 0;
 
             this._setJumpMode();
-            
+
             $log('activete called ');
 
             //TODO: why is this being called twice?
@@ -280,8 +334,14 @@ define([  'stagemanager'
             }, this);
         },
         deactivate: function(){
-            clearTimeout(this.scrubInterval);
+            clearInterval(this.scrubInterval);
             this.off(null, null, this);
+        },
+        exit: function() {
+            clearTimeout(this.saveTimeout);
+            clearTimeout(this._stopScrubbingTimeout);
+            this.deactivate();
+            $(".dir-overlay").css({top: -720})
         }
     });
 

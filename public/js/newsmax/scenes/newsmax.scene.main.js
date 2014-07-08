@@ -15,7 +15,9 @@ define([
         'utils',
         'config',
         'platform',
-        'newsmax/newsmax.magicremote'
+        'newsmax/newsmax.magicremote',
+        'jquery',
+        'jquery.caret', 'jquery.ellipsis'
     ],
     function(
         StageManager,
@@ -36,7 +38,8 @@ define([
         Util,
         conf,
         Platform,
-        magicRemote
+        magicRemote,
+        $
     ) {
 
         //'use strict';
@@ -338,6 +341,7 @@ define([
                             hideSubNav = true;
                             setCancelFetch(true);
                             keyMenu.focus();
+                            $("#searchterm").focus();
                             break;
                     }
                 }, scene);
@@ -362,7 +366,7 @@ define([
                         left: 350,
                         opacity: 1
                     });
-                    $("#searchterm").focus();
+
                 }, scene)
 
                 keyMenu.on('onblur', function() {
@@ -460,15 +464,27 @@ define([
                 keyMenu.on('leftfrommenu', function() {
                     mainMenu.focus();
                 }, scene)
-
+                var currentpos;
                 keyMenu.on('valueselect', function(item) {
                     var currentval = $("#searchterm").val();
+                    currentpos =  $("#searchterm").caret();
+                    if (item.toLowerCase() === "space") item = " ";
+                    $log(" CARET AT ", currentpos)
                     if (item.length == 1 && $("#searchterm").val().length < 20) {
-                        $("#searchterm").val(currentval + item);
+                        if(_.isNumber(currentpos)) {
+                            $("#searchterm").val(currentval.splice(currentpos,item));
+                            _.defer(function() {
+                                console.log('seting care to ', currentpos)
+                                $("#searchterm").caret(currentpos + 1);
+                            })
+                        } else {
+                             $("#searchterm").val(currentval + item);
+                        }
                     } else if (item.toLowerCase() === "del") {
-                        $("#searchterm").val(currentval.substring(0, currentval.length - 1));
-                    } else if (item.toLowerCase() === "space") {
-                        $("#searchterm").val(currentval + " ");
+                        $("#searchterm").val(currentval.delchar(currentpos - 1));
+                        _.defer(function() {
+                            $("#searchterm").caret(currentpos - 1);
+                        })
                     } else if (item.toLowerCase() === "clear") {
                         $("#searchterm").val("");
                     } else if (item.toLowerCase() === "ok") {
@@ -656,7 +672,7 @@ define([
 
                 if (data.length > 0) {
                     $("#searchTermBox span.label").empty().html("Search Results for: ")
-                    $("#searchTermBox span.term").empty().html(term);
+                    $("#searchTermBox span.term").empty().html(term).ellipsis({row: 1});
                     populateGrid(data);
                     Grid.resetIndex();
                     Grid.focus();

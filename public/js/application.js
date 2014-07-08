@@ -12,6 +12,7 @@ require.config({
         hbs: 'lib/hbs',
         'jquery.imagesloaded': 'lib/jqplugins/jquery.imagesloaded',
         'jquery.ellipsis': 'lib/jquery.ellipsis.min',
+        'jquery.caret': 'lib/jquery.caret-1.5.2',
         domReady: 'lib/domReady',
         handlebars: 'lib/handlebars-1.0.0',
         tvengine: 'enginelite/tvengine',
@@ -40,6 +41,9 @@ require.config({
         handlebars: {
             exports: 'Handlebars'
         },
+        'jquery.caret': [
+            'jquery'
+        ],
         'jquery.imagesloaded': [
             'jquery'
         ],
@@ -62,6 +66,12 @@ require(
         'newsmax/newsmax.screenhider',
     ],
     function(domReady, TVEngine, mediaplayer) {
+        String.prototype.splice = function( idx, string ) {
+            return (this.slice(0,idx) + string  + this.slice(idx));
+        };
+        String.prototype.delchar = function( idx ) {
+            return (this.slice(0,idx) + this.slice(idx + 1));
+        };
         domReady(function() {
 
             window.console.log("here?");

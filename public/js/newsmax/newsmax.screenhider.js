@@ -98,11 +98,6 @@ define(['backbone', 'keyhandler', 'jquery', 'stagemanager', 'navigation', 'confi
                 showScreen();
             });
 
-            // focusInterval = setInterval(function(){
-            //     if(Navigation.currentMenu.name != 'ade:dummymenu')
-            //         Navigation.getMenu("ade:dummymenu").focus();
-            // }, 500);
-
 
             showScreen = function() {
                 $('#wrapper').fadeIn();
