@@ -1,15 +1,15 @@
 define([
-    'stagemanager', 
-    'navigation', 
-    'platform', 
-    'jquery', 
-    'underscore', 
-    'backbone', 
-    'mediaplayer', 
-    'keyhandler', 
-    'utils', 
-    'newsmax/scenes/newsmax.scrubber', 
-    'newsmax/menus/newsmax.menus.trickplay', 
+    'stagemanager',
+    'navigation',
+    'platform',
+    'jquery',
+    'underscore',
+    'backbone',
+    'mediaplayer',
+    'keyhandler',
+    'utils',
+    'newsmax/scenes/newsmax.scrubber',
+    'newsmax/menus/newsmax.menus.trickplay',
     'newsmax/menus/newsmax.menus.backmenu',
     'config',
     'newsmax/menus/newsmax.menu.clickablemenu',
@@ -26,7 +26,7 @@ define([
         KeyHandler,
         Util,
         scrubManager,
-        TrickMenu, 
+        TrickMenu,
         BackMenu,
         conf,
         ClickableMenu,
@@ -35,7 +35,7 @@ define([
 
     var videoPlayback,
         videoProgressInMS;
-   
+
     videoPlayback = new StageManager.Scene({
         defaultScene: false,
         name: "videoPlayback",
@@ -60,7 +60,7 @@ define([
     }
 
     videoPlayback.onenterscene = function() {
-        
+
         if(!backMenu){
             backMenu = new BackMenu({
                 el: ".backButton"
@@ -79,10 +79,12 @@ define([
         progressBarTrueWidth = $("#progressBarBack").outerWidth();
         TrickMenu.disable();
         showLoader();
-        
+
         if (!this.persist.params) $error('!video scene needs paramater!');
 
         video = this.persist.params.item
+
+
 
         $('#vtitle').html(video.attributes.title);
         $('#vdescription').html(video.attributes.description);
@@ -92,7 +94,7 @@ define([
         bindMediaEventHandler();
 
         TrickMenu.setElement("#trickPlayContainer");
- 
+
         var context ={}
         MediaPlayer.on('timeupdate',function(time){
             if(time > 0){
@@ -101,8 +103,8 @@ define([
                 TrickMenu.enable();
                 initKeyhandlers();
                 touchTimeout();
-                MediaPlayer.off(null,null,context);  
-            } 
+                MediaPlayer.off(null,null,context);
+            }
         },context);
 
 		MediaPlayer.on('play', function() {  
@@ -116,11 +118,11 @@ define([
 		
         TrickMenu.setFocusTo("onStop");
         TrickMenu.focus();
-        
+
         hideMenu.on('onfocus', function() {
             $('#hideTrayButton').addClass('focused');
         }, this);
-        
+
         hideMenu.on('onblur', function() {
             $('#hideTrayButton').removeClass('focused');
         }, this);
@@ -133,7 +135,7 @@ define([
         }, this)
 
         hideMenu.on('onup',function(){
-            if($('.backButton:visible').length!==0){  backMenu.focus();}    
+            if($('.backButton:visible').length!==0){  backMenu.focus();}
         },this);
 
         videoInitialized = false;
@@ -151,11 +153,11 @@ define([
       $(".trickPlayButton").removeClass("selected focused");
       $('#hideTrayButton').removeClass('focused');  //not sure why i am having to add this here?
       teardownKeyhandlers();
-      scrubManager.deactivate();
+      scrubManager.exit();
       MediaPlayer.stop();
       hideMenu.off(null, null, this);
-      TrickMenu.off(null, null, this); 
-      closeMenu.off(null,null,this); 
+      TrickMenu.off(null, null, this);
+      closeMenu.off(null,null,this);
       MediaPlayer.off(null,null,this);
     }
 
@@ -175,14 +177,14 @@ define([
         } else {
             MediaPlayer.once('timeupdate',function(){
                 touchTimeout();
-            },this); 
+            },this);
         }
         KeyHandler.on('onRight onLeft onUp onDown onSelect', function() {
             touchTimeout();
         }, this);
 
         if(Platform.name == 'lg'){
-            
+
             this.oldMouseoff = window.onmouseoff;
             window.onmouseoff = function(){
                 touchTimeout();
@@ -239,7 +241,7 @@ define([
 
             if(MediaPlayer.playing()){
                 videoPlayback.changeState('controlsdown');
-            }   
+            }
             else
                 touchTimeout();
         }, conf.globalTimeout);
@@ -259,7 +261,7 @@ define([
         }
     }
 
-    
+
     videoPlayback.updateTimeDisplay = function(currentTime, duration) {
         if(currentTime==0 && videoPlayback.hasScrubbed)
             return;
@@ -287,7 +289,7 @@ define([
     }
 
     function initKeyhandlers() {
-        
+
         KeyHandler.off(null, null, videoPlayback);  //always do this so that we don't do multiple bindings. realize this = the videoplayer scene
 
         KeyHandler.on("onPlay", function() {
@@ -344,9 +346,6 @@ define([
                 scrubManager.stopStickyScrubbing();
                 return;
             }
-
-            //if(!MediaPlayer.playing()) return;  <-- doesn't allow rew from paused state
-
             scrubManager.onLeft();
         }, videoPlayback);
 
@@ -360,7 +359,6 @@ define([
                 scrubManager.stopStickyScrubbing();
                 return;
             }
-
             //if(!MediaPlayer.playing()) return; // <-- doesn't allow ff from paused state
 
             scrubManager.onRight();
@@ -377,12 +375,12 @@ define([
             //$log("scrubTimeupdate updating time: ", updatetime);
             videoPlayback.hasScrubbed = true;
             /*if(updatetime==0){
-                $("#errorField").append($("<div>scrubber firing 0</div>"))                
+                $("#errorField").append($("<div>scrubber firing 0</div>"))
             }*/
 
             videoPlayback.updateTimeDisplay(updatetime, MediaPlayer.duration());
         }, videoPlayback);
-       
+
     }
 
     function mediaEventHandler(event, param) {
@@ -409,7 +407,7 @@ define([
                 showLoader();
                 break;
             case 'playlist:ended':
-                StageManager.StageHistory.back();  
+                StageManager.StageHistory.back();
                 break;
             case 'onstop':
                 StageManager.StageHistory.back();
@@ -425,11 +423,11 @@ define([
         MediaPlayer.off(null, null, videoPlayback);
         KeyHandler.off(null, null, videoPlayback);
     }
-    
+
     var showLoader = function(){
       $("#circularG").fadeIn();
     }
-    
+
     var hideLoader = function(){
       $("#circularG").fadeOut();
     }

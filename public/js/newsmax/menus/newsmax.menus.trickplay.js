@@ -3,10 +3,10 @@ define(['navigation', 'enginelite/menuprototypes/enginelite.menus.listmenu', 'hb
 	var menu = ListMenu.extend({
         events : {
           'mouseover .trickPlayButton' : 'focusOnElement',
-          'click .trickPlayButton' : 'clickOnElement', 
+          'click .trickPlayButton' : 'clickOnElement',
         },
         focusOnElement:function(event){
-
+            if(this.disabled()) return;
             var idx = $(event.currentTarget).index()
             this._currentIndex = idx;
 
@@ -17,6 +17,7 @@ define(['navigation', 'enginelite/menuprototypes/enginelite.menus.listmenu', 'hb
 
         },
         clickOnElement:function(event){
+            if(this.disabled()) return;
             var idx = $(event.currentTarget).index();
             this.trigger('selectedindex',idx);
         },
@@ -25,6 +26,7 @@ define(['navigation', 'enginelite/menuprototypes/enginelite.menus.listmenu', 'hb
     var VideoMenu = new menu({});
 
     VideoMenu.on('selectedindex',function(index){
+      if(this.disabled()) return;
       console.log("SELECTED INDEX")
       this.$el.children().removeClass('selected');
       this.$el.children().eq(index).addClass('selected');
@@ -53,12 +55,12 @@ define(['navigation', 'enginelite/menuprototypes/enginelite.menus.listmenu', 'hb
             default:
                 //do nothing
         }
-    });
+    }.bind(VideoMenu), this);
 
     VideoMenu.setFocusTo = function(type) {
 
         switch(type.toString()){
-            
+
             case "onStop":
                 this._currentIndex = 0;
                 break;
@@ -90,10 +92,16 @@ define(['navigation', 'enginelite/menuprototypes/enginelite.menus.listmenu', 'hb
     //TODO: ASK MIKE HOW TO DO THIS BETTER with extend
     VideoMenu.enabled = true;
     VideoMenu.disable = function(){
+        $("#trickPlayContainer").css({
+            opacity: 0.3
+        })
         this.enabled = false;
     }
 
     VideoMenu.enable = function(){
+        $("#trickPlayContainer").css({
+            opacity: 1
+        })
         this.enabled = true
     }
 

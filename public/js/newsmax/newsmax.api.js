@@ -66,7 +66,7 @@ define(['navigation','platform','config'], function(Navigation, Platform, conf) 
           thumbnail: imageProcessingLink + $(i).find('thumbnail').eq(0).attr('url') + imageSizeSlug,
           duration: $(i).find('content').eq(0).attr('duration')
         };
-        if(_.findWhere(resultsArray, newItem) == null) resultsArray.push(newItem);
+        if(_.findWhere(resultsArray, newItem) == null && newItem.streamUrl && newItem.streamUrl !== "") resultsArray.push(newItem);
       })
       return resultsArray;
     }

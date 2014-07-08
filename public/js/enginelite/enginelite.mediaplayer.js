@@ -484,6 +484,7 @@ define(['jquery', 'underscore', 'backbone', 'tvengine', 'platform', 'keyhandler'
     PlaylistItem.prototype.addRendition = function(r) {
         // $log(" ADDING Rendition ", r);
         if (!r.url) {
+            debugger;
             $error("TRYING TO ADD RENDITION WTH INVAID URL: " + r.url);
         } else {
             var renditions = this.get("renditions");
