@@ -319,6 +319,7 @@ define([
 
                             if ($('#gridMenuHolder').is(':visible')) hideGrid(); //just in case
                             setCancelFetch(true);
+							udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name='+item.attributes.title+'&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=menu&nmx_page_type=vod');							
                             break;
                         case 'subcategory':
                             hideGrid();
@@ -326,18 +327,21 @@ define([
                             updateGrid(item.get('subcategory').at(0).get('url'));
                             subMenu.focus();
                             $("#subMenu li.sm-focused").addClass("selected");
+							udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name='+item.get('subcategory').at(0).get('title')+'&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=submenu&nmx_page_type=vod');							
                             break;
                         case 'videos':
                             hideSubNav = true;
                             //$log("setting hideSubNav to true: ", hideSubNav);
                             hideGrid();
                             updateGrid(item.get("url"));
+							udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name='+item.attributes.title+'&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=video&nmx_page_type=vod');								
                             break;
                         case 'search':
                             hideGrid();
                             hideSubNav = true;
                             setCancelFetch(true);
                             keyMenu.focus();
+							udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name='+item.attributes.title+'&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=search&nmx_page_type=vod');									
                             break;
                     }
                 }, scene);
@@ -392,6 +396,7 @@ define([
                     $("#subMenu li").removeClass("selected");
                     $("#subMenu li.sm-focused").addClass("selected");
                     updateGrid(item.get('url'));
+					udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name='+item.get('title')+'&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=submenu&nmx_page_type=vod');						
                 }, scene);
 
                 subMenu.on("showscrollers", function() {

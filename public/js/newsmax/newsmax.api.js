@@ -1,5 +1,5 @@
 define(['navigation','platform','config'], function(Navigation, Platform, conf) {
-  var imageProcessingLink = "http://www.nmax.tv/NewsmaxVideoServices/api/Image?uri=";
+  var imageProcessingLink = "http://cdn.nmax.tv/NewsmaxVideoServices/api/Image?uri=";
   var imageSizeSlug = "&height=110&width=197";
 
 	return {
@@ -9,6 +9,7 @@ define(['navigation','platform','config'], function(Navigation, Platform, conf) 
 			options = _.defaults(options || {},{
 				url : url,
 				skipProxy: (document.location.href.indexOf("nmax") > 0 || !Platform.needsProxy)
+				//skipProxy: true
 			})
 
 			return $.ajax(options).then(function(data) {
@@ -35,7 +36,7 @@ define(['navigation','platform','config'], function(Navigation, Platform, conf) 
 		},
 		fetchMainConfig: function () {
 			var SN = Platform.deviceId();
-			return this.fetchItem('http://cdn.nmax.tv/NewsmaxVideoServices/api/Configuration?DC=iPhone&SN=' + SN, this.parseMainConfig, {
+			return this.fetchItem('http://cdn.nmax.tv/NewsmaxVideoServices/api/Configuration?DC=SmartTV&SN=' + SN, this.parseMainConfig, {
 				proxypath:'proxy.cdn'
 			})
 		},
@@ -48,7 +49,7 @@ define(['navigation','platform','config'], function(Navigation, Platform, conf) 
 			return data;
 		},
     doSearch: function (term){
-      return this.fetchItem('http://www.nmax.tv/newsmaxvideoservices/api/Search?Criteria=' + term, this.searchParser, {
+      return this.fetchItem('http://cdn.nmax.tv/NewsmaxVideoServices/api/Search?Criteria=' + term, this.searchParser, {
         proxypath:'proxy.api'
       })
     },
