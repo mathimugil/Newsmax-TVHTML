@@ -1,4 +1,5 @@
 // Generated on 2013-10-28 using generator-tvengine 0.1.0
+/* jshint node: true */
 'use strict';
 
 var LIVERELOAD_PORT = 35729;
@@ -27,7 +28,7 @@ module.exports = function(grunt) {
         requirejs.config({
             baseUrl: __dirname,
             nodeRequire: require
-        })
+        });
         var proxyConfig = requirejs('public/js/proxyconfig');
         var proxies = proxyConfig.proxies || [];
         return proxies.map(function(p) {
