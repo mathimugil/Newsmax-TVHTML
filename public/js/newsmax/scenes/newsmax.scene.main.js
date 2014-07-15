@@ -340,6 +340,7 @@ define([
 							udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name='+item.attributes.title+'&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=video&nmx_page_type=vod');
                             break;
                         case 'search':
+                            $log('got into search handler....')
                             hideGrid();
                             hideSubNav = true;
                             setCancelFetch(true);
@@ -472,28 +473,35 @@ define([
                 var currentpos;
                 keyMenu.on('valueselect', function(item) {
                     var currentval = $("#searchterm").val();
-                    currentpos =  $("#searchterm").caret();
-                    if (item.toLowerCase() === "space") item = " ";
-                    $log(" CARET AT ", currentpos)
-                    if (item.length == 1 && $("#searchterm").val().length < 20) {
+                    var lowered_item = item.toLowerCase();
+                    var searchterm = $("#searchterm");
+
+                    currentpos =  searchterm.caret();
+
+                    if (lowered_item === "space") item = " ";
+                    //$log(" CARET AT ", currentpos)
+                    if (item.length == 1 && searchterm.val().length < 20) {
                         if(_.isNumber(currentpos)) {
-                            $("#searchterm").val(currentval.splice(currentpos,item));
+                            if(currentpos == currentval.length)
+                                searchterm.val(currentval + item);
+                            else
+                                searchterm.val(currentval.splice(currentpos,item));
                             _.defer(function() {
-                                console.log('seting care to ', currentpos)
-                                $("#searchterm").caret(currentpos + 1);
-                            })
+                                //console.log('seting care to ', currentpos)
+                                searchterm.caret(currentpos + 1);
+                            });
                         } else {
-                             $("#searchterm").val(currentval + item);
+                             searchterm.val(currentval + item);
                         }
-                    } else if (item.toLowerCase() === "del") {
-                        $("#searchterm").val(currentval.delchar(currentpos - 1));
+                    } else if (lowered_item === "del") {
+                        searchterm.val(currentval.delchar(currentpos - 1));
                         _.defer(function() {
-                            $("#searchterm").caret(currentpos - 1);
+                            searchterm.caret(currentpos - 1);
                         })
-                    } else if (item.toLowerCase() === "clear") {
-                        $("#searchterm").val("");
-                    } else if (item.toLowerCase() === "ok") {
-                        runSearch($("#searchterm").val());
+                    } else if (lowered_item === "clear") {
+                        searchterm.val("");
+                    } else if (lowered_item === "ok") {
+                        runSearch(searchterm.val());
                     }
                 }, scene)
 
