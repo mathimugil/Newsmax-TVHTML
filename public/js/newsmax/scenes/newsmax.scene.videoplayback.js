@@ -111,7 +111,7 @@ define([
 			console.log('Video Playback has started ');
 			var video = MediaPlayer.getCurrentItem();
 			var title = video.attributes.title;
-			udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name='+title+'&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=video&nmx_page_type=vod');
+			udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name='+title+'&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=video&nmx_page_type=vod&player_event=play&event_timestamp='+getCurrentTimeString());
 			$('body').css('background', 'transparent');			
 		},context);
 		
@@ -261,7 +261,18 @@ define([
         }
     }
 
-
+    function getCurrentTimeString() {
+	var currentdate = new Date(); 
+	var datetime = currentdate.getDate() + "_"
+				+ (currentdate.getMonth()+1)  + "_" 
+				+ currentdate.getFullYear() + "__"  
+				+ currentdate.getHours() + "_"  
+				+ currentdate.getMinutes() + "_" 
+				+ currentdate.getSeconds() + "_"	
+				+ currentdate.getMilliseconds();		
+	return datetime;
+    }
+	
     videoPlayback.updateTimeDisplay = function(currentTime, duration) {
         if(currentTime==0 && videoPlayback.hasScrubbed)
             return;
@@ -334,6 +345,7 @@ define([
             }
 
             MediaPlayer.stop();
+ 	    udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name='+title+'&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=video&nmx_page_type=vod&player_event=stop&event_timestamp='+getCurrentTimeString());
         }, videoPlayback);
 
         KeyHandler.on("onRW", function() {
@@ -411,6 +423,7 @@ define([
                 break;
             case 'onstop':
                 StageManager.StageHistory.back();
+		console.log('event: ' + event + ' - params: ', params);                
                 break;
             case 'videoerror':
                 //$log('There was an error in videoplayback scene - make sure you are using safari for hls streams');
