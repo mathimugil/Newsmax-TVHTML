@@ -75,8 +75,12 @@ define([
             }
 
             if (mainMenu.focused && hideSubNav) { //top of the hour news no submenu
-                hideGrid();
-                return false;
+                if(gridShowing){
+                    hideGrid();
+                    return false;
+                } else {
+                    return true;
+                }
             }
 
             if (mainMenu.focused)
