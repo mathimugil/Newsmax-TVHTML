@@ -49,6 +49,8 @@ define(['navigation','platform','config'], function(Navigation, Platform, conf) 
 			return data;
 		},
     doSearch: function (term){
+	  var PlatformInfo = extractPlatformInfo(Platform);
+	  udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name=Search&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=search&nmx_page_type=vod&event=Search_Initiate&search_term='+term+'&version='+PlatformInfo.pversion+'&device_type='+PlatformInfo.platform+'&device_id='+PlatformInfo.deviceid+'&os='+PlatformInfo.pos);
       return this.fetchItem('http://cdn.nmax.tv/NewsmaxVideoServices/api/Search?Criteria=' + term, this.searchParser, {
         proxypath:'proxy.api'
       })
@@ -67,9 +69,9 @@ define(['navigation','platform','config'], function(Navigation, Platform, conf) 
           thumbnail: imageProcessingLink + $(i).find('thumbnail').eq(0).attr('url') + imageSizeSlug,
           duration: $(i).find('content').eq(0).attr('duration')
         };
-        // if(!newItem.streamUrl || newItem.length == 0) {
-        //     newItem.streamUrl = $(i).find('content').eq(0).attr('url_mp4');
-        // }
+        if(!newItem.streamUrl || newItem.length == 0) {
+            newItem.streamUrl = $(i).find('content').eq(0).attr('url_mp4');
+        }
 
         if(_.findWhere(resultsArray, newItem) == null && newItem.streamUrl && newItem.streamUrl !== "") resultsArray.push(newItem);
       })
