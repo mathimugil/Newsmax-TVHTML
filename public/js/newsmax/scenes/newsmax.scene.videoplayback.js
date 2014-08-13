@@ -107,15 +107,15 @@ define([
             }
         },context);
 
-		MediaPlayer.on('play', function() {  
+		MediaPlayer.on('play', function() {
 			console.log('Video Playback has started ');
 			var video = MediaPlayer.getCurrentItem();
 			var title = video.attributes.title;
 			udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name='+title+'&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=video&nmx_page_type=vod');
-			$('body').css('background', 'transparent');			
+			$('body').css('background', 'transparent');
 		},context);
-		
-		
+
+
         TrickMenu.setFocusTo("onStop");
         TrickMenu.focus();
 
@@ -282,7 +282,7 @@ define([
 
     function initVideoPlayback() {
         var playlist =  video.getPlaylist();
-        playlist.playlistItems[0].attributes.title = video.attributes.title;		
+        playlist.playlistItems[0].attributes.title = video.attributes.title;
         MediaPlayer.setPlaylist(playlist);
         MediaPlayer.play();
         $(".trickPlayButton.play").addClass("selected");
@@ -343,7 +343,7 @@ define([
             $(".trickPlayButton.rewind").addClass("selected");
 
             if (scrubManager._scrubbing) {
-                scrubManager.stopStickyScrubbing();
+               // scrubManager.stopStickyScrubbing();
                 return;
             }
             scrubManager.onLeft();
@@ -356,7 +356,7 @@ define([
             $(".trickPlayButton.fastforward").addClass("selected");
             //debugger;
             if (scrubManager._scrubbing) {
-                scrubManager.stopStickyScrubbing();
+                // scrubManager.stopStickyScrubbing();
                 return;
             }
             //if(!MediaPlayer.playing()) return; // <-- doesn't allow ff from paused state

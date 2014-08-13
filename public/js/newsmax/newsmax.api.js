@@ -69,9 +69,9 @@ define(['navigation','platform','config'], function(Navigation, Platform, conf) 
           thumbnail: imageProcessingLink + $(i).find('thumbnail').eq(0).attr('url') + imageSizeSlug,
           duration: $(i).find('content').eq(0).attr('duration')
         };
-        if(!newItem.streamUrl || newItem.length == 0) {
-            newItem.streamUrl = $(i).find('content').eq(0).attr('url_mp4');
-        }
+        // if(!newItem.streamUrl || newItem.length == 0) {
+        //     newItem.streamUrl = $(i).find('content').eq(0).attr('url_mp4');
+        // }
 
         if(_.findWhere(resultsArray, newItem) == null && newItem.streamUrl && newItem.streamUrl !== "") resultsArray.push(newItem);
       })

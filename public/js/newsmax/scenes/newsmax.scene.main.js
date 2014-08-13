@@ -122,7 +122,7 @@ define([
                 $log("menuitems", MenuItems);
                 conf.pauseScreenhider = false;
 				var PlatformInfo = extractPlatformInfo(Platform);
-				
+
                 /* LIVE STREAM CONTROLS */
                 var initLiveStream = function() {
                     var liveObj = MenuItems.find(function(i) {
@@ -144,7 +144,7 @@ define([
                     MediaPlayer.play();
 					var video = MediaPlayer.getCurrentItem();
 					CurrentMedia = video;
-					udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name=livefeed&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=video&nmx_page_type=vod&event=Media_Play&event_timestamp='+getCurrentTimeString()+'&version='+PlatformInfo.pversion+'&device_type='+PlatformInfo.platform+'&device_id='+PlatformInfo.deviceid+'&os='+PlatformInfo.pos);					
+					udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name=livefeed&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=video&nmx_page_type=vod&event=Media_Play&event_timestamp='+getCurrentTimeString()+'&version='+PlatformInfo.pversion+'&device_type='+PlatformInfo.platform+'&device_id='+PlatformInfo.deviceid+'&os='+PlatformInfo.pos);
                 }
                 initLiveStream();
 
@@ -321,7 +321,7 @@ define([
                     var item = MenuItems.at(index);
                     hideSubNav = false;
                     setCancelFetch(false);
-					
+
                     switch (item.get('action')) {
                         case 'livefeed':
                             hideWrapper();
@@ -334,7 +334,7 @@ define([
                             if ($('#gridMenuHolder').is(':visible')) hideGrid(); //just in case
                             setCancelFetch(true);
 							console.log("Platform1");
-							udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name='+item.attributes.title+'&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=menu&nmx_page_type=vod&event=Menu_Select&version='+PlatformInfo.pversion+'&device_type='+PlatformInfo.platform+'&device_id='+PlatformInfo.deviceid+'&os='+PlatformInfo.pos);							
+							udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name='+item.attributes.title+'&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=menu&nmx_page_type=vod&event=Menu_Select&version='+PlatformInfo.pversion+'&device_type='+PlatformInfo.platform+'&device_id='+PlatformInfo.deviceid+'&os='+PlatformInfo.pos);
                             break;
                         case 'subcategory':
                             hideGrid();
@@ -342,29 +342,30 @@ define([
                             updateGrid(item.get('subcategory').at(0).get('url'));
                             subMenu.focus();
                             $("#subMenu li.sm-focused").addClass("selected");
-							console.log("Platform2");							
-							udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name='+item.get('subcategory').at(0).get('title')+'&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=submenu&nmx_page_type=vod&event=Menu_Select&version='+PlatformInfo.pversion+'&device_type='+PlatformInfo.platform+'&device_id='+PlatformInfo.deviceid+'&os='+PlatformInfo.pos);							
+							console.log("Platform2");
+							udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name='+item.get('subcategory').at(0).get('title')+'&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=submenu&nmx_page_type=vod&event=Menu_Select&version='+PlatformInfo.pversion+'&device_type='+PlatformInfo.platform+'&device_id='+PlatformInfo.deviceid+'&os='+PlatformInfo.pos);
                             break;
                         case 'videos':
                             hideSubNav = true;
                             //$log("setting hideSubNav to true: ", hideSubNav);
                             hideGrid();
                             updateGrid(item.get("url"));
-							console.log("Platform3");						
-							udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name='+item.attributes.title+'&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=video&nmx_page_type=vod&event=Menu_Select&version='+PlatformInfo.pversion+'&device_type='+PlatformInfo.platform+'&device_id='+PlatformInfo.deviceid+'&os='+PlatformInfo.pos);								
+							console.log("Platform3");
+							udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name='+item.attributes.title+'&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=video&nmx_page_type=vod&event=Menu_Select&version='+PlatformInfo.pversion+'&device_type='+PlatformInfo.platform+'&device_id='+PlatformInfo.deviceid+'&os='+PlatformInfo.pos);
                             break;
                         case 'search':
                             $log('got into search handler....')
                             hideGrid();
+                            $("#searchterm").val('');
                             hideSubNav = true;
                             setCancelFetch(true);
                             keyMenu.focus();
-							console.log("Platform4");							
-							udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name='+item.attributes.title+'&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=search&nmx_page_type=vod&event=Menu_Select&version='+PlatformInfo.pversion+'&device_type='+PlatformInfo.platform+'&device_id='+PlatformInfo.deviceid+'&os='+PlatformInfo.pos);									
+							console.log("Platform4");
+							udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name='+item.attributes.title+'&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=search&nmx_page_type=vod&event=Menu_Select&version='+PlatformInfo.pversion+'&device_type='+PlatformInfo.platform+'&device_id='+PlatformInfo.deviceid+'&os='+PlatformInfo.pos);
                             break;
 						default:
-							console.log("Platform5");							
-							udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name='+item.attributes.title+'&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=search&nmx_page_type=vod&event=Menu_Select&version='+PlatformInfo.pversion+'&device_type='+PlatformInfo.platform+'&device_id='+PlatformInfo.deviceid+'&os='+PlatformInfo.pos);									
+							console.log("Platform5");
+							udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name='+item.attributes.title+'&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=search&nmx_page_type=vod&event=Menu_Select&version='+PlatformInfo.pversion+'&device_type='+PlatformInfo.platform+'&device_id='+PlatformInfo.deviceid+'&os='+PlatformInfo.pos);
                             break;
                     }
                 }, scene);
@@ -419,8 +420,8 @@ define([
                     $("#subMenu li").removeClass("selected");
                     $("#subMenu li.sm-focused").addClass("selected");
                     updateGrid(item.get('url'));
-					console.log("Platform6");					
-					udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name='+item.get('title')+'&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=submenu&nmx_page_type=vod&version='+PlatformInfo.pversion+'&device_type='+PlatformInfo.platform+'&device_id='+PlatformInfo.deviceid+'&os='+PlatformInfo.pos);						
+					console.log("Platform6");
+					udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name='+item.get('title')+'&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=submenu&nmx_page_type=vod&version='+PlatformInfo.pversion+'&device_type='+PlatformInfo.platform+'&device_id='+PlatformInfo.deviceid+'&os='+PlatformInfo.pos);
                 }, scene);
 
                 subMenu.on("showscrollers", function() {
@@ -698,13 +699,13 @@ define([
                 }
 
                 if (data.length > 0) {
-                    $("#searchTermBox span.label").empty().html("Search Results for: ")
+                    $("#searchTermBox span.label").empty().html("Results for: ")
                     $("#searchTermBox span.term").empty().html(term).ellipsis({row: 1});
                     populateGrid(data);
                     Grid.resetIndex();
                     Grid.focus();
                 } else { // no search results
-                    $("#searchTermBox span.label").empty().html('0 Search Results for: "' + term + '"');
+                    $("#searchTermBox span.label").empty().html('0 Results for: "' + term + '"');
                     $("#searchTermBox span.term").empty();
                     emptyGrid();
                     hideLoader();
