@@ -1585,14 +1585,10 @@ ul#subMenu {
     font: Helvetica;
     font-weight: bold; }
     #mainMenu li.selected:before, #subMenu li.selected:before {
-      font-family: FontAwesome;
-      font-size: 26px;
-      font-style: normal;
-      font-weight: normal;
       position: absolute;
       top: 15px;
       left: 10px;
-      content: "\f054"; }
+      content: url("../images/right_arrow_pngs/chevron-right_ffffff_26.png"); }
 
 #mainMenu li {
   width: 276px; }

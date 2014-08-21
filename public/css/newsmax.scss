@@ -270,13 +270,13 @@ ul#subMenu{
     font: Helvetica;
     font-weight: bold;
     &:before{
-      font-family: FontAwesome;
-      font-size: 26px;
-      font-style: normal;
-      font-weight: normal;
+      // font-family: FontAwesome;
+      // font-size: 26px;
+      // font-style: normal;
+      // font-weight: normal;
       position: absolute;
       top: 15px; left: 10px;
-      content: "\f054";
+      content: url('../images/right_arrow_pngs/chevron-right_ffffff_26.png');
     }
   }
 }
