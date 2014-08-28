@@ -579,15 +579,17 @@ define([
                 var moveGrid = function(direction) {
                     clearSelectorsForGrid();
                     $(Grid.el).children().children().eq(Grid._currentIndex).parent().addClass("currentRow");
-                    var options = {};
+                    var options = {},
+                        currentTop = parseInt($('#gridMenuContainer').css('top'), 10);
                     direction == "up" ? options = {
-                        "top": "-=" + gridRowHeight + "px"
+                        "top": currentTop - gridRowHeight + "px"
                     } : options = {
-                        "top": "+=" + gridRowHeight + "px"
+                        "top": currentTop + gridRowHeight + "px"
                     };
-                    $("#gridMenuContainer").animate(options, 0, function() {
-                        //animation completed
-                    });
+                    $("#gridMenuContainer").css(options);                   
+                    // $("#gridMenuContainer").animate(options, 0, function() {
+                    //     //animation completed
+                    // });
 
                 };
 
