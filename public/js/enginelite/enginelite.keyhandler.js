@@ -39,12 +39,11 @@ define(['tvengine','platform','jquery','underscore','backbone'], function(TVEngi
 			KEY_FF2: 'onFF'
 		}
 
-		var keyMap = {}, KeyHandler = {};
-
+		var keyMap = {}, KeyHandler = {}, 
+			allowKeyAction = true,
+			delayLength = 300;
 
 		_.extend(KeyHandler, Backbone.Events);
-
-
 
 		var init = function() {
 			var $KEYS = Platform.keys();
@@ -55,9 +54,10 @@ define(['tvengine','platform','jquery','underscore','backbone'], function(TVEngi
 				// if (event.keyCode == 457) document.location.reload(true)
 				var action = keyActions[keyMap[event.keyCode]];
 
-				if (typeof action != 'undefined') {
+				if (typeof action != 'undefined' && allowKeyAction) {
 					if (action == 'onReturn') event.preventDefault(); //samsung tv's need for _checkOrBack
 					KeyHandler.trigger(action);
+					allowKeyAction = false;
 					return false;
 				} else {
 					return true;
@@ -68,16 +68,26 @@ define(['tvengine','platform','jquery','underscore','backbone'], function(TVEngi
 				var action = keyActions[keyMap[event.keyCode]];
 				if (typeof action != "undefined") {
 					KeyHandler.trigger(action + "Up");
+					delayKeyEvents();
 					return false;
 				} else {
 					return true;
 				}
-			})
+			});
 
 			var currentHash = "back."+new Date().getTime();
 
+		};
 
-	}
-	return KeyHandler;
+		/* We simply want to disable obsessive keypressing */
+		var delayKeyEvents = function() {
+			setTimeout(reinstateKeyActions, delayLength);
+		}; 
+
+		/* keydown function sets allowKeyAction to false. we reinstate here */
+		var reinstateKeyActions = function() {
+			allowKeyAction = true; 
+		};
+		return KeyHandler;
 });
 
