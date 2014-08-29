@@ -71,7 +71,9 @@ define([
             if (searchState) { //if we are actually on search grid w/ results
                 mainMenu.trigger("selectedindex", mainMenu._maxIndex);
                 searchState = false;
+                dumbFocus();
                 return false;
+
             }
 
             if (mainMenu.focused && hideSubNav) { //top of the hour news no submenu
@@ -118,6 +120,7 @@ define([
         scene.onenterscene = function() {
             $log(">>> ENTERING MAIN SCENE!!");
             showWrapper();
+            dumbFocus();
             return MenuItemsDeferred.done(function(MenuItems) {
                 $log("menuitems", MenuItems);
                 conf.pauseScreenhider = false;
@@ -398,6 +401,7 @@ define([
                         left: -$("#searchMenu").outerWidth(),
                         opacity: 0.3
                     });
+                    dumbFocus();
                     showMainMenu();
                 }, scene)
 
@@ -675,6 +679,7 @@ define([
                 if (gridShowing) showGrid();
                 lastMenuFocus.focus();
             }
+            dumbFocus();
         }
         mainState.onleavestate = function() {
             $log("%%%%%%%%%%%% leaving main state");
@@ -789,7 +794,9 @@ define([
             $("#errormodal").fadeIn();
             modalMenu.focus();
         }
-
+        var dumbFocus = function() {
+            $("#somelink").focus();
+        }
         var saveState = function() {
             lastMenuFocus = Navigation.currentFocus.menu;
             lastMainmenuIndex = mainMenu._currentIndex;
