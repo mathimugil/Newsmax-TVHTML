@@ -41,7 +41,7 @@ define(['tvengine','platform','jquery','underscore','backbone'], function(TVEngi
 
 		var keyMap = {}, KeyHandler = {}, 
 			allowKeyAction = true,
-			delayLength = 300;
+			delayLength = 150;
 
 		_.extend(KeyHandler, Backbone.Events);
 
@@ -53,10 +53,11 @@ define(['tvengine','platform','jquery','underscore','backbone'], function(TVEngi
 			$(document).bind("keydown", function(event) {
 				// if (event.keyCode == 457) document.location.reload(true)
 				var action = keyActions[keyMap[event.keyCode]];
-
 				if (typeof action != 'undefined' && allowKeyAction) {
 					if (action == 'onReturn') event.preventDefault(); //samsung tv's need for _checkOrBack
 					KeyHandler.trigger(action);
+					event.stopPropogation();
+					event.preventDefault();
 					allowKeyAction = false;
 					return false;
 				} else {

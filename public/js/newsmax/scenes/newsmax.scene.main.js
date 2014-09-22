@@ -116,11 +116,16 @@ define([
         var hideSubNav = false; //we use this in the case where there is no grid - i.e. Top of the Hour News
         var wrapperVisible;
         var fetchCounter = 0;
+        var isOpera = (Platform.name == "opera" || document.location.href.indexOf('noinput') > -1);
 
         scene.onenterscene = function() {
             $log(">>> ENTERING MAIN SCENE!!");
             showWrapper();
             dumbFocus();
+            if(isOpera) {
+                $("#searchterm").replaceWith('<div id="searchterm"></div>')
+            }
+            
             return MenuItemsDeferred.done(function(MenuItems) {
                 $log("menuitems", MenuItems);
                 conf.pauseScreenhider = false;
@@ -359,7 +364,10 @@ define([
                         case 'search':
                             $log('got into search handler....')
                             hideGrid();
-                            $("#searchterm").val('');
+                            
+                            if (isOpera) $("#searchterm").text('');
+                            else  $("#searchterm").val('');
+
                             hideSubNav = true;
                             setCancelFetch(true);
                             keyMenu.focus();
@@ -495,32 +503,42 @@ define([
                     mainMenu.focus();
                 }, scene)
                 var currentpos;
+                var setSearchValue = function(text) {
+                    if (isOpera) $("#searchterm").text(text)
+                    else $("#searchterm").val(text);
+                }
+                var getSearchValue = function() {
+                    var val = (isOpera) ? $("#searchterm").text() : $("#searchterm").val();
+                    return _.isString(val) ? val : '';
+                }
+
                 keyMenu.on('valueselect', function(item) {
-                    var currentval = $("#searchterm").val();
+                    var currentval = getSearchValue();
                     var lowered_item = item.toLowerCase();
                     var searchterm = $("#searchterm");
                     currentpos =  $("#searchterm").caret();
+
+                    console.info('current pos', currentpos);
                     if (item.toLowerCase() === "space") item = " ";
                     $log(" CARET AT ", currentpos)
-                    if (item.length == 1 && $("#searchterm").val().length < 20) {
+                    if (item.length == 1 && getSearchValue().length < 20) {
                         if(_.isNumber(currentpos)) {
-                            $("#searchterm").val(currentval.splice(currentpos,item));
+                            setSearchValue(currentval.splice(currentpos,item));
                             _.defer(function() {
-                                console.log('seting care to ', currentpos)
                                 $("#searchterm").caret(currentpos + 1);
                             })
                         } else {
-                             $("#searchterm").val(currentval + item);
+                            setSearchValue(currentval + item);
                         }
                     } else if (item.toLowerCase() === "del") {
-                        $("#searchterm").val(currentval.delchar(currentpos - 1));
+                        setSearchValue(currentval.delchar(currentpos - 1));
                         _.defer(function() {
                             $("#searchterm").caret(currentpos - 1);
                         })
                     } else if (item.toLowerCase() === "clear") {
-                        $("#searchterm").val("");
+                        setSearchValue("");
                     } else if (item.toLowerCase() === "ok") {
-                        runSearch($("#searchterm").val());
+                        runSearch(getSearchValue());
                     }
                 }, scene)
 
