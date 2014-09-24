@@ -5,7 +5,6 @@ define(['underscore'],function(_) {
       if(config.isBuild) {
         load();
       } else {
-
         var tests = _([
             { test:/GoogleTV/, file: 'enginelite/platforms/enginelite.platform.googletv', name: "Google TV"},
             { test:/LG Browser/, file: 'enginelite/platforms/enginelite.platform.lg', name: "LG"},
@@ -14,7 +13,7 @@ define(['underscore'],function(_) {
             { test:/AQUOS/, file: 'enginelite/platforms/enginelite.platform.sharp', name: "Sharp"},
             { test:/Opera TV Store/, file: 'enginelite/platforms/enginelite.platform.opera', name: "Opera"}
         ]);
-
+        
         var test = tests.find(function(t) {
             return  (navigator.userAgent.search(t.test) > -1);
         })
