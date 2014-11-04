@@ -125,7 +125,7 @@ define([
             if(isOpera) {
                 $("#searchterm").replaceWith('<div id="searchterm"></div>')
             }
-            
+
             return MenuItemsDeferred.done(function(MenuItems) {
                 $log("menuitems", MenuItems);
                 conf.pauseScreenhider = false;
@@ -150,6 +150,13 @@ define([
                     }, this);
 
                     MediaPlayer.play();
+                    // temp only for dev
+                    // $("#loadingVideoIndicator").fadeOut();
+                    // $("#logo").fadeIn();
+                    // console.log("PLAY DISABLED!!")
+
+
+
 					var video = MediaPlayer.getCurrentItem();
 					CurrentMedia = video;
 					udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name=livefeed&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=video&nmx_page_type=vod&event=Media_Play&event_timestamp='+getCurrentTimeString()+'&version='+PlatformInfo.pversion+'&device_type='+PlatformInfo.platform+'&device_id='+PlatformInfo.deviceid+'&os='+PlatformInfo.pos);
@@ -364,7 +371,7 @@ define([
                         case 'search':
                             $log('got into search handler....')
                             hideGrid();
-                            
+
                             if (isOpera) $("#searchterm").text('');
                             else  $("#searchterm").val('');
 
@@ -608,7 +615,7 @@ define([
                     } : options = {
                         "top": currentTop + gridRowHeight + "px"
                     };
-                    $("#gridMenuContainer").css(options);                   
+                    $("#gridMenuContainer").css(options);
                     // $("#gridMenuContainer").animate(options, 0, function() {
                     //     //animation completed
                     // });
