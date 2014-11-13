@@ -94,6 +94,7 @@ define([
         bindMediaEventHandler();
 
         TrickMenu.setElement("#trickPlayContainer");
+        TrickMenu.addQMenuIfNeeded();
 
         var context ={}
         MediaPlayer.on('timeupdate',function(time){

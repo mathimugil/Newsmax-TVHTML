@@ -21,6 +21,37 @@ define(['navigation', 'enginelite/menuprototypes/enginelite.menus.listmenu', 'hb
             var idx = $(event.currentTarget).index();
             this.trigger('selectedindex',idx);
         },
+        addQMenuIfNeeded:function(){
+            // needed if netcast API is present AND if it isn't already in the DOM
+            var isOnNetCast = !!window.NetCastLaunchQMENU,
+                existing = $('#qmenubutton'),
+                alreadyPresent = existing.length > 0;
+
+            if (isOnNetCast && !alreadyPresent){
+                this._addQMenu();
+            } else if (alreadyPresent){
+
+                if (this._mouseIsOff()) existing.hide();
+                else                    existing.show();
+            }
+
+        },
+        _mouseIsOff: function(){
+            var off = window.NetCastGetMouseOnOff && window.NetCastGetMouseOnOff() === 'off';
+            return off;
+        },
+        _addQMenu:function(){
+            var button = $('<div id=qmenubutton></div>');
+                button.appendTo($('#playBackTray'));
+                button.on('click', function(){
+                    window.NetCastLaunchQMENU();
+                });
+                $(window).on('mouseoff', function(){ button.hide(); });
+                $(window).on('mouseon',  function(){ button.show(); });
+                if (this._mouseIsOff()) {
+                    button.hide();
+                }
+        }
     });
 
     var VideoMenu = new menu({});
