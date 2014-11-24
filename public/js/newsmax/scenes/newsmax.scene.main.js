@@ -163,6 +163,7 @@ define([
                 }
                 initLiveStream();
 
+
                 /* MENUS */
                 if (!mainMenu) {
                     mainMenu = new SlotMenu({
@@ -847,5 +848,5 @@ define([
 
             }
         }
-        return scene;
+       return scene;
     });
