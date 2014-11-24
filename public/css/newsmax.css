@@ -1937,17 +1937,17 @@ ul#subMenu {
   -webkit-animation-name: bounce_fadingBarsG;
   -webkit-animation-duration: 1.3s;
   -webkit-animation-iteration-count: infinite;
-  -webkit-animation-direction: linear;
+  -webkit-animation-direction: normal;
   -webkit-transform: scale(0.3);
   -o-animation-name: bounce_fadingBarsG;
   -o-animation-duration: 1.3s;
   -o-animation-iteration-count: infinite;
-  -o-animation-direction: linear;
+  -o-animation-direction: normal;
   -o-transform: scale(0.3);
   animation-name: bounce_fadingBarsG;
   animation-duration: 1.3s;
   animation-iteration-count: infinite;
-  animation-direction: linear;
+  animation-direction: normal;
   transform: scale(0.3); }
 
 #fadingBarsG_1 {
@@ -2042,17 +2042,17 @@ ul#subMenu {
   -webkit-animation-name: bounce_circularG;
   -webkit-animation-duration: 1.04s;
   -webkit-animation-iteration-count: infinite;
-  -webkit-animation-direction: linear;
+  -webkit-animation-direction: normal;
   -o-border-radius: 27px;
   -o-animation-name: bounce_circularG;
   -o-animation-duration: 1.04s;
   -o-animation-iteration-count: infinite;
-  -o-animation-direction: linear;
+  -o-animation-direction: normal;
   border-radius: 27px;
   animation-name: bounce_circularG;
   animation-duration: 1.04s;
   animation-iteration-count: infinite;
-  animation-direction: linear; }
+  animation-direction: normal; }
 
 #circularG_1 {
   left: 0;
