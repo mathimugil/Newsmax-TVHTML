@@ -92,7 +92,7 @@ require(
 
             TVEngine.on('tvengine:appready', function() {
                 $log(" Hi there ...... ");
-				
+
 				// Get platform info but don't go crazy trying to recognize everything
 				// that's out there.  This is just for the major platforms and OSes.	  
 				var platform = Platform.name, ua = navigator.userAgent;
@@ -111,7 +111,7 @@ require(
 
 				// Detect DeviceID
 				var deviceID = Platform.deviceId();
-				
+
 				udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name=MainPage&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=home&nmx_page_type=vod&version='+pVersion+'&device_type='+platform+'&device_id='+deviceID+'&os='+pOS);
                 Platform.on('network:disconnected', function() {
                     if (StageManager.scene.name == 'errormodal') return;
