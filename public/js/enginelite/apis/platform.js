@@ -21,8 +21,6 @@ define(['underscore'],function(_) {
         if(!test) {
             test = {  file: 'enginelite/platforms/enginelite.platform.browser', name: "Browser"}
         }
-        //$("#errorField").append($('<div>'+"Platform detected: " + test.name + " loading file: " + test.file+'</div>'));
-        console.log("Platform detected: " + test.name + " loading file: " + test.file);
 
         require([test.file], load);
       }

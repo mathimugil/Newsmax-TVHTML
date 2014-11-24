@@ -10,6 +10,20 @@
  *
  */
 
+/* shim */
+
+;(function(){
+if(! Function.prototype.bind) {
+    Function.prototype.bind = function(ctx){
+        var fn = this;
+        return function(){
+            return fn.apply(ctx, arguments);
+        }
+    }
+}
+}());
+
+
 define(['jquery', 'underscore', 'backbone', 'handlebars'], function($, _, Backbone, Handlebars) {
     window.$noop = function() {
         // if more then one return an array.

@@ -1,4 +1,5 @@
 // Generated on 2013-10-28 using generator-tvengine 0.1.0
+/* jshint node: true, asi:true */
 'use strict';
 
 var LIVERELOAD_PORT = 35729;
@@ -14,6 +15,20 @@ var mountFolder = function(connect, dir) {
 
 var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
 
+function replIntercept(req, res, next){
+
+    //to use the dbr module, comment out the following line:
+    next();return
+
+    if(req.url.match(/repl$/)){
+        req.body.output.forEach(function(line){
+            console.log('>> ', line);
+        });
+        res.end('ok');
+    } else {
+        next();
+    }
+}
 
 
 module.exports = function(grunt) {
@@ -27,7 +42,7 @@ module.exports = function(grunt) {
         requirejs.config({
             baseUrl: __dirname,
             nodeRequire: require
-        })
+        });
         var proxyConfig = requirejs('public/js/proxyconfig');
         var proxies = proxyConfig.proxies || [];
         return proxies.map(function(p) {
@@ -139,6 +154,8 @@ module.exports = function(grunt) {
                     middleware: function(connect) {
                         return [
                             mountFolder(connect, './build'),
+                            connect.bodyParser(),
+                            replIntercept,
                             proxySnippet
                         ];
                     },
@@ -151,6 +168,8 @@ module.exports = function(grunt) {
                         return [
                             proxySnippet,
                             lrSnippet,
+                            connect.bodyParser(),
+                            replIntercept,
                             mountFolder(connect, './public')
                         ];
                     }
@@ -161,6 +180,8 @@ module.exports = function(grunt) {
                     middleware: function(connect) {
                         return [
                             mountFolder(connect, './public'),
+                            connect.bodyParser(),
+                            replIntercept,
                             proxySnippet
                         ];
                     },

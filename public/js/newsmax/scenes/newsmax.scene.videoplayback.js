@@ -1,15 +1,15 @@
 define([
-    'stagemanager', 
-    'navigation', 
-    'platform', 
-    'jquery', 
-    'underscore', 
-    'backbone', 
-    'mediaplayer', 
-    'keyhandler', 
-    'utils', 
-    'newsmax/scenes/newsmax.scrubber', 
-    'newsmax/menus/newsmax.menus.trickplay', 
+    'stagemanager',
+    'navigation',
+    'platform',
+    'jquery',
+    'underscore',
+    'backbone',
+    'mediaplayer',
+    'keyhandler',
+    'utils',
+    'newsmax/scenes/newsmax.scrubber',
+    'newsmax/menus/newsmax.menus.trickplay',
     'newsmax/menus/newsmax.menus.backmenu',
     'config',
     'newsmax/menus/newsmax.menu.clickablemenu',
@@ -26,7 +26,7 @@ define([
         KeyHandler,
         Util,
         scrubManager,
-        TrickMenu, 
+        TrickMenu,
         BackMenu,
         conf,
         ClickableMenu,
@@ -35,8 +35,8 @@ define([
 
     var videoPlayback,
         videoProgressInMS;
-	var PlatformInfo = extractPlatformInfo(Platform); 
-	
+	var PlatformInfo = extractPlatformInfo(Platform);
+
     videoPlayback = new StageManager.Scene({
         defaultScene: false,
         name: "videoPlayback",
@@ -61,7 +61,7 @@ define([
     }
 
     videoPlayback.onenterscene = function() {
-        
+
         if(!backMenu){
             backMenu = new BackMenu({
                 el: ".backButton"
@@ -80,7 +80,7 @@ define([
         progressBarTrueWidth = $("#progressBarBack").outerWidth();
         TrickMenu.disable();
         showLoader();
-        
+
         if (!this.persist.params) $error('!video scene needs paramater!');
 
         video = this.persist.params.item
@@ -93,7 +93,7 @@ define([
         bindMediaEventHandler();
 
         TrickMenu.setElement("#trickPlayContainer");
- 
+
         var context ={}
         MediaPlayer.on('timeupdate',function(time){
             if(time > 0){
@@ -102,27 +102,29 @@ define([
                 TrickMenu.enable();
                 initKeyhandlers();
                 touchTimeout();
-                MediaPlayer.off(null,null,context);  
-            } 
+                MediaPlayer.off(null,null,context);
+            }
         },context);
 
-		MediaPlayer.on('play', function() {  
+		MediaPlayer.on('play', function() {
 			console.log('Video Playback has started ');
 			var video = MediaPlayer.getCurrentItem();
 			var title = video.attributes.title;
+
 			udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name='+title+'&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=video&nmx_page_type=vod&event=Media_Play&event_timestamp='+getCurrentTimeString()+'&version='+PlatformInfo.pversion+'&device_type='+PlatformInfo.platform+'&device_id='+PlatformInfo.deviceid+'&os='+PlatformInfo.pos);
 			CurrentMedia = video;
-			$('body').css('background', 'transparent');			
+			$('body').css('background', 'transparent');
+
 		},context);
-		
-		
+
+
         TrickMenu.setFocusTo("onStop");
         TrickMenu.focus();
-        
+
         hideMenu.on('onfocus', function() {
             $('#hideTrayButton').addClass('focused');
         }, this);
-        
+
         hideMenu.on('onblur', function() {
             $('#hideTrayButton').removeClass('focused');
         }, this);
@@ -135,7 +137,7 @@ define([
         }, this)
 
         hideMenu.on('onup',function(){
-            if($('.backButton:visible').length!==0){  backMenu.focus();}    
+            if($('.backButton:visible').length!==0){  backMenu.focus();}
         },this);
 
         videoInitialized = false;
@@ -143,7 +145,7 @@ define([
 
     videoPlayback.onleavescene = function() {
 	  var video = MediaPlayer.getCurrentItem();
-	  var title = video.attributes.title;	
+	  var title = video.attributes.title;
       MediaPlayer.off("videoup",null,videoPlayback);
       $("body").css('background','transparent');
       clearTimeout(timeout);
@@ -158,10 +160,10 @@ define([
       scrubManager.exit();
       MediaPlayer.stop();
       hideMenu.off(null, null, this);
-      TrickMenu.off(null, null, this); 
-      closeMenu.off(null,null,this); 
+      TrickMenu.off(null, null, this);
+      closeMenu.off(null,null,this);
       MediaPlayer.off(null,null,this);
-	  udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name='+title+'&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=video&nmx_page_type=vod&event=Media_Exit&event_timestamp='+getCurrentTimeString()+'&version='+PlatformInfo.pversion+'&device_type='+PlatformInfo.platform+'&device_id='+PlatformInfo.deviceid+'&os='+PlatformInfo.pos);				  
+	  udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name='+title+'&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=video&nmx_page_type=vod&event=Media_Exit&event_timestamp='+getCurrentTimeString()+'&version='+PlatformInfo.pversion+'&device_type='+PlatformInfo.platform+'&device_id='+PlatformInfo.deviceid+'&os='+PlatformInfo.pos);
 	  CurrentMedia = null;
     }
 
@@ -181,14 +183,14 @@ define([
         } else {
             MediaPlayer.once('timeupdate',function(){
                 touchTimeout();
-            },this); 
+            },this);
         }
         KeyHandler.on('onRight onLeft onUp onDown onSelect', function() {
             touchTimeout();
         }, this);
 
         if(Platform.name == 'lg'){
-            
+
             this.oldMouseoff = window.onmouseoff;
             window.onmouseoff = function(){
                 touchTimeout();
@@ -245,7 +247,7 @@ define([
 
             if(MediaPlayer.playing()){
                 videoPlayback.changeState('controlsdown');
-            }   
+            }
             else
                 touchTimeout();
         }, conf.globalTimeout);
@@ -264,7 +266,7 @@ define([
             return;
         }
     }
-	 
+
     videoPlayback.updateTimeDisplay = function(currentTime, duration) {
         if(currentTime==0 && videoPlayback.hasScrubbed)
             return;
@@ -285,14 +287,14 @@ define([
 
     function initVideoPlayback() {
         var playlist =  video.getPlaylist();
-        playlist.playlistItems[0].attributes.title = video.attributes.title;		
+        playlist.playlistItems[0].attributes.title = video.attributes.title;
         MediaPlayer.setPlaylist(playlist);
         MediaPlayer.play();
         $(".trickPlayButton.play").addClass("selected");
     }
 
     function initKeyhandlers() {
-        
+
         KeyHandler.off(null, null, videoPlayback);  //always do this so that we don't do multiple bindings. realize this = the videoplayer scene
 
         KeyHandler.on("onPlay", function() {
@@ -310,8 +312,8 @@ define([
 
             MediaPlayer.play();
 			var video = MediaPlayer.getCurrentItem();
-			var title = video.attributes.title;				
-			udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name='+title+'&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=video&nmx_page_type=vod&event=Media_Play&event_timestamp='+getCurrentTimeString()+'&version='+PlatformInfo.pversion+'&device_type='+PlatformInfo.platform+'&device_id='+PlatformInfo.deviceid+'&os='+PlatformInfo.pos);			
+			var title = video.attributes.title;
+			udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name='+title+'&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=video&nmx_page_type=vod&event=Media_Play&event_timestamp='+getCurrentTimeString()+'&version='+PlatformInfo.pversion+'&device_type='+PlatformInfo.platform+'&device_id='+PlatformInfo.deviceid+'&os='+PlatformInfo.pos);
 			CurrentMedia = video;
         }, videoPlayback);
 
@@ -329,8 +331,8 @@ define([
 
             MediaPlayer.pause();
 			var video = MediaPlayer.getCurrentItem();
-			var title = video.attributes.title;				
-			udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name='+title+'&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=video&nmx_page_type=vod&event=Media_Pause&event_timestamp='+getCurrentTimeString()+'&version='+PlatformInfo.pversion+'&device_type='+PlatformInfo.platform+'&device_id='+PlatformInfo.deviceid+'&os='+PlatformInfo.pos);						
+			var title = video.attributes.title;
+			udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name='+title+'&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=video&nmx_page_type=vod&event=Media_Pause&event_timestamp='+getCurrentTimeString()+'&version='+PlatformInfo.pversion+'&device_type='+PlatformInfo.platform+'&device_id='+PlatformInfo.deviceid+'&os='+PlatformInfo.pos);
         }, videoPlayback);
 
         KeyHandler.on("onStop", function() {
@@ -344,8 +346,8 @@ define([
             }
             MediaPlayer.stop();
 			var video = MediaPlayer.getCurrentItem();
-			var title = video.attributes.title;				
-			udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name='+title+'&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=video&nmx_page_type=vod&event=Media_Stop&event_timestamp='+getCurrentTimeString()+'&version='+PlatformInfo.pversion+'&device_type='+PlatformInfo.platform+'&device_id='+PlatformInfo.deviceid+'&os='+PlatformInfo.pos);						
+			var title = video.attributes.title;
+			udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name='+title+'&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=video&nmx_page_type=vod&event=Media_Stop&event_timestamp='+getCurrentTimeString()+'&version='+PlatformInfo.pversion+'&device_type='+PlatformInfo.platform+'&device_id='+PlatformInfo.deviceid+'&os='+PlatformInfo.pos);
         }, videoPlayback);
 
         KeyHandler.on("onRW", function() {
@@ -355,7 +357,7 @@ define([
             $(".trickPlayButton.rewind").addClass("selected");
 
             if (scrubManager._scrubbing) {
-                scrubManager.stopStickyScrubbing();
+               // scrubManager.stopStickyScrubbing();
                 return;
             }
 
@@ -370,7 +372,7 @@ define([
             $(".trickPlayButton.fastforward").addClass("selected");
             //debugger;
             if (scrubManager._scrubbing) {
-                scrubManager.stopStickyScrubbing();
+                // scrubManager.stopStickyScrubbing();
                 return;
             }
 
@@ -390,12 +392,12 @@ define([
             //$log("scrubTimeupdate updating time: ", updatetime);
             videoPlayback.hasScrubbed = true;
             /*if(updatetime==0){
-                $("#errorField").append($("<div>scrubber firing 0</div>"))                
+                $("#errorField").append($("<div>scrubber firing 0</div>"))
             }*/
 
             videoPlayback.updateTimeDisplay(updatetime, MediaPlayer.duration());
         }, videoPlayback);
-       
+
     }
 
     function mediaEventHandler(event, param) {
@@ -422,11 +424,11 @@ define([
                 showLoader();
                 break;
             case 'playlist:ended':
-                StageManager.StageHistory.back();  
+                StageManager.StageHistory.back();
                 break;
             case 'onstop':
                 StageManager.StageHistory.back();
-		console.log('event: ' + event + ' - params: ', params);                
+		console.log('event: ' + event + ' - params: ', params);
                 break;
             case 'videoerror':
                 //$log('There was an error in videoplayback scene - make sure you are using safari for hls streams');
@@ -439,11 +441,11 @@ define([
         MediaPlayer.off(null, null, videoPlayback);
         KeyHandler.off(null, null, videoPlayback);
     }
-    
+
     var showLoader = function(){
       $("#circularG").fadeIn();
     }
-    
+
     var hideLoader = function(){
       $("#circularG").fadeOut();
     }
