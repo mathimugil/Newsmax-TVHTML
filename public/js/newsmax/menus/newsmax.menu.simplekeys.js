@@ -41,25 +41,41 @@ define(['navigation', 'hbs!newsmax/templates/KeyBoard','underscore'], function(N
             return _.isString(item.attr('data-value')) ? item.attr('data-value') : item.text();
         },
         setFocus: function() {
-           
-            $(this.el).find("td").removeClass("focused")
-            $(this.el).find("tr").eq(this._coords.row).find('td').eq(this._coords.col).addClass("focused");
+            var that = this;
 
-            //TODO: remove later
+            if(window._keyboard_timer)
+                clearTimeout(window._keyboard_timer);
+            
+            window._keyboard_timer = setTimeout(function() {
+                var find_item = $(that.el).find("tr").eq(that._coords.row).find('td').eq(that._coords.col);
+                //$(that.el).find("td").removeClass("focused")
+                var focused_item = that.el.getElementsByClassName('focused');
+                if(focused_item.length > 0)
+                    focused_item[0].className = "";
 
-            this.trigger('newfocus', {
-                coords: this._coords,
-                value: $(this.el).find("tr").eq(this._coords.row).find('td').eq(this._coords.col)
-            });
-            $log(" SEARCH FOCUS: row " + this._coords.row + ", col: ", this._coords.col)
+                find_item.addClass("focused");
 
-            if (this._oldIndex !== this._currentIndex && this._focused) {
-                this.trigger('newfocus', {
-                    index: this._currentIndex,
-                    item: this.collection.at(this._currentIndex)
-                });
-                this._oldFocus = this._currentIndex;
-            }
+                //TODO: remove later
+
+                
+                //$log(" SEARCH FOCUS: row " + that._coords.row + ", col: ", that._coords.col)
+
+                if (that._oldIndex !== that._currentIndex && that._focused) {
+                    $log('triggering new focus! IF!!!!!');
+                    that.trigger('newfocus', {
+                        index: that._currentIndex,
+                        item: that.collection.at(that._currentIndex)
+                    });
+                    that._oldFocus = that._currentIndex;
+                } else 
+                {
+                    //$log('triggering new focus! else!!!!!');
+                    //this.trigger('newfocus', {
+                    //    coords: this._coords,
+                    //    value: find_item
+                    //});
+                }
+            }, 1);
         },
 
         _testColUp: function(idx) {

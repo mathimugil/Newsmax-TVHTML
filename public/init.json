@@ -1,0 +1,15 @@
+{
+
+  "rendering_size"    :{
+          "width"     : 1280,
+          "height"    : 720,
+  },
+  "keyboard"          :{
+          "use"       :false
+  },
+  "mode"              : "key",
+  "user_agent"        : "",
+  "console_log"       :true,
+  "allowed_domain"    :[],
+
+}

@@ -39,7 +39,7 @@ define(['tvengine','platform','jquery','underscore','backbone'], function(TVEngi
 			KEY_FF2: 'onFF'
 		}
 
-		var keyMap = {}, KeyHandler = {}, 
+		var keyMap = {}, KeyHandler = {},
 			allowKeyAction = true,
 			delayLength = 150;
 
@@ -85,11 +85,11 @@ define(['tvengine','platform','jquery','underscore','backbone'], function(TVEngi
 		/* We simply want to disable obsessive keypressing */
 		var delayKeyEvents = function() {
 			setTimeout(reinstateKeyActions, delayLength);
-		}; 
+		};
 
 		/* keydown function sets allowKeyAction to false. we reinstate here */
 		var reinstateKeyActions = function() {
-			allowKeyAction = true; 
+			allowKeyAction = true;
 		};
 		return KeyHandler;
 });

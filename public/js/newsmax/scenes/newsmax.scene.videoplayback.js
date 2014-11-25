@@ -35,6 +35,7 @@ define([
 
     var videoPlayback,
         videoProgressInMS;
+	var PlatformInfo = extractPlatformInfo(Platform);
 
     videoPlayback = new StageManager.Scene({
         defaultScene: false,
@@ -84,8 +85,6 @@ define([
 
         video = this.persist.params.item
 
-
-
         $('#vtitle').html(video.attributes.title);
         $('#vdescription').html(video.attributes.description);
         $('#vdescription').ellipsis({ row: 2 });
@@ -111,8 +110,11 @@ define([
 			console.log('Video Playback has started ');
 			var video = MediaPlayer.getCurrentItem();
 			var title = video.attributes.title;
-			udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name='+title+'&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=video&nmx_page_type=vod');
+
+			udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name='+title+'&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=video&nmx_page_type=vod&event=Media_Play&event_timestamp='+getCurrentTimeString()+'&version='+PlatformInfo.pversion+'&device_type='+PlatformInfo.platform+'&device_id='+PlatformInfo.deviceid+'&os='+PlatformInfo.pos);
+			CurrentMedia = video;
 			$('body').css('background', 'transparent');
+
 		},context);
 
 
@@ -142,6 +144,8 @@ define([
     }
 
     videoPlayback.onleavescene = function() {
+	  var video = MediaPlayer.getCurrentItem();
+	  var title = video.attributes.title;
       MediaPlayer.off("videoup",null,videoPlayback);
       $("body").css('background','transparent');
       clearTimeout(timeout);
@@ -159,6 +163,8 @@ define([
       TrickMenu.off(null, null, this);
       closeMenu.off(null,null,this);
       MediaPlayer.off(null,null,this);
+	  udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name='+title+'&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=video&nmx_page_type=vod&event=Media_Exit&event_timestamp='+getCurrentTimeString()+'&version='+PlatformInfo.pversion+'&device_type='+PlatformInfo.platform+'&device_id='+PlatformInfo.deviceid+'&os='+PlatformInfo.pos);
+	  CurrentMedia = null;
     }
 
     controlsUp.onenterstate = function() {
@@ -261,7 +267,6 @@ define([
         }
     }
 
-
     videoPlayback.updateTimeDisplay = function(currentTime, duration) {
         if(currentTime==0 && videoPlayback.hasScrubbed)
             return;
@@ -306,6 +311,10 @@ define([
             if(MediaPlayer.playing()) return;
 
             MediaPlayer.play();
+			var video = MediaPlayer.getCurrentItem();
+			var title = video.attributes.title;
+			udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name='+title+'&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=video&nmx_page_type=vod&event=Media_Play&event_timestamp='+getCurrentTimeString()+'&version='+PlatformInfo.pversion+'&device_type='+PlatformInfo.platform+'&device_id='+PlatformInfo.deviceid+'&os='+PlatformInfo.pos);
+			CurrentMedia = video;
         }, videoPlayback);
 
         KeyHandler.on("onPause", function() {
@@ -321,6 +330,9 @@ define([
             }
 
             MediaPlayer.pause();
+			var video = MediaPlayer.getCurrentItem();
+			var title = video.attributes.title;
+			udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name='+title+'&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=video&nmx_page_type=vod&event=Media_Pause&event_timestamp='+getCurrentTimeString()+'&version='+PlatformInfo.pversion+'&device_type='+PlatformInfo.platform+'&device_id='+PlatformInfo.deviceid+'&os='+PlatformInfo.pos);
         }, videoPlayback);
 
         KeyHandler.on("onStop", function() {
@@ -332,8 +344,10 @@ define([
             if (scrubManager._scrubbing) {
                 scrubManager.stopStickyScrubbing();
             }
-
             MediaPlayer.stop();
+			var video = MediaPlayer.getCurrentItem();
+			var title = video.attributes.title;
+			udm_('http' + (document.location.href.charAt(4) == 's' ? 's://sb' : '://b') + '.scorecardresearch.com/b?c1=2&c2=9248945&ns_site=newsmax&name='+title+'&category=live&nmx_site=nmx&nmx_pfm=tv&nmx_sub_category=video&nmx_page_type=vod&event=Media_Stop&event_timestamp='+getCurrentTimeString()+'&version='+PlatformInfo.pversion+'&device_type='+PlatformInfo.platform+'&device_id='+PlatformInfo.deviceid+'&os='+PlatformInfo.pos);
         }, videoPlayback);
 
         KeyHandler.on("onRW", function() {
@@ -346,6 +360,8 @@ define([
                // scrubManager.stopStickyScrubbing();
                 return;
             }
+
+
             scrubManager.onLeft();
         }, videoPlayback);
 
@@ -359,6 +375,7 @@ define([
                 // scrubManager.stopStickyScrubbing();
                 return;
             }
+
             //if(!MediaPlayer.playing()) return; // <-- doesn't allow ff from paused state
 
             scrubManager.onRight();
@@ -411,6 +428,7 @@ define([
                 break;
             case 'onstop':
                 StageManager.StageHistory.back();
+		console.log('event: ' + event + ' - params: ', params);
                 break;
             case 'videoerror':
                 //$log('There was an error in videoplayback scene - make sure you are using safari for hls streams');

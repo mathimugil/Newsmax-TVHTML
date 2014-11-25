@@ -1,6 +1,7 @@
 <ul class="gridMenuPage">
 {{#each items}}
 	{{pager @index ../numberPerPage '</ul><ul class="gridMenuPage">'}}
-	<li class="gridItem"><img src="{{thumbnail}}"><div class="title-clip">{{title}}</div></li>
+	<li class="gridItem"><img src="{{thumbnail}}" onerror="this.src='images/newsmax_alt_item.png';"><div class="title-clip">{{title}}</div></li>
 {{/each}}
 </ul>
+
