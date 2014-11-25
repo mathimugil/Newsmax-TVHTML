@@ -8,10 +8,10 @@ define([
         'newsmax/newsmax.mainmenu',
         'newsmax/newsmax.utils',
         'newsmax/menus/newsmax.menu.simplekeys',
-        'newsmax/menus/newsmax.menu.modalmenu',
         'newsmax/newsmax.api',
         'hbs!newsmax/templates/GridMenu',
         'mediaplayer',
+        'tvengine',
         'utils',
         'config',
         'platform',
@@ -31,10 +31,11 @@ define([
         MenuItemsDeferred,
         Utils,
         KeyboardMenu,
-        ModalMenu,
         API,
         GridMenuTemplate,
         MediaPlayer,
+        TVEngine,
+
         Util,
         conf,
         Platform,
@@ -55,6 +56,7 @@ define([
 
         var cancelFetch = false; //used to cancel fetches when used with back button
         var searchState = false; //if true in search state, if false, in non-search state ie. other grids
+
         scene.disableBack = false;
 
         scene.handlesback = function() {
@@ -109,6 +111,7 @@ define([
         // var hiddenMenus = scene.createState('hiddenMenus', false);
         // var visibleMenus = scene.createState('visibleMenus', true);
         var mainState = scene.createState('mainState', true);
+        var errorModalState = scene.createState('errorModal');
 
         var Grid, mainMenu, subMenu, keyMenu, gridRowHeight, lastFocusIndex, lastGridCollection, lastSubmenuIndex, lastSubmenuCollection, lastMainmenuIndex, gridShowing, subCollection;
 
@@ -125,6 +128,13 @@ define([
             if(isOpera) {
                 $("#searchterm").replaceWith('<div id="searchterm"></div>')
             }
+
+            modalMenu = new Navigation.Menu({});
+            modalMenu.on('onselect', function() {
+                console.info("On Modal Menu Select")
+                TVEngine.exit();
+            }, scene)
+
             
             return MenuItemsDeferred.done(function(MenuItems) {
                 $log("menuitems", MenuItems);
@@ -148,6 +158,11 @@ define([
                         $("#loadingVideoIndicator").fadeOut();
                         $("#logo").fadeIn();
                     }, this);
+
+                    MediaPlayer.on('videoerror', function() {
+                        $("#loadingVideoIndicator").hide();
+                        scene.s.errorModal();
+                    }, scene)
 
                     MediaPlayer.play();
 					var video = MediaPlayer.getCurrentItem();
@@ -682,6 +697,7 @@ define([
             saveState();
             scene.tearDownMenus();
             hideWrapper();
+            modalMenu.off(null,null, this);
         }
 
 
@@ -822,6 +838,10 @@ define([
             lastGridCollection = Grid.collection;
             lastSubmenuCollection = subMenu.collection;
             lastSubmenuIndex = subMenu._currentIndex;
+        }
+
+        errorModalState.onenterstate = function() {
+            renderModal('Video Error', 'There has been an issue playing video. Please try again later.');
         }
 
         var setCancelFetch = function(bool) {

@@ -56,8 +56,10 @@ define(['tvengine','platform','jquery','underscore','backbone'], function(TVEngi
 				if (typeof action != 'undefined' && allowKeyAction) {
 					if (action == 'onReturn') event.preventDefault(); //samsung tv's need for _checkOrBack
 					KeyHandler.trigger(action);
-					event.stopPropogation();
-					event.preventDefault();
+					if(event) {
+						if(event.stopPropogation) event.stopPropogation();
+						if(event.preventDefault) event.preventDefault();
+					}
 					allowKeyAction = false;
 					return false;
 				} else {
