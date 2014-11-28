@@ -116,14 +116,14 @@ define([
         var hideSubNav = false; //we use this in the case where there is no grid - i.e. Top of the Hour News
         var wrapperVisible;
         var fetchCounter = 0;
-        var isOpera = (Platform.name == "opera" || document.location.href.indexOf('noinput') > -1);
+        var isLG = (Platform.name == "lg");
 
         scene.onenterscene = function() {
             $log(">>> ENTERING MAIN SCENE!!");
             showWrapper();
             dumbFocus();
-            if(isOpera) {
-                $("#searchterm").replaceWith('<div id="searchterm"></div>')
+            if(isLG) {
+                $("#searchterm").replaceWith('<input type="text" id="searchterm" tabindex="-1"></input>')
             }
 
             return MenuItemsDeferred.done(function(MenuItems) {
@@ -382,7 +382,7 @@ define([
                             $log('got into search handler....')
                             hideGrid();
 
-                            if (isOpera) $("#searchterm").text('');
+                            if (notLG) $("#searchterm").text('');
                             else  $("#searchterm").val('');
 
                             hideSubNav = true;
@@ -525,11 +525,11 @@ define([
                 }, scene)
                 var currentpos;
                 var setSearchValue = function(text) {
-                    if (isOpera) $("#searchterm").text(text)
+                    if (notLG) $("#searchterm").text(text)
                     else $("#searchterm").val(text);
                 }
                 var getSearchValue = function() {
-                    var val = (isOpera) ? $("#searchterm").text() : $("#searchterm").val();
+                    var val = (notLG) ? $("#searchterm").text() : $("#searchterm").val();
                     return _.isString(val) ? val : '';
                 }
 
